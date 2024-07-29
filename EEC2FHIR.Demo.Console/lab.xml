@@ -1,0 +1,603 @@
+<cdp:ContentPackage xmlns="urn:hl7-org:v3" xmlns:cdp="http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0 CDA_Package_V01.xsd">
+	<cdp:ContentContainer range="0">
+		<cdp:StructuredContent>
+			<ClinicalDocument xmlns:voc="urn:hl7-org:v3/voc" classCode="DOCCLIN" moodCode="EVN" xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
+				<typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3"/>
+				<templateId extension="113_V101.0" root="2.16.886.101.20003.20014"/>
+				<id extension="CT00000001" root="2.16.886.104.90004.100021"/>
+				<code code="11502-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Laboratory report.total"/>
+				<title>血液檢驗報告</title>
+				<effectiveTime value="20240723144701"/>
+				<confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality" displayName="normal"/>
+				<languageCode code="zh-TW"/>
+				<recordTarget contextControlCode="OP" typeCode="RCT">
+					<patientRole classCode="PAT">
+						<id extension="500" root="2.16.886.111.100000.100000"/>
+						<patient classCode="PSN" determinerCode="INSTANCE">
+							<id extension="Z123456789" root="2.16.886.104.90004.100021"/>
+							<name>王測試</name>
+							<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1"/>
+							<birthTime value="19900101"/>
+						</patient>
+						<providerOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1132070011" root="2.16.886.101.20003.20014"/>
+							<name>長庚紀念醫院林口總院</name>
+						</providerOrganization>
+					</patientRole>
+				</recordTarget>
+				<author contextControlCode="OP" typeCode="AUT">
+					<time value="202407231440"/>
+					<assignedAuthor classCode="ASSIGNED">
+						<id extension="D0001" root="2.16.886.111.100000.100000"/>
+						<assignedPerson classCode="PSN" determinerCode="INSTANCE">
+							<name>簡人儀**</name>
+						</assignedPerson>
+					</assignedAuthor>
+				</author>
+				<custodian typeCode="CST">
+					<assignedCustodian classCode="ASSIGNED">
+						<representedCustodianOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1132070011" root="2.16.886.101.20003.20014"/>
+							<name>長庚紀念醫院林口總院</name>
+						</representedCustodianOrganization>
+					</assignedCustodian>
+				</custodian>
+				<inFulfillmentOf typeCode="FLFS">
+					<order classCode="ACT" moodCode="RQO">
+						<id extension="9876" root="2.16.886.111.100000.100000"/>
+					</order>
+				</inFulfillmentOf>
+				<componentOf typeCode="COMP">
+					<encompassingEncounter classCode="ENC" moodCode="EVN">
+						<effectiveTime value="202407230652"/>
+					</encompassingEncounter>
+				</componentOf>
+				<component contextConductionInd="true" typeCode="COMP">
+					<structuredBody classCode="DOCBODY" moodCode="EVN">
+						<component contextConductionInd="true" typeCode="COMP">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="30954-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Relevant diagnostic tests and/or laboratory data"/>
+								<title>檢驗結果</title>
+								<text>
+									<table>
+										<tbody>
+											<tr>
+												<td>(9)檢體來源</td>
+												<td>靜脈</td>
+												<td>(10)檢體類別</td>
+												<td>Blood</td>
+												<td>(11)檢體類別說明</td>
+												<td>血液</td>
+											</tr>
+											<tr>
+												<td>(12)健保檢驗項目代號</td>
+												<td/>
+												<td>(13)健保檢驗項目名稱</td>
+												<td>脂蛋白(a)分析</td>
+												<td>(15)收件日期時間</td>
+												<td>202407231310</td>
+											</tr>
+										</tbody>
+									</table>
+									<table>
+										<thead>
+											<tr>
+												<td>項次</td>
+												<td>報告日期時間</td>
+												<td>檢驗項目名稱</td>
+												<td>檢驗報告結果值</td>
+												<td>單位</td>
+												<td>檢驗方法</td>
+												<td>參考值</td>
+												<td>備註</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>202407231440</td>
+												<td>Hypersensitive CRP</td>
+												<td>0.63</td>
+												<td>mg/L</td>
+												<td>Automated count </td>
+												<td>小於5; CAD risk:小於1.0 Low,大於3.0 Hi.</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>202407231440</td>
+												<td>Albumin</td>
+												<td>4.92</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>3.5-5.4</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>202407231440</td>
+												<td>LDL-Cholesterol (direct)</td>
+												<td>164</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>小於100(Desirable),~129 Near Opt.</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>4</td>
+												<td>202407231440</td>
+												<td>T-Cholesterol</td>
+												<td>226</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>小於200(Desirable)(大於等於18Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>5</td>
+												<td>202407231440</td>
+												<td>HDL-Cholesterol</td>
+												<td>48</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>M:大於等於40</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>6</td>
+												<td>202407231440</td>
+												<td>Triglyceride</td>
+												<td>113</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>小於150(Desirable)(大於18Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>7</td>
+												<td>202407231440</td>
+												<td>Total Protein</td>
+												<td>7.8</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>6.4-8.3</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>8</td>
+												<td>202407231440</td>
+												<td>Uric acid</td>
+												<td>7.0</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>小於 7.0</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>9</td>
+												<td>202407231440</td>
+												<td>Creatinine</td>
+												<td>0.94</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>M:0.64~1.27 (大於18Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>10</td>
+												<td>202407231440</td>
+												<td>Estimated GFR</td>
+												<td>大於60(  97 僅供參考) mL/min/1.73㎡</td>
+												<td>mL/m/1.73</td>
+												<td>Automated count </td>
+												<td>N:大於等於60,s3:30~59,s4:15~29,s5小於15</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>11</td>
+												<td>202407231440</td>
+												<td>ALT/GPT</td>
+												<td>45</td>
+												<td>U/L</td>
+												<td>Automated count </td>
+												<td>小於等於36 (大於18Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>12</td>
+												<td>202407231440</td>
+												<td>Alkaline phosphatase</td>
+												<td>57</td>
+												<td>U/L</td>
+												<td>Automated count </td>
+												<td> 36~122(大於19yrs  )</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>13</td>
+												<td>202407231440</td>
+												<td>Total Bilirubin</td>
+												<td>1.6</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>0.3~1.2 (5days-60yr)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>14</td>
+												<td>202407231440</td>
+												<td>Direct Bilirubin</td>
+												<td>0.4</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>小於等於0.4</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>15</td>
+												<td>202407231440</td>
+												<td>γ-GT</td>
+												<td>44</td>
+												<td>U/L</td>
+												<td>Automated count </td>
+												<td>M:10~71</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>16</td>
+												<td>202407231440</td>
+												<td>CK</td>
+												<td>129.0</td>
+												<td>U/L</td>
+												<td>Automated count </td>
+												<td>M20-200,F20-180</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>17</td>
+												<td>202407231440</td>
+												<td>Lipoprotein(a)</td>
+												<td>18.0</td>
+												<td>mg/dL</td>
+												<td>Automated count </td>
+												<td>小於 30</td>
+												<td/>
+											</tr>
+										</tbody>
+									</table>
+								</text>
+								<entry>
+									<organizer classCode="BATTERY" moodCode="EVN">
+										<code code="58410-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Complete blood count (hemogram) panel">
+											<originalText>
+												<reference value="#NHI_12164B"/>
+											</originalText>
+											<translation code="12164B" codeSystem="2.16.886.101.20003.20014" codeSystemName="NHI" displayName="脂蛋白(a)分析"/>
+										</code>
+										<statusCode code="completed"/>
+										<effectiveTime value="202407231310"/>
+										<specimen typeCode="SPC">
+											<specimenRole classCode="SPEC">
+												<specimenPlayingEntity classCode="ENT" determinerCode="INSTANCE">
+													<code code="Blood" codeSystem="2.16.840.1.113883.11.19464" codeSystemName="SpecimenEntityType" displayName="血液"/>
+													<name>血液</name>
+													<desc>靜脈抽血檢查</desc>
+												</specimenPlayingEntity>
+											</specimenRole>
+										</specimen>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hypersensitive CRPby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/L" value="0.63" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/L" value="0"/>
+															<high unit="mg/L" value="4.99"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Albuminby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="g/dL" value="4.92" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="3.50"/>
+															<high unit="g/dL" value="5.40"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="LDL-Cholesterol (direct)by Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="164" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="129.01"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="T-Cholesterolby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="226" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="HDL-Cholesterolby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="48" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="40"/>
+															<high unit="mg/dL" value="9999"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Triglycerideby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="113" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Total Proteinby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="g/dL" value="7.8" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="6.40"/>
+															<high unit="g/dL" value="8.30"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Uric acidby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="7.0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="6.99"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Creatinineby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="0.94" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0.64"/>
+															<high unit="mg/dL" value="1.27"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Estimated GFRby Automated count"/>
+												<text>大於60(  97 僅供參考) mL/min/1.73㎡</text>
+												<effectiveTime value="202407231440"/>
+												<value unit="mL/m/1.73" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mL/m/1.73" value="60"/>
+															<high unit="mL/m/1.73" value="9999"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="ALT/GPTby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="U/L" value="45" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="U/L" value="0"/>
+															<high unit="U/L" value="36.01"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Alkaline phosphataseby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="U/L" value="57" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="U/L" value="0"/>
+															<high unit="U/L" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Total Bilirubinby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="1.6" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Direct Bilirubinby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="0.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="0.40"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="γ-GTby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="U/L" value="44" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="U/L" value="10"/>
+															<high unit="U/L" value="71"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CKby Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="U/L" value="129.0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="U/L" value="20"/>
+															<high unit="U/L" value="200"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Lipoprotein(a)by Automated count"/>
+												<text/>
+												<effectiveTime value="202407231440"/>
+												<value unit="mg/dL" value="18.0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="mg/dL" value="0"/>
+															<high unit="mg/dL" value="29.99"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+									</organizer>
+								</entry>
+							</section>
+						</component>
+					</structuredBody>
+				</component>
+			</ClinicalDocument>
+		</cdp:StructuredContent>
+	</cdp:ContentContainer>
+</cdp:ContentPackage>
