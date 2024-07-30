@@ -105,15 +105,6 @@ namespace EEC2FHIR.Laboratory
             bundle.Type = Bundle.BundleType.Document;
             bundle.Identifier = new Identifier("https://twcore.mohw.gov.tw/ig/index.html", "Bundle-EMR");
             bundle.Timestamp = DateTimeOffset.Now;
-            //bundle.Entry.Add(new Bundle.EntryComponent { FullUrl = composition.GetFullUrl(),  Resource = composition });
-            //bundle.Entry.Add(new Bundle.EntryComponent { Resource = organization });
-            //bundle.Entry.Add(new Bundle.EntryComponent { Resource = patient });
-            //foreach (var obs in observations)
-            //    bundle.Entry.Add(new Bundle.EntryComponent { Resource = obs });
-            //foreach (var spe in specimens)
-            //    bundle.Entry.Add(new Bundle.EntryComponent { Resource = spe });
-            //bundle.Entry.Add(new Bundle.EntryComponent { Resource = author });
-            //bundle.Entry.Add(new Bundle.EntryComponent { Resource = encounter });
 
             bundle.AppendEntryResource(composition);
             bundle.AppendEntryResource(organization);
@@ -379,7 +370,7 @@ namespace EEC2FHIR.Laboratory
                  *       <value xsi:type="PQ" value="3.80 unit="mg/dL" />
                  */
                 var valueNode = obsNode.SelectSingleNode("ns:value", xmlNsMgr);
-                var valueType = valueNode.GetAttributeValue("xsi:type");
+                var valueType = valueNode.GetAttributeValue("xsi:type");                
                 switch (valueType)
                 {
                     case "ST": // 文字結果，只處理數值不處理unit
@@ -387,20 +378,20 @@ namespace EEC2FHIR.Laboratory
                         component.Value = new FhirString(stringValue);
                         break;
                     case "PQ": // 數字結果，處理數值與單位
-                        var decimalValue = decimal.Parse(valueNode.GetAttributeValue("value"));
+                        var value = decimal.Parse(valueNode.GetAttributeValue("value"));
                         var unit = valueNode.GetAttributeValue("unit");
-                        component.Value = new Hl7.Fhir.Model.Quantity(decimalValue, unit);
+                        component.Value = CreateQuantity(value, unit);
                         break;
                     case "IVL_PQ": // 數字區間                        
                         var lowNode = valueNode.SelectSingleNode("ns:low", xmlNsMgr);
-                        var decimalLowValue = decimal.Parse(lowNode.GetAttributeValue("value"));
+                        var lowValue = decimal.Parse(lowNode.GetAttributeValue("value"));
                         var lowUnit = lowNode.GetAttributeValue("unit");
                         var highNode = valueNode.SelectSingleNode("ns:high", xmlNsMgr);
-                        var decimalHighValue = decimal.Parse(highNode.GetAttributeValue("value"));
+                        var highValue = decimal.Parse(highNode.GetAttributeValue("value"));
                         var highUnit = highNode.GetAttributeValue("unit");
                         var valueRange = new Range();
-                        valueRange.Low = new Hl7.Fhir.Model.Quantity(decimalLowValue, lowUnit);
-                        valueRange.High = new Hl7.Fhir.Model.Quantity(decimalHighValue, highUnit);
+                        valueRange.Low = CreateQuantity(lowValue, lowUnit);
+                        valueRange.High = CreateQuantity(highValue, highUnit);
                         component.Value = valueRange;
                         break;
                     default:
@@ -416,13 +407,13 @@ namespace EEC2FHIR.Laboratory
                 {
                     case "IVL_PQ": // 數字區間                        
                         var lowNode = valueRangeNode.SelectSingleNode("ns:low", xmlNsMgr);
-                        var decimalLowValue = decimal.Parse(lowNode.GetAttributeValue("value"));
+                        var lowValue = decimal.Parse(lowNode.GetAttributeValue("value"));
                         var lowUnit = lowNode.GetAttributeValue("unit");
                         var highNode = valueRangeNode.SelectSingleNode("ns:high", xmlNsMgr);
-                        var decimalHighValue = decimal.Parse(highNode.GetAttributeValue("value"));
+                        var highValue = decimal.Parse(highNode.GetAttributeValue("value"));
                         var highUnit = highNode.GetAttributeValue("unit");
-                        rangeComponent.Low = new Hl7.Fhir.Model.Quantity(decimalLowValue, lowUnit);
-                        rangeComponent.High = new Hl7.Fhir.Model.Quantity(decimalHighValue, highUnit);
+                        rangeComponent.Low = CreateQuantity(lowValue, lowUnit);
+                        rangeComponent.High = CreateQuantity(highValue, highUnit);
                         component.ReferenceRange.Add(rangeComponent);
                         break;
                     default:
@@ -434,6 +425,22 @@ namespace EEC2FHIR.Laboratory
             observation = client.Create(observation);
 
             return observation;
+        }
+
+        private Hl7.Fhir.Model.Quantity CreateQuantity(decimal value, string unit)
+        {
+            // 進行Unit轉譯
+            switch (unit)
+            {
+                case "sec":
+                    unit = "s"; // 秒，ucum使用s
+                    break;
+                case "-":
+                    unit = "%"; // 沒有單位，嘗試使用百分比
+                    break;
+            }
+
+            return new Hl7.Fhir.Model.Quantity(value, unit);
         }
     }
 }
