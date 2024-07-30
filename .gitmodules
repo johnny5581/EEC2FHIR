@@ -1,0 +1,3 @@
+[submodule "firely-net-sdk"]
+	path = firely-net-sdk
+	url = https://cghtfs.cgmh.org.tw/HIS/FHIR/_git/firely-net-sdk
