@@ -289,7 +289,7 @@ namespace EEC2FHIR.Laboratory
             // method 使用固定值4703008
             // bodysite 使用固定值368234003
             specimen.Collection = new Specimen.CollectionComponent();
-            specimen.Collection.Method = new CodeableConcept(SystemCodeSnomed, "4703008", "Cardinal vein structure", null);
+            //specimen.Collection.Method = new CodeableConcept("http://hl7.org/fhir/ValueSet/body-site", "4703008", "Cardinal vein structure", null);
             specimen.Collection.BodySite = new CodeableConcept(SystemCodeSnomed, "368234003", "Posterior carpal region");
 
             specimen = client.Create(specimen);
@@ -429,18 +429,20 @@ namespace EEC2FHIR.Laboratory
 
         private Hl7.Fhir.Model.Quantity CreateQuantity(decimal value, string unit)
         {
-            // 進行Unit轉譯
-            switch (unit)
-            {
-                case "sec":
-                    unit = "s"; // 秒，ucum使用s
-                    break;
-                case "-":
-                    unit = "%"; // 沒有單位，嘗試使用百分比
-                    break;
-            }
+            //// 進行Unit轉譯
+            //if (UnitMap.TryGetValue(unit ?? "", out string newUnit))
+            //    unit = newUnit;
 
-            return new Hl7.Fhir.Model.Quantity(value, unit);
+            return new Hl7.Fhir.Model.Quantity(value, unit, "http://www.cgmh.org.tw/unit");
         }
+
+
+        private readonly Dictionary<string, string> UnitMap
+            = new Dictionary<string, string>
+            {
+                { "℃", "Cel" },
+                { "-", "%" },
+                { "million/uL", "10*6/uL"}
+            };
     }
 }
