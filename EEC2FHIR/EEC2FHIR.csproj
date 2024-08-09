@@ -5,10 +5,20 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\firely-net-sdk\src\Hl7.Fhir.Core\Hl7.Fhir.Core.csproj" />
-    <ProjectReference Include="..\Hl7.Fhir.TWCoreIG\Hl7.Fhir.TWCoreIG.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Hl7.Fhir.TWCoreIG\Hl7.Fhir.TWCoreIG.csproj" />
+	</ItemGroup>
+	<Choose>
+		<When Condition="'$(IsLocal)' == 'True'">
+			<ItemGroup>
+				<ProjectReference Include="..\firely-net-sdk\src\Hl7.Fhir.Core\Hl7.Fhir.Core.csproj" />
+			</ItemGroup>
+		</When>
+		<Otherwise>
+			<ItemGroup>
+				<PackageReference Include="Hl7.Fhir.R4" version="4.3.0" />
+			</ItemGroup>
+		</Otherwise>
+	</Choose>
 
 </Project>

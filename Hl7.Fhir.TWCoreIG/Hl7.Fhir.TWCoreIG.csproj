@@ -7,9 +7,18 @@
 		<RootNamespace>Hl7.Fhir</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\firely-net-sdk\src\Hl7.Fhir.Core\Hl7.Fhir.Core.csproj" />
-  </ItemGroup>
+	<Choose>
+		<When Condition="'$(IsLocal)' == 'True'">
+			<ItemGroup>
+				<ProjectReference Include="..\firely-net-sdk\src\Hl7.Fhir.Core\Hl7.Fhir.Core.csproj" />
+			</ItemGroup>
+		</When>
+		<Otherwise>
+			<ItemGroup>
+				<PackageReference Include="Hl7.Fhir.R4" version="4.3.0" />
+			</ItemGroup>
+		</Otherwise>
+	</Choose>
 	
 	<ItemGroup Condition=" '$(TargetFramework)' != 'net452'">
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
