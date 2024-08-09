@@ -8,13 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dev.Forms" Version="1.1.2-CI-20240717-175510" />
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EEC2FHIR\EEC2FHIR.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
 </Project>

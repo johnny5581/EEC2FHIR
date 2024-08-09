@@ -1,5 +1,4 @@
-﻿using EEC2FHIR.GUI.Forms;
-using Hl7.Fhir.Rest;
+﻿using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,6 +11,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,7 +20,7 @@ using System.Xml.Linq;
 
 namespace EEC2FHIR.GUI
 {
-    public partial class Form1 : CgForm
+    public partial class Form1 : Form
     {
         private Scintilla textAreaXml;
         private Scintilla textAreaJson;
@@ -128,6 +128,24 @@ namespace EEC2FHIR.GUI
                 textAreaJson.Text = json;
                 PrettyJson();
             });
+        }
+
+
+
+        private void Execute(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch(TargetInvocationException ex)
+            {
+                MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
