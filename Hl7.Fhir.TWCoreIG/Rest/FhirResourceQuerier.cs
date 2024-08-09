@@ -60,7 +60,8 @@ namespace Hl7.Fhir.Rest
 
         public T GetByIdentifier(string codeSystem, string code)
         {
-            return SearchByIdentifier(codeSystem, code).SingleOrDefault();
+            //return SearchByIdentifier(codeSystem, code).SingleOrDefault();
+            return SearchByIdentifier(codeSystem, code).FirstOrDefault();
         }
 
     }
