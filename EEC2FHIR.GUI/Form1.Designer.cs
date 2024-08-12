@@ -64,6 +64,7 @@
             this.buttonUpload.TabIndex = 3;
             this.buttonUpload.Text = "上傳";
             this.buttonUpload.UseVisualStyleBackColor = true;
+            this.buttonUpload.Click += new System.EventHandler(this.buttonUpload_Click);
             // 
             // buttonTransfer
             // 
@@ -74,6 +75,7 @@
             this.buttonTransfer.TabIndex = 2;
             this.buttonTransfer.Text = "轉檔";
             this.buttonTransfer.UseVisualStyleBackColor = true;
+            this.buttonTransfer.Visible = false;
             this.buttonTransfer.Click += new System.EventHandler(this.buttonTransfer_Click);
             // 
             // buttonPrettyXml
