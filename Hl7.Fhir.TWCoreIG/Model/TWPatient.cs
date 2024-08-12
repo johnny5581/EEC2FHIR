@@ -12,7 +12,7 @@ namespace Hl7.Fhir.Model
     /// </summary>
     public static class TWPatient
     {
-        public static string CodeSystemTwIdentifier = "http://www.moi.gov.tw"; // 內政部核發證件CodeSystem
+        public static string CodeSystemTwIdentifier = "http://www.moi.gov.tw/"; // 內政部核發證件CodeSystem
 
         /// <summary>
         /// 設定國家證件號識別(身分證字號)
@@ -38,6 +38,7 @@ namespace Hl7.Fhir.Model
             coding.CodeElement.Extension.Add(codeElementExtension);
             identifierType.Coding.Add(coding);
             identifier.Type = identifierType;
+
             patient.Identifier.Add(identifier);
 
             return patient;

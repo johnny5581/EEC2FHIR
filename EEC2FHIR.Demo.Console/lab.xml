@@ -30,7 +30,7 @@
 					<assignedAuthor classCode="ASSIGNED">
 						<id extension="D0001" root="2.16.886.111.100000.100000"/>
 						<assignedPerson classCode="PSN" determinerCode="INSTANCE">
-							<name>簡人儀**</name>
+							<name>簡伊施</name>
 						</assignedPerson>
 					</assignedAuthor>
 				</author>
@@ -288,7 +288,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hypersensitive CRPby Automated count"/>
+												<code code="2951-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hypersensitive CRPby Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="mg/L" value="0.63" xsi:type="PQ"/>
@@ -306,7 +306,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Albuminby Automated count"/>
+												<code code="2955-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Albuminby Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="g/dL" value="4.92" xsi:type="PQ"/>
@@ -324,7 +324,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="LDL-Cholesterol (direct)by Automated count"/>
+												<code code="2951-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="LDL-Cholesterol (direct)by Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="mg/dL" value="164" xsi:type="PQ"/>
@@ -342,7 +342,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="T-Cholesterolby Automated count"/>
+												<code code="2956-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="T-Cholesterolby Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="mg/dL" value="226" xsi:type="PQ"/>
@@ -360,7 +360,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="HDL-Cholesterolby Automated count"/>
+												<code code="2164-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="HDL-Cholesterolby Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="mg/dL" value="48" xsi:type="PQ"/>
@@ -378,7 +378,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Triglycerideby Automated count"/>
+												<code code="1514-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Triglycerideby Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="mg/dL" value="113" xsi:type="PQ"/>
@@ -396,7 +396,7 @@
 										<component>
 											<observation classCode="OBS" moodCode="EVN">
 												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Total Proteinby Automated count"/>
+												<code code="3665-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Total Proteinby Automated count"/>
 												<text/>
 												<effectiveTime value="202407231440"/>
 												<value unit="g/dL" value="7.8" xsi:type="PQ"/>
@@ -406,186 +406,6 @@
 														<value xsi:type="IVL_PQ">
 															<low unit="g/dL" value="6.40"/>
 															<high unit="g/dL" value="8.30"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Uric acidby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="mg/dL" value="7.0" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="mg/dL" value="0"/>
-															<high unit="mg/dL" value="6.99"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Creatinineby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="mg/dL" value="0.94" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="mg/dL" value="0.64"/>
-															<high unit="mg/dL" value="1.27"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Estimated GFRby Automated count"/>
-												<text>大於60(  97 僅供參考) mL/min/1.73㎡</text>
-												<effectiveTime value="202407231440"/>
-												<value unit="mL/m/1.73" value="0" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="mL/m/1.73" value="60"/>
-															<high unit="mL/m/1.73" value="9999"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="ALT/GPTby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="U/L" value="45" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="U/L" value="0"/>
-															<high unit="U/L" value="36.01"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Alkaline phosphataseby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="U/L" value="57" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="U/L" value="0"/>
-															<high unit="U/L" value="0"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Total Bilirubinby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="mg/dL" value="1.6" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="mg/dL" value="0"/>
-															<high unit="mg/dL" value="0"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Direct Bilirubinby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="mg/dL" value="0.4" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="mg/dL" value="0"/>
-															<high unit="mg/dL" value="0.40"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="γ-GTby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="U/L" value="44" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="U/L" value="10"/>
-															<high unit="U/L" value="71"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CKby Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="U/L" value="129.0" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="U/L" value="20"/>
-															<high unit="U/L" value="200"/>
-														</value>
-													</observationRange>
-												</referenceRange>
-											</observation>
-										</component>
-										<component>
-											<observation classCode="OBS" moodCode="EVN">
-												<id extension="1"/>
-												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Lipoprotein(a)by Automated count"/>
-												<text/>
-												<effectiveTime value="202407231440"/>
-												<value unit="mg/dL" value="18.0" xsi:type="PQ"/>
-												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
-												<referenceRange>
-													<observationRange>
-														<value xsi:type="IVL_PQ">
-															<low unit="mg/dL" value="0"/>
-															<high unit="mg/dL" value="29.99"/>
 														</value>
 													</observationRange>
 												</referenceRange>

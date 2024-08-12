@@ -34,5 +34,11 @@ namespace Hl7.Fhir.Model
             bundle.Entry.Add(entry);
             return bundle;
         }
+
+        public static void SetMetaProfile(this Resource res, string profile)
+        {
+            res.Meta = new Meta();
+            res.Meta.Profile = new string[] { profile };
+        }
     }
 }

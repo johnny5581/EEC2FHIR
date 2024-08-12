@@ -53,6 +53,7 @@ namespace EEC2FHIR.Laboratory
 
             // 摘要
             var composition = new Composition();
+            composition.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckComposition");
             // 取得文件本體            
             xmlNsMgr = new XmlNamespaceManager(xml.NameTable);
             xmlNsMgr.AddNamespace("", "urn:hl7-org:v3");
@@ -69,6 +70,7 @@ namespace EEC2FHIR.Laboratory
             var organization = GetOrganizationParticipant(clinicalDoc.SelectSingleNode("ns:custodian/ns:assignedCustodian/ns:representedCustodianOrganization", xmlNsMgr));
             composition.Custodian = organization.GetReference();
             var author = GetAuthorParticipant(clinicalDoc.SelectSingleNode("ns:author", xmlNsMgr));
+            composition.Author.Add(author.GetReference());
             composition.Author.Add(author.GetReference());
             var encounter = GetEncounterParticipant(clinicalDoc, composition);
             composition.Encounter = encounter.GetReference();
@@ -89,6 +91,8 @@ namespace EEC2FHIR.Laboratory
 
                 observations.Add(observation);
                 specimens.Add(specimen);
+
+                composition.Section.Add(sectionComponent);
             }
 
 
@@ -102,6 +106,7 @@ namespace EEC2FHIR.Laboratory
 
             // 組合bundle
             var bundle = new Bundle();
+            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckBundle");
             bundle.Type = Bundle.BundleType.Document;
             bundle.Identifier = new Identifier("https://twcore.mohw.gov.tw/ig/index.html", "Bundle-EMR");
             bundle.Timestamp = DateTimeOffset.Now;
@@ -154,7 +159,7 @@ namespace EEC2FHIR.Laboratory
 
             // 如果病人沒有找到，建立新的病人
             patient = new Patient();
-
+            patient.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPatient");
             patient.SetTwIdentifier(idNo);
             patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
 
@@ -195,6 +200,8 @@ namespace EEC2FHIR.Laboratory
             }
 
             organization = new Organization();
+
+            organization.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckOrganization");
             organization.SetTwIdentifier(hospId);
 
             var hospName = node.SelectSingleNode("ns:name", xmlNsMgr).InnerText;
@@ -220,6 +227,7 @@ namespace EEC2FHIR.Laboratory
             }
 
             practitioner = new Practitioner();
+            practitioner.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPractitioner");
             practitioner.SetHospitalIdentifier(SystemCodeGlobal, empId);
 
             // 中文姓名
@@ -247,6 +255,7 @@ namespace EEC2FHIR.Laboratory
 
             // TODO: 資料轉換來源不清
             encounter = new Encounter();
+            encounter.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckEncounter");
             encounter.Identifier.Add(new Identifier(SystemCodeLocal, opdNo));
             encounter.Class = new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "OBSENC", "observation encounter");
             encounter.ServiceType = new CodeableConcept(SystemCodeSnomed, "394609007", "General surgery", "Medical Services");
@@ -280,6 +289,7 @@ namespace EEC2FHIR.Laboratory
 
             // 建立採檢資訊
             specimen = new Specimen();
+            specimen.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckSpecimen");
             specimen.Type = new CodeableConcept("http://terminology.hl7.org/CodeSystem/v3-SpecimenType", code);
             specimen.Subject = composition.Subject;
 
@@ -290,7 +300,7 @@ namespace EEC2FHIR.Laboratory
             // bodysite 使用固定值368234003
             specimen.Collection = new Specimen.CollectionComponent();
             //specimen.Collection.Method = new CodeableConcept("http://hl7.org/fhir/ValueSet/body-site", "4703008", "Cardinal vein structure", null);
-            specimen.Collection.BodySite = new CodeableConcept(SystemCodeSnomed, "368234003", "Posterior carpal region");
+            specimen.Collection.BodySite = new CodeableConcept(SystemCodeSnomed, "408512008", "Posterior carpal region", "Posterior carpal region");
 
             specimen = client.Create(specimen);
 
@@ -302,7 +312,7 @@ namespace EEC2FHIR.Laboratory
 
             // 檢驗每次都產生新的
             observation = new Observation();
-
+            observation.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckObservation");
             observation.Status = ObservationStatus.Final;
 
             // 設定檢驗資訊
@@ -334,7 +344,7 @@ namespace EEC2FHIR.Laboratory
             observation.Effective = new Period(new FhirDateTime(specimenTime), new FhirDateTime(receiveTime));
 
             // 項目與結果
-            var interpretation = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests and/or laboratory data", null);
+            var interpretation = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests and/or laboratory data");
             observation.Interpretation.Add(interpretation);
 
             // 備註            

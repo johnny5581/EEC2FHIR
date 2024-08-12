@@ -11,8 +11,10 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -31,7 +33,7 @@ namespace EEC2FHIR.GUI
         {
             InitializeComponent();
             InitializeCustomComponent();
-            client = new FhirClient(ConfigurationManager.AppSettings["fhir.server"]);
+            client = new FhirClient(ConfigurationManager.AppSettings["fhir.server"], new FhirClientSettings { PreferredFormat = ResourceFormat.Json },  messageHandler: new ExHttpClientHandler());
         }
 
         private void InitializeCustomComponent()
@@ -119,7 +121,7 @@ namespace EEC2FHIR.GUI
         {
             Execute(() =>
             {
-                var xml = textAreaXml.Text;                
+                var xml = textAreaXml.Text;
                 var parser = new Laboratory.Parser(client);
                 var xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(xml);
@@ -129,7 +131,21 @@ namespace EEC2FHIR.GUI
                 PrettyJson();
             });
         }
-
+        private void buttonUpload_Click(object sender, EventArgs e)
+        {
+            Execute(() =>
+            {
+                var xml = textAreaXml.Text;
+                var parser = new Laboratory.Parser(client);
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(xml);
+                var bundle = parser.Parse(xmlDoc);
+                var json = new FhirJsonSerializer().SerializeToString(bundle);
+                textAreaJson.Text = json;
+                PrettyJson();
+                client.Create(bundle);
+            });
+        }
 
 
         private void Execute(Action action)
@@ -138,14 +154,59 @@ namespace EEC2FHIR.GUI
             {
                 action();
             }
-            catch(TargetInvocationException ex)
+            catch (TargetInvocationException ex)
             {
                 MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private class ExHttpClientHandler : HttpClientHandler
+        {
+            private string lastToken;
+            private DateTime expiredTime;
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                var token = GetToken();
+                request.Headers.Add("Authorization", "Bearer " + token); 
+
+                return base.SendAsync(request, cancellationToken);
+            }
+
+            // 取Token
+            private string GetToken()
+            {
+                if (expiredTime > DateTime.Now)
+                    return lastToken;
+
+                // recreate token
+                var request = new HttpRequestMessage(HttpMethod.Post, ConfigurationManager.AppSettings["fhir.token.server"]);
+                var parameters = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                    new KeyValuePair<string, string>("client_id", "fhir-twcore-0.2.0"),
+                    new KeyValuePair<string, string>("client_secret", ConfigurationManager.AppSettings["fhir.token.secret"]),
+                };
+
+                var sendTime = DateTime.Now;
+                request.Content = new FormUrlEncodedContent(parameters);
+                using (var client = new HttpClient())
+                {
+                    var response = client.SendAsync(request).Result;
+                    var jsonContent = response.Content.ReadAsStringAsync().Result;
+                    var jsonObj = JObject.Parse(jsonContent);
+                    var bearerToken = Convert.ToString(jsonObj["access_token"]);
+
+                    lastToken = bearerToken;
+                    expiredTime = sendTime.AddMinutes(3);
+                    return lastToken;
+                }
+            }
+        }
+
+     
     }
+
 }
