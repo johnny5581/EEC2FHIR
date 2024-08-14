@@ -16,12 +16,8 @@ namespace Hl7.Fhir.Model
         /// </summary>        
         public static Organization SetTwIdentifier(this Organization organization, string id)
         {
-            //var identifier = new Identifier(CodeSystemTwIdentifier, id);
-            //identifier.Type = new CodeableConcept("http://terminology.hl7.org/CodeSystem/v2-0203", "PRN");            
-            //organization.Identifier.Add(identifier);'
-            var identifier = new Identifier();
-            identifier.Value = id;
-            organization.Identifier.Add(identifier);
+            var identifier = new Identifier(CodeSystemTwIdentifier, id);
+            identifier.Type = new CodeableConcept("http://terminology.hl7.org/CodeSystem/v2-0203", "PRN");
             return organization;
         }
     }

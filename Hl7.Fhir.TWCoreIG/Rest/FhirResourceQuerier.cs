@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Hl7.Fhir.Rest
 {
     public abstract class FhirResourceQuerier
     {
         public static string GetCriteriaIdentifier(string codeSystem, string code)
-        {
+        {            
             return $"identifier={codeSystem}|{code}";
         }
         public static SearchParams CreateSearchParams()

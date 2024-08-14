@@ -71,7 +71,7 @@ namespace EEC2FHIR.Laboratory
             composition.Custodian = organization.GetReference();
             var author = GetAuthorParticipant(clinicalDoc.SelectSingleNode("ns:author", xmlNsMgr));
             composition.Author.Add(author.GetReference());
-            composition.Author.Add(author.GetReference());
+            composition.Author.Add(organization.GetReference());
             var encounter = GetEncounterParticipant(clinicalDoc, composition);
             composition.Encounter = encounter.GetReference();
 
@@ -106,7 +106,7 @@ namespace EEC2FHIR.Laboratory
 
             // 組合bundle
             var bundle = new Bundle();
-            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckBundle");
+            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Bundle-twcore");
             bundle.Type = Bundle.BundleType.Document;
             bundle.Identifier = new Identifier("https://twcore.mohw.gov.tw/ig/index.html", "Bundle-EMR");
             bundle.Timestamp = DateTimeOffset.Now;

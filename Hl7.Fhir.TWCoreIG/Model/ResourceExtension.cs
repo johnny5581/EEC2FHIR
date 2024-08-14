@@ -11,13 +11,15 @@ namespace Hl7.Fhir.Model
         /// <summary>
         /// 取得reference
         /// </summary>        
-        public static ResourceReference GetReference(this Resource resource)
+        public static ResourceReference GetReference(this Resource resource, bool fullUrl = false)
         {
             var reference = new ResourceReference();
 
             reference.Type = resource.TypeName;
-            reference.Reference = $"{resource.TypeName}/{resource.Id}";
-
+            if(fullUrl)
+                reference.Reference = resource.GetFullUrl();
+            else
+                reference.Reference = $"{resource.TypeName}/{resource.Id}";            
             return reference;
         }
 

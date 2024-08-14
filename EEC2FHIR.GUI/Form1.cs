@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
@@ -29,11 +30,20 @@ namespace EEC2FHIR.GUI
         private int maxLineNumberCharLengthXml;
         private int maxLineNumberCharLengthJson;
         private FhirClient client;
+        private readonly List<UploadHistory> Histories
+            = new List<UploadHistory>();
+        private UploadHistory currentScope;
+        private BindingSource bindingSource;
+        private Form2 subForm;
         public Form1()
         {
             InitializeComponent();
             InitializeCustomComponent();
-            client = new FhirClient(ConfigurationManager.AppSettings["fhir.server"], new FhirClientSettings { PreferredFormat = ResourceFormat.Json },  messageHandler: new ExHttpClientHandler());
+            bindingSource = new BindingSource();
+            bindingSource.DataSource = Histories;
+            listHistory.DataSource = bindingSource;
+            client = new FhirClient(ConfigurationManager.AppSettings["fhir.server"], new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new ExHttpClientHandler(this));
+            subForm = new Form2();
         }
 
         private void InitializeCustomComponent()
@@ -67,7 +77,7 @@ namespace EEC2FHIR.GUI
             textArea.Styles[Style.Json.LineComment].ForeColor = Color.Green;
             textArea.Styles[Style.Json.BlockComment].ForeColor = Color.Green;
 
-            textArea.Margins[0].Width = 10;
+            textArea.Margins[0].Width = 20;
         }
 
         private void PrettyXml()
@@ -116,23 +126,11 @@ namespace EEC2FHIR.GUI
 
             }
         }
-
-        private void buttonTransfer_Click(object sender, EventArgs e)
+        private void menuUpload_Click(object sender, EventArgs e)
         {
-            Execute(() =>
-            {
-                var xml = textAreaXml.Text;
-                var parser = new Laboratory.Parser(client);
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-                var bundle = parser.Parse(xmlDoc);
-                var json = new FhirJsonSerializer().SerializeToString(bundle);
-                textAreaJson.Text = json;
-                PrettyJson();
-            });
-        }
-        private void buttonUpload_Click(object sender, EventArgs e)
-        {
+            currentScope = new UploadHistory(Guid.NewGuid().ToString());
+            bindingSource.Add(currentScope);
+            //Histories.Add(currentScope);
             Execute(() =>
             {
                 var xml = textAreaXml.Text;
@@ -145,10 +143,11 @@ namespace EEC2FHIR.GUI
                 PrettyJson();
                 client.Create(bundle);
             });
+            currentScope = null;
         }
 
 
-        private void Execute(Action action)
+        private void Execute(Action action, Action<Exception> errorHandler = null)
         {
             try
             {
@@ -156,24 +155,86 @@ namespace EEC2FHIR.GUI
             }
             catch (TargetInvocationException ex)
             {
+                errorHandler?.Invoke(ex.InnerException);
                 MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
+                errorHandler?.Invoke(ex);
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void SaveRequest(string guid, string url, string method, string request)
+        {
+            if (currentScope == null) throw new NullReferenceException("missing Upload history");
+            var history = new RequestHistory(guid, method, url)
+            {
+                Request = request
+            };
+            currentScope.Requests.Add(history);
+        }
+        public void SaveResponse(string guid, string response)
+        {
+            if (currentScope == null) throw new NullReferenceException("missing Upload history");
+            currentScope.Requests[guid].Response = response;
+        }
+        private void listHistory_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Execute(() =>
+            {
+                var item = listHistory.SelectedItem as UploadHistory;
+                if (item == null)
+                    throw new Exception("沒有選取紀錄");
+                subForm.LoadData(item);
+                if (subForm.Visible)
+                    subForm.BringToFront();
+                else
+                    subForm.Show();
+            });
+        }
+
+        private void menuClear_Click(object sender, EventArgs e)
+        {
+            bindingSource.Clear();
         }
         private class ExHttpClientHandler : HttpClientHandler
         {
             private string lastToken;
             private DateTime expiredTime;
+            private Form1 form1;
+            private string secret;
+            private string server;
+
+            public ExHttpClientHandler(Form1 form1)
+            {
+                this.form1 = form1;
+                server = ConfigurationManager.AppSettings["fhir.token.server"];
+                secret = ConfigurationManager.AppSettings["fhir.token.secret"];
+            }
+
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
-                var token = GetToken();
-                request.Headers.Add("Authorization", "Bearer " + token); 
+                if (server != null)
+                {
+                    var token = GetToken();
+                    request.Headers.Add("Authorization", "Bearer " + token);
+                }
 
-                return base.SendAsync(request, cancellationToken);
+                var guid = Guid.NewGuid().ToString();
+                // 抓request
+                form1.SaveRequest(guid, request.Method.Method, request.RequestUri.ToString(), request.Content?.ReadAsStringAsync()?.Result);
+
+
+                var response = base.SendAsync(request, cancellationToken).Result;
+                // 抓response
+                var responseText = response.Content.ReadAsStringAsync().Result;
+                form1.SaveResponse(guid, responseText);
+
+                return Task.FromResult(response);
             }
+
+
 
             // 取Token
             private string GetToken()
@@ -182,12 +243,12 @@ namespace EEC2FHIR.GUI
                     return lastToken;
 
                 // recreate token
-                var request = new HttpRequestMessage(HttpMethod.Post, ConfigurationManager.AppSettings["fhir.token.server"]);
+                var request = new HttpRequestMessage(HttpMethod.Post, server);
                 var parameters = new List<KeyValuePair<string, string>>()
                 {
                     new KeyValuePair<string, string>("grant_type", "client_credentials"),
                     new KeyValuePair<string, string>("client_id", "fhir-twcore-0.2.0"),
-                    new KeyValuePair<string, string>("client_secret", ConfigurationManager.AppSettings["fhir.token.secret"]),
+                    new KeyValuePair<string, string>("client_secret", secret),
                 };
 
                 var sendTime = DateTime.Now;
@@ -206,7 +267,50 @@ namespace EEC2FHIR.GUI
             }
         }
 
-     
     }
+
+    public class UploadHistory
+    {
+        public UploadHistory(string token)
+        {
+            Token = token;
+        }
+
+        public string Token { get; }
+        public DateTime Time { get; set; } = DateTime.Now;
+        public RequestHistoryCollection Requests { get; set; } = new RequestHistoryCollection();
+
+        public override string ToString()
+        {
+            return $"{Time:HH:mm:ss} - {Token}";
+        }
+    }
+    public class RequestHistory
+    {
+        public RequestHistory(string guid, string method, string url)
+        {
+            Guid = guid;
+            Method = method;
+            Url = url;
+        }
+        public string Guid { get; }
+        public string Method { get; }
+        public string Url { get; }
+        public string Request { get; set; }
+        public string Response { get; set; }
+        public DateTime Time { get; } = DateTime.Now;
+        public override string ToString()
+        {
+            return $"{Time:HH:mm:ss} - {Method} - {Url}";
+        }
+    }
+    public class RequestHistoryCollection : KeyedCollection<string, RequestHistory>
+    {
+        protected override string GetKeyForItem(RequestHistory item)
+        {
+            return item.Guid;
+        }
+    }
+
 
 }
