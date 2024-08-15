@@ -134,10 +134,8 @@ namespace EEC2FHIR.GUI
             Execute(() =>
             {
                 var xml = textAreaXml.Text;
-                var parser = new Laboratory.Parser(client);
-                var xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(xml);
-                var bundle = parser.Parse(xmlDoc);
+                var parser = new Laboratory.Parser(client);                
+                var bundle = parser.Parse(xml);
                 var json = new FhirJsonSerializer().SerializeToString(bundle);
                 textAreaJson.Text = json;
                 PrettyJson();

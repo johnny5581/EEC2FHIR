@@ -11,27 +11,31 @@ namespace Hl7.Fhir.Model
         /// <summary>
         /// 取得reference
         /// </summary>        
-        public static ResourceReference GetReference(this Resource resource, bool fullUrl = false)
+        public static ResourceReference GetReference(this Resource resource, ResourceReferenceType refType = ResourceReferenceType.Normal)
         {
             var reference = new ResourceReference();
 
             reference.Type = resource.TypeName;
-            if(fullUrl)
-                reference.Reference = resource.GetFullUrl();
-            else
-                reference.Reference = $"{resource.TypeName}/{resource.Id}";            
+            switch(refType)
+            {
+                case ResourceReferenceType.Normal:
+                    reference.Reference = $"{resource.TypeName}/{resource.Id}";
+                    break;
+                case ResourceReferenceType.FullUri:
+                    reference.Reference = $"{resource.ResourceBase}{resource.TypeName}/{resource.Id}";
+                    break;
+                case ResourceReferenceType.IdOnly:
+                    reference.Reference = $"#{resource.Id}";
+                    break;
+            }
+                
             return reference;
-        }
-
-        public static string GetFullUrl(this Resource resource)
-        {
-            return $"{resource.ResourceBase}{resource.TypeName}/{resource.Id}";
         }
 
         public static Bundle AppendEntryResource(this Bundle bundle, Resource res)
         {
             var entry = new Bundle.EntryComponent();
-            entry.FullUrl = res.GetFullUrl();
+            entry.FullUrl = res.GetReference(ResourceReferenceType.FullUri).Reference;
             entry.Resource = res;
             bundle.Entry.Add(entry);
             return bundle;
@@ -42,5 +46,12 @@ namespace Hl7.Fhir.Model
             res.Meta = new Meta();
             res.Meta.Profile = new string[] { profile };
         }
+    }
+
+    public enum ResourceReferenceType
+    {
+        FullUri,
+        Normal,
+        IdOnly,
     }
 }

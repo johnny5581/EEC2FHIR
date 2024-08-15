@@ -1,6 +1,7 @@
 ﻿using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,9 +16,8 @@ namespace EEC2FHIR.Demo
         {
             var client = new FhirClient("http://localhost:11180/fhir", settings: new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new ProxyMessageHandler());
             var parser = new Laboratory.Parser(client);
-            var xml = new XmlDocument();            
-            xml.Load("lab.xml");
-            var bundle = parser.Parse(xml);
+            var text = File.ReadAllText("lab.xml");
+            var bundle = parser.Parse(text);
             client.Create(bundle);
 
             //var querier = new TWOrganizationQuerier(client);

@@ -2,26 +2,24 @@
 using Hl7.Fhir.ElementModel.Types;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
-using Microsoft.SqlServer.Server;
+using Hl7.Fhir.Utility;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
+
 namespace EEC2FHIR.Laboratory
 {
-    public class Parser
+    public class Parser : ParserBase
     {
-        private readonly FhirClient client;
-        private XmlNamespaceManager xmlNsMgr;
-
-        public Parser(FhirClient client)
+        public Parser(FhirClient client) : base(client)
         {
-            this.client = client;
         }
 
         public string SystemCodeGlobal { get; set; } = "https://www.cgmh.org.tw";
@@ -29,81 +27,92 @@ namespace EEC2FHIR.Laboratory
         public static string SystemCodeLoinc { get; } = "http://loinc.org";
         public static string SystemCodeSnomed { get; } = "http://snomed.info/sct";
 
-        /**
-         * 長庚醫療財團法人林口長庚紀念醫院 	
-         * OID:  2.16.886.104.100565.100008 
-         * DN:   ou=林口長庚紀念醫院,o=長庚醫療財團法人,c=tw
-         * CODE: 1132070011, root=2.16.886.101.20003.20014
-         **/
-        public Bundle Parse(XmlDocument xml)
+        public Bundle Parse(string xml)
         {
-            /** 
-             * ref: https://silcoet.ntunhs.edu.tw/Healthycloud/ICvsmodel.html
-             * 
-             * Bundle要件:
-             *   Composition  整份摘要
-             *   Patient      病人
-             *   Organization 醫院
-             *   Practitioner 醫事人員(開立檢驗醫矚單張醫師)
-             *   Encounter    就診資料
-             *   Observation  檢驗資料
-             *   Specimem     檢體來源
-             *   
-             **/
+            var doc = ConvertToDoc(xml);
+            var nsMgr = CreateNamespaceManager(xml);
 
-            // 摘要
+            // 新增命名空間
+            nsMgr.AddNamespace("", "urn:hl7-org:v3");
+            nsMgr.AddNamespace("ns", "urn:hl7-org:v3");
+            nsMgr.AddNamespace("cdp", "http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0");
+            nsMgr.AddNamespace("ds", "http://www.w3.org/2000/09/xmldsig#");
+            nsMgr.AddNamespace("xades", "http://uri.etsi.org/01903/v1.4.1#");
+            nsMgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+            // 取得根目錄
+            var root = doc.XPathSelectElement("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument", nsMgr);
+
+            // 建立摘要
             var composition = new Composition();
             composition.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckComposition");
-            // 取得文件本體            
-            xmlNsMgr = new XmlNamespaceManager(xml.NameTable);
-            xmlNsMgr.AddNamespace("", "urn:hl7-org:v3");
-            xmlNsMgr.AddNamespace("ns", "urn:hl7-org:v3");
-            xmlNsMgr.AddNamespace("cdp", "http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0");
-            xmlNsMgr.AddNamespace("ds", "http://www.w3.org/2000/09/xmldsig#");
-            xmlNsMgr.AddNamespace("xades", "http://uri.etsi.org/01903/v1.4.1#");
 
-            var clinicalDoc = xml.SelectSingleNode("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument", xmlNsMgr);
-
-            // 製作病人
-            var patient = GetPatitentParticipant(clinicalDoc.SelectSingleNode("ns:recordTarget", xmlNsMgr));
-            composition.Subject = patient.GetReference();
-            var organization = GetOrganizationParticipant(clinicalDoc.SelectSingleNode("ns:custodian/ns:assignedCustodian/ns:representedCustodianOrganization", xmlNsMgr));
+            // 取得醫院資訊
+            var organization = GetOrganizationResource(root, "ns:custodian/ns:assignedCustodian/ns:representedCustodianOrganization", nsMgr, composition);
             composition.Custodian = organization.GetReference();
-            var author = GetAuthorParticipant(clinicalDoc.SelectSingleNode("ns:author", xmlNsMgr));
-            composition.Author.Add(author.GetReference());
             composition.Author.Add(organization.GetReference());
-            var encounter = GetEncounterParticipant(clinicalDoc, composition);
+
+            // 取得病人資料
+            var patient = GetPatientResource(root, "ns:recordTarget", nsMgr, composition);
+            composition.Subject = patient.GetReference();
+
+            // 取得檢驗報告醫技人員資訊
+            var author = GetPractitionerResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition);
+            composition.Author.Add(author.GetReference());
+
+            // 取得開單資訊
+            var encounter = GetEncounterResource(root, "ns:documentationOf/ns:serviceEvent", nsMgr, composition);
             composition.Encounter = encounter.GetReference();
 
-            var componentRoot = clinicalDoc.SelectSingleNode("ns:component/ns:structuredBody/ns:component/ns:section", xmlNsMgr);
-            var organizers = componentRoot.SelectNodes("ns:entry/ns:organizer", xmlNsMgr);
+            // 取得檢驗內容
+            var componentRoot = root.XPathSelectElement("ns:component/ns:structuredBody/ns:component/ns:section", nsMgr);
+            var sectionLoincCode = componentRoot.XPathEvaluateString("ns:code/@code", nsMgr);
+            var sectionDisplayName = componentRoot.XPathEvaluateString("ns:code/@displayName", nsMgr);
+            var organizers = componentRoot.XPathSelectElements("ns:entry/ns:organizer", nsMgr);
             var observations = new List<Observation>();
             var specimens = new List<Specimen>();
-            foreach (XmlNode organizer in organizers)
+            foreach (var organizer in organizers)
             {
-                var specimen = GetSpecimenParticipant(organizer.SelectSingleNode("ns:specimen", xmlNsMgr), composition);
-                var observation = GetObservationParticipant(organizer, clinicalDoc, specimen, composition);
-
                 var sectionComponent = new Composition.SectionComponent();
-                sectionComponent.Code = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests and/or laboratory data");
-                sectionComponent.Entry.Add(observation.GetReference());
-                sectionComponent.Entry.Add(specimen.GetReference());
+                sectionComponent.Code = new CodeableConcept(SystemCodeLoinc, sectionLoincCode, sectionDisplayName);
 
-                observations.Add(observation);
+                // 處理採檢資訊
+                var specimen = CreateSpecimenResource(organizer, "ns:specimen", nsMgr, composition);
+                // 給予特定ID
+                specimen.Id = Guid.NewGuid().ToString();
+                sectionComponent.Entry.Add(specimen.GetReference(ResourceReferenceType.IdOnly));
+                composition.Contained.Add(specimen);
                 specimens.Add(specimen);
+
+                var observation = CreateObservationResource(organizer, "", nsMgr, composition, specimen);
+                // 給予特定ID
+                observation.Id = Guid.NewGuid().ToString();
+                sectionComponent.Entry.Add(observation.GetReference(ResourceReferenceType.IdOnly));
+                composition.Contained.Add(observation);
+                observations.Add(observation);
 
                 composition.Section.Add(sectionComponent);
             }
 
+            // 摘要標題
+            composition.Title = root.XPathEvaluateString("ns:title", nsMgr);
 
-            // 組裝摘要
-            composition.Title = clinicalDoc.SelectSingleNode("ns:title", xmlNsMgr).InnerText;
-            composition.Date = DateUtility.Convert(clinicalDoc.SelectSingleNode("ns:effectiveTime", xmlNsMgr).GetAttributeValue("value"), outFormat: "ISO", inFormat: "yyyyMMddHHmmss");
+            // 摘要時間
+            var effectiveTime = root.XPathEvaluateString("ns:effectiveTime/@value", nsMgr);
+            composition.Date = DateUtility.Convert(effectiveTime, outFormat: "ISO", inFormat: "yyyyMMddHHmmss");
+
+            // 摘要狀態
             composition.Status = CompositionStatus.Final;
+
+            // 摘要類型
             composition.Type = new CodeableConcept(SystemCodeLoinc, "11503-0", "檢驗檢查");
-            composition = client.Create(composition);
+
+            // 產生composition
+            CreateResource(composition);
 
 
+
+            // 組合bundle
             // 組合bundle
             var bundle = new Bundle();
             bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Bundle-twcore");
@@ -125,135 +134,142 @@ namespace EEC2FHIR.Laboratory
         }
 
 
-
-        private Patient GetPatitentParticipant(XmlNode node)
+        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
             Patient patient = null;
 
-            // 身分證號
-            var idNo = node.SelectSingleNode("ns:patientRole/ns:patient/ns:id", xmlNsMgr).GetAttributeValue("extension");
+            var node = root.XPathSelectElement(xpath, nsMgr);
+
             // 醫院病歷號
-            var chtNo = node.SelectSingleNode("ns:patientRole/ns:id", xmlNsMgr).GetAttributeValue("extension");
+            var chtNo = node.XPathEvaluateString("ns:patientRole/ns:id/@extension", nsMgr);
+            // 身份證字號
+            var idno = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:id/@extension", nsMgr);
 
-
-            // 先查詢看看目前有沒有這個病人，有的話使用現有的病人資料
+            // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
             var querier = new TWPatientQuerier(client);
-            var pat = querier.GetByIdentifier(SystemCodeLocal, chtNo);
+            patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
+            if (patient != null)
+                return patient;
 
-            // 如果找不到病人，嘗試使用身分證號取得病人資料，有資料的話就更新他的病歷號
-            if (pat == null)
+            // 再來透過身分證字號查詢，如果有的話，把病歷號合併
+            patient = querier.GetByTwIdentifier(idno);
+            if (patient != null)
             {
-                pat = querier.GetByTwIdentifier(idNo);
-                if (pat != null)
-                {
-                    pat.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
-                    client.Update(pat);
-                }
+                patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
+                return UpdateResource(patient); // 更新這筆病人資料
             }
 
-            // 如果病人有找到，使用這個病人
-            if (pat != null)
-            {
-                return pat;
-            }
-
-            // 如果病人沒有找到，建立新的病人
+            // 建立新的病人資料
             patient = new Patient();
             patient.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPatient");
-            patient.SetTwIdentifier(idNo);
+            patient.SetTwIdentifier(idno);
             patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
 
             // 中文姓名
-            var cnm = node.SelectSingleNode("ns:patientRole/ns:patient/ns:name", xmlNsMgr).InnerText;
+            var cnm = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:name", nsMgr);
             patient.SetChineseName(cnm);
 
             // 性別
-            var genderCode = node.SelectSingleNode("ns:patientRole/ns:patient/ns:administrativeGenderCode", xmlNsMgr).GetAttributeValue("code");
-            // var genderSystem = "http://terminology.hl7.org/CodeSystem/v3-AdministrativeGender"; // 固定使用的系統(來自CDC 2.16.840.1.113883.5.1)            
-            patient.SetAdministrativeGenderV3(genderCode);
+            var gender = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:administrativeGenderCode/@code", nsMgr);
+            patient.SetAdministrativeGenderV3(gender);
 
             // 生日
-            var birthDate = node.SelectSingleNode("ns:patientRole/ns:patient/ns:birthTime", xmlNsMgr).GetAttributeValue("value");
-            patient.BirthDate = DateUtility.Convert(birthDate);
+            var birthDat = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:birthTime/@value", nsMgr);
+            patient.BirthDate = DateUtility.Convert(birthDat);
 
-            // 管理組織            
-            patient.ManagingOrganization = GetOrganizationParticipant(node.SelectSingleNode("ns:patientRole/ns:providerOrganization", xmlNsMgr)).GetReference();
+            // 管理機構
+            patient.ManagingOrganization = GetOrganizationResource(node, "ns:patientRole/ns:providerOrganization", nsMgr, composition).GetReference();
 
-
-            patient = client.Create(patient);
-
-            return patient;
+            return CreateResource(patient);
         }
 
-        private Organization GetOrganizationParticipant(XmlNode node)
+        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
             Organization organization = null;
 
-            var hospId = node.SelectSingleNode("ns:id", xmlNsMgr).GetAttributeValue("extension");
+            var node = root.XPathSelectElement(xpath, nsMgr);
 
-            // 先查看看有沒有這個醫療院所代碼，有的話就使用這個代碼
+            // 醫療院所代碼
+            var hospId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
+
+            // 先檢查有沒有這個機構，有的話就使用目前資料
             var querier = new TWOrganizationQuerier(client);
             organization = querier.GetByTwIdentifier(hospId);
             if (organization != null)
-            {
                 return organization;
+
+            // 因為FHIR建立資源比較慢，檢核composition.Custodian的資源是否相同
+            if (composition.Custodian != null)
+            {
+                var reference = composition.Custodian.Reference;
+                var org = client.Read<Organization>(reference);
+                if (org != null && org.GetTwIdentifier() == hospId)
+                    return org;
             }
 
+            // 建立新的機構資料
             organization = new Organization();
-
             organization.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckOrganization");
             organization.SetTwIdentifier(hospId);
 
-            var hospName = node.SelectSingleNode("ns:name", xmlNsMgr).InnerText;
+            var hospName = node.XPathEvaluateString("ns:name", nsMgr);
             organization.Name = hospName;
 
-            organization = client.Create(organization);
-
-            return organization;
+            return CreateResource(organization);
         }
 
-        private Practitioner GetAuthorParticipant(XmlNode node)
+        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
             Practitioner practitioner = null;
 
-            var empId = node.SelectSingleNode("ns:assignedAuthor/ns:id", xmlNsMgr).GetAttributeValue("extension");
+            var node = root.XPathSelectElement(xpath, nsMgr);
 
-            // 先查看看有沒有這個醫事人員代碼，有的話就使用這個代碼
+            var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
+
+            // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
             var querier = new TWPractitionerQuerier(client);
             practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
             if (practitioner != null)
-            {
                 return practitioner;
+
+            // !! 因為HAPI FHIR cahce的關係，檢查composition.author是否有這個資源，有的話就使用
+            if (composition.Author != null && !composition.Author.IsNullOrEmpty())
+            {
+                // composition.Author[0] 是院區，跳過
+                for (var i=1; i<composition.Author.Count; i++)
+                {
+                    var prac = client.Read<Practitioner>(composition.Author[i].Reference);
+                    if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
+                        return prac;
+                }
             }
 
+            // 建立新的醫事人員資料
             practitioner = new Practitioner();
             practitioner.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPractitioner");
             practitioner.SetHospitalIdentifier(SystemCodeGlobal, empId);
 
             // 中文姓名
-            var cnm = node.SelectSingleNode("ns:assignedAuthor/ns:assignedPerson/ns:name", xmlNsMgr).InnerText;
+            var cnm = node.XPathEvaluateString("ns:assignedPerson/ns:name", nsMgr);
             practitioner.SetChineseName(cnm);
 
-            practitioner = client.Create(practitioner);
-
-            return practitioner;
+            return CreateResource(practitioner);
         }
-
-        private Encounter GetEncounterParticipant(XmlNode node, Composition composition)
+        private Encounter GetEncounterResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
             Encounter encounter = null;
 
-            var opdNo = node.SelectSingleNode("ns:id", xmlNsMgr).GetAttributeValue("extension");
+            var node = root.XPathSelectElement(xpath, nsMgr);
 
-            // 先查看看有沒有這張就診單，有的話就使用這張單
+            var opdNo = root.XPathEvaluateString("ns:id/@extension", nsMgr);
+
+            // 先查看看有沒有這個就診紀錄，有的話就使用
             var querier = new FhirResourceQuerier<Encounter>(client);
             encounter = querier.GetByIdentifier(SystemCodeLocal, opdNo);
             if (encounter != null)
-            {
                 return encounter;
-            }
 
-            // TODO: 資料轉換來源不清
+            // 建立新的就診紀錄
             encounter = new Encounter();
             encounter.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckEncounter");
             encounter.Identifier.Add(new Identifier(SystemCodeLocal, opdNo));
@@ -261,87 +277,77 @@ namespace EEC2FHIR.Laboratory
             encounter.ServiceType = new CodeableConcept(SystemCodeSnomed, "394609007", "General surgery", "Medical Services");
             encounter.Status = Encounter.EncounterStatus.Finished;
             encounter.Subject = composition.Subject;
-            encounter.Participant.Add(new Encounter.ParticipantComponent { Individual = composition.Author.FirstOrDefault() });
 
-            // 時間
-            var time = node.SelectSingleNode("ns:author/ns:time", xmlNsMgr).GetAttributeValue("value");
-            encounter.Period = new Period { Start = DateUtility.Convert(time, inFormat: "yyyyMMddHHmm", outFormat: "yyyy-MM-dd") };
+            // 開單醫師
+            var practitoner = GetPractitionerResource(node, "ns:performer/ns:assignedEntity", nsMgr, composition);
+            encounter.Participant.Add(new Encounter.ParticipantComponent
+            {
+                Individual = practitoner.GetReference(),
+            });
 
-            encounter = client.Create(encounter);
+            // 開單日期
+            var time = node.XPathEvaluateString("ns:effectiveTime/@value", nsMgr);
+            encounter.Period = new Period
+            {
+                Start = DateUtility.Convert(time, inFormat: "yyyyMMddHHmm")
+            };
 
-            return encounter;
+            return CreateResource(encounter);
         }
 
-        /// <summary>
-        /// 取得採檢資訊
-        /// </summary>        
-        private Specimen GetSpecimenParticipant(XmlNode node, Composition composition)
+        private Specimen CreateSpecimenResource(XElement organizer, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
-            Specimen specimen = null;
+            var node = organizer.XPathSelectElement(xpath, nsMgr);
 
-            // 採檢資訊每次都產生新的
-            var spicimenPlayingEntityCodeNode = node.SelectSingleNode("ns:specimenRole/ns:specimenPlayingEntity/ns:code", xmlNsMgr);
-            var codeSystem = spicimenPlayingEntityCodeNode.GetAttributeValue("codeSystem");
-            var code = spicimenPlayingEntityCodeNode.GetAttributeValue("code");
-            // TODO: 轉譯 'Blood' => ' BLD'
-            if (code == "Blood")
-                code = " BLD";
-
-            // 建立採檢資訊
-            specimen = new Specimen();
+            // 注意: 每次都產生新的Specimen
+            var specimen = new Specimen();
             specimen.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckSpecimen");
-            specimen.Type = new CodeableConcept("http://terminology.hl7.org/CodeSystem/v3-SpecimenType", code);
+
+            var specimenCode = node.XPathEvaluateString("ns:specimenRole/ns:specimenPlayingEntity/ns:code/@code", nsMgr);
+            if (specimenCode == "Blood")
+                specimenCode = " BLD"; // 轉譯
+            specimen.Type = new CodeableConcept("http://terminology.hl7.org/CodeSystem/v3-SpecimenType", specimenCode);
             specimen.Subject = composition.Subject;
 
-
-            // TODO: 檢體來源，目前無法對應
-            // 因此依照(view-source:https://emr.mohw.gov.tw/FHIRemr/WebSite1/XML_Resources(xml)_/Specimen_BloodExamination128223.xml)
-            // method 使用固定值4703008
-            // bodysite 使用固定值368234003
+            // 檢體來源，使用固定值
             specimen.Collection = new Specimen.CollectionComponent();
-            //specimen.Collection.Method = new CodeableConcept("http://hl7.org/fhir/ValueSet/body-site", "4703008", "Cardinal vein structure", null);
             specimen.Collection.BodySite = new CodeableConcept(SystemCodeSnomed, "408512008", "Posterior carpal region", "Posterior carpal region");
-
-            specimen = client.Create(specimen);
 
             return specimen;
         }
-        private Observation GetObservationParticipant(XmlNode node, XmlNode root, Specimen specimen, Composition composition)
+        private Observation CreateObservationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, Specimen specimen)
         {
-            Observation observation = null;
+            var node = string.IsNullOrEmpty(xpath) ? root : root.XPathSelectElement(xpath, nsMgr);
 
-            // 檢驗每次都產生新的
-            observation = new Observation();
+            // 注意: 每次都產生新的Observation
+            var observation = new Observation();
             observation.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckObservation");
             observation.Status = ObservationStatus.Final;
-
-            // 設定檢驗資訊
-            var id = root.SelectSingleNode("ns:id", xmlNsMgr).GetAttributeValue("extension");
-            observation.Identifier.Add(new Identifier(SystemCodeLocal, id));
-
-            // 設定observation.Code
-            var codeNode = node.SelectSingleNode("ns:code", xmlNsMgr);
-            var obsLoincCode = codeNode.GetAttributeValue("code");
-            var obsLoincDisplayName = codeNode.GetAttributeValue("displayName");
-            var codeTranslationNode = codeNode.SelectSingleNode("ns:translation", xmlNsMgr);
-            var obsNhiCode = codeTranslationNode.GetAttributeValue("code");
-            var obsNhiDisplayName = codeTranslationNode.GetAttributeValue("displayName");
-            // 使用loinc碼
-            observation.Code = new CodeableConcept("http://loinc.org", obsLoincCode, obsLoincDisplayName, obsNhiDisplayName);
-
-
             observation.Subject = composition.Subject;
             observation.Encounter = composition.Encounter;
-            // TODO: 使用composition作者
-            observation.Performer.AddRange(composition.Author);
+            observation.Performer.Add(composition.Author[1]);
             observation.Specimen = specimen.GetReference();
 
+            // 設定檢驗單資訊            
+            var id = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:id/@extension", nsMgr);
+            observation.Identifier.Add(new Identifier(SystemCodeLocal, id));
+
+            // 設定檢驗項目            
+            var obsLoincCode = node.XPathEvaluateString("ns:code/@code", nsMgr);
+            var obsLoincDisplayName = node.XPathEvaluateString("ns:code/@displayName", nsMgr);
+            var obsNhiCode = node.XPathEvaluateString("ns:code/ns:translation/@code", nsMgr);
+            var obsNhiDisplayName = node.XPathEvaluateString("ns:code/ns:translation/@displayName", nsMgr);
+            observation.Code = new CodeableConcept("http://loinc.org", obsLoincCode, obsLoincDisplayName, obsNhiDisplayName ?? obsLoincDisplayName);
 
             // 採檢時間
-            var specimenTime = DateUtility.Convert(root.SelectSingleNode("ns:componentOf/ns:encompassingEncounter/ns:effectiveTime", xmlNsMgr).GetAttributeValue("value"), inFormat: "yyyyMMddHHmm");
+            var specTime = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:componentOf/ns:encompassingEncounter/ns:effectiveTime/@value", nsMgr);
             // 收件時間
-            var receiveTime = DateUtility.Convert(node.SelectSingleNode("ns:effectiveTime", xmlNsMgr).GetAttributeValue("value"), inFormat: "yyyyMMddHHmm");
-            observation.Effective = new Period(new FhirDateTime(specimenTime), new FhirDateTime(receiveTime));
+            var rcvTime = node.XPathEvaluateString("ns:effectiveTime/@value", nsMgr);
+            observation.Effective = new Period
+            {
+                Start = DateUtility.Convert(specTime, inFormat: "yyyyMMddHHmm"),
+                End = DateUtility.Convert(rcvTime, inFormat: "yyyyMMddHHmm")
+            };
 
             // 項目與結果
             var interpretation = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests and/or laboratory data");
@@ -353,15 +359,17 @@ namespace EEC2FHIR.Laboratory
             // 檢體類別
             observation.BodySite = specimen.Collection.BodySite;
 
-            var componentNodes = node.SelectNodes("ns:component", xmlNsMgr);
-            foreach (XmlNode componentNode in componentNodes)
+            // 檢驗內容
+            var components = node.XPathSelectElements("ns:component", nsMgr);
+            foreach (var component in components)
             {
-                var component = new Observation.ComponentComponent();
+                var obsComponent = new Observation.ComponentComponent();
 
-                var obsNode = componentNode.SelectSingleNode("ns:observation", xmlNsMgr);
-                var loincCode = obsNode.SelectSingleNode("ns:code", xmlNsMgr).GetAttributeValue("code");
-                var loincDisplayName = obsNode.SelectSingleNode("ns:code", xmlNsMgr).GetAttributeValue("displayName");
-                component.Code = new CodeableConcept(SystemCodeLoinc, loincCode, loincDisplayName);
+                // 檢驗細項代碼
+                var loincCode = component.XPathEvaluateString("ns:observation/ns:code/@code", nsMgr);
+                var loincDisplayName = component.XPathEvaluateString("ns:observation/ns:code/@displayName", nsMgr);
+                obsComponent.Code = new CodeableConcept(SystemCodeLoinc, loincCode, loincDisplayName);
+
 
                 /**
                  * 檢驗結果/參考值
@@ -379,80 +387,66 @@ namespace EEC2FHIR.Laboratory
                  *     單數字
                  *       <value xsi:type="PQ" value="3.80 unit="mg/dL" />
                  */
-                var valueNode = obsNode.SelectSingleNode("ns:value", xmlNsMgr);
-                var valueType = valueNode.GetAttributeValue("xsi:type");                
+                var valueNode = component.XPathSelectElement("ns:observation/ns:value", nsMgr);
+                var valueType = valueNode.XPathEvaluateString("@xsi:type", nsMgr);
                 switch (valueType)
                 {
                     case "ST": // 文字結果，只處理數值不處理unit
-                        var stringValue = valueNode.GetAttributeValue("value");
-                        component.Value = new FhirString(stringValue);
+                        var stringValue = valueNode.XPathEvaluateString("@value", nsMgr);
+                        obsComponent.Value = new FhirString(stringValue);
                         break;
                     case "PQ": // 數字結果，處理數值與單位
-                        var value = decimal.Parse(valueNode.GetAttributeValue("value"));
-                        var unit = valueNode.GetAttributeValue("unit");
-                        component.Value = CreateQuantity(value, unit);
+                        var value = decimal.Parse(valueNode.XPathEvaluateString("@value", nsMgr));
+                        var unit = valueNode.XPathEvaluateString("@unit", nsMgr);
+                        obsComponent.Value = CreateQuantity(value, unit);
                         break;
-                    case "IVL_PQ": // 數字區間                        
-                        var lowNode = valueNode.SelectSingleNode("ns:low", xmlNsMgr);
-                        var lowValue = decimal.Parse(lowNode.GetAttributeValue("value"));
-                        var lowUnit = lowNode.GetAttributeValue("unit");
-                        var highNode = valueNode.SelectSingleNode("ns:high", xmlNsMgr);
-                        var highValue = decimal.Parse(highNode.GetAttributeValue("value"));
-                        var highUnit = highNode.GetAttributeValue("unit");
+                    case "IVL_PQ": // 數字區間                                                
+                        var lowValue = decimal.Parse(valueNode.XPathEvaluateString("ns:low/@value", nsMgr));
+                        var lowUnit = valueNode.XPathEvaluateString("ns:low/@unit", nsMgr);
+                        var highValue = decimal.Parse(valueNode.XPathEvaluateString("ns:high/@value", nsMgr));
+                        var highUnit = valueNode.XPathEvaluateString("ns:high/@unit", nsMgr);
                         var valueRange = new Range();
                         valueRange.Low = CreateQuantity(lowValue, lowUnit);
                         valueRange.High = CreateQuantity(highValue, highUnit);
-                        component.Value = valueRange;
+                        obsComponent.Value = valueRange;
                         break;
                     default:
                         throw new NotSupportedException("unsupported value type:" + valueType);
                 }
 
-
-                // 檢驗結果參考值，只參考range
+                // 參考值，只參考range
                 var rangeComponent = new Observation.ReferenceRangeComponent();
-                var valueRangeNode = obsNode.SelectSingleNode("ns:referenceRange/ns:observationRange/ns:value", xmlNsMgr);
-                var valueRangeType = valueRangeNode.GetAttributeValue("xsi:type");
+                var valueRangeNode = component.XPathSelectElement("ns:observation/ns:referenceRange/ns:observationRange/ns:value", nsMgr);
+                var valueRangeType = valueRangeNode.XPathEvaluateString("@xsi:type", nsMgr);
                 switch (valueRangeType)
                 {
                     case "IVL_PQ": // 數字區間                        
-                        var lowNode = valueRangeNode.SelectSingleNode("ns:low", xmlNsMgr);
-                        var lowValue = decimal.Parse(lowNode.GetAttributeValue("value"));
-                        var lowUnit = lowNode.GetAttributeValue("unit");
-                        var highNode = valueRangeNode.SelectSingleNode("ns:high", xmlNsMgr);
-                        var highValue = decimal.Parse(highNode.GetAttributeValue("value"));
-                        var highUnit = highNode.GetAttributeValue("unit");
+                        var lowValue = decimal.Parse(valueRangeNode.XPathEvaluateString("ns:low/@value", nsMgr));
+                        var lowUnit = valueRangeNode.XPathEvaluateString("ns:low/@unit", nsMgr);
+                        var highValue = decimal.Parse(valueRangeNode.XPathEvaluateString("ns:high/@value", nsMgr));
+                        var highUnit = valueRangeNode.XPathEvaluateString("ns:high/@unit", nsMgr);
                         rangeComponent.Low = CreateQuantity(lowValue, lowUnit);
                         rangeComponent.High = CreateQuantity(highValue, highUnit);
-                        component.ReferenceRange.Add(rangeComponent);
+                        obsComponent.ReferenceRange.Add(rangeComponent);
                         break;
                     default:
                         throw new NotSupportedException("unsupported value type:" + valueType);
                 }
-                observation.Component.Add(component);
+                observation.Component.Add(obsComponent);
             }
-
-            observation = client.Create(observation);
-
             return observation;
         }
 
+        private XmlNamespaceManager CreateNamespaceManager(string xml)
+        {
+            var reader = XmlReader.Create(new StringReader(xml));
+            var nameTable = reader.NameTable;
+            var namespaceManager = new XmlNamespaceManager(nameTable);
+            return namespaceManager;
+        }
         private Hl7.Fhir.Model.Quantity CreateQuantity(decimal value, string unit)
         {
-            //// 進行Unit轉譯
-            //if (UnitMap.TryGetValue(unit ?? "", out string newUnit))
-            //    unit = newUnit;
-
             return new Hl7.Fhir.Model.Quantity(value, unit, "http://www.cgmh.org.tw/unit");
         }
-
-
-        private readonly Dictionary<string, string> UnitMap
-            = new Dictionary<string, string>
-            {
-                { "℃", "Cel" },
-                { "-", "%" },
-                { "million/uL", "10*6/uL"}
-            };
     }
 }

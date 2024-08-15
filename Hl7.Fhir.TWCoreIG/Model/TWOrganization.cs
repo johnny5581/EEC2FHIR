@@ -18,7 +18,18 @@ namespace Hl7.Fhir.Model
         {
             var identifier = new Identifier(CodeSystemTwIdentifier, id);
             identifier.Type = new CodeableConcept("http://terminology.hl7.org/CodeSystem/v2-0203", "PRN");
+            organization.Identifier.Add(identifier);
             return organization;
+        }
+
+        public static string GetTwIdentifier(this Organization organization)
+        {
+            return GetIdentifier(organization, CodeSystemTwIdentifier);
+        }
+        public static string GetIdentifier(this Organization organization, string codeSystem)
+        {
+            var identifier = organization.Identifier.FirstOrDefault(r => r.System == codeSystem);
+            return identifier?.Value;
         }
     }
 }

@@ -84,5 +84,11 @@ namespace Hl7.Fhir.Model
             }
             return practitioner;
         }
+
+        public static string GetIdentifier(this Practitioner practitioner, string codeSystem)
+        {
+            var identifier = practitioner.Identifier.FirstOrDefault(r => r.System == codeSystem);
+            return identifier?.Value;
+        }
     }
 }
