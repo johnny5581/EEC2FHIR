@@ -57,6 +57,9 @@ namespace EECViewer
                 var querier = new FhirResourceQuerier<Bundle>(client);
                 var searchParams = new SearchParams();
 
+                // 基礎: 類別為檢驗報告 (11503-0)
+                searchParams.Add("type", "11503-0");
+
                 // 日期，當日或區間
                 if (!string.IsNullOrEmpty(textDocumentTime.Text))
                 {
