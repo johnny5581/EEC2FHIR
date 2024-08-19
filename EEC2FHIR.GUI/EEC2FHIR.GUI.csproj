@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EEC2FHIR\EEC2FHIR.csproj" />
+    <ProjectReference Include="..\FhirConnectathonUtility\FhirConnectathonUtility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

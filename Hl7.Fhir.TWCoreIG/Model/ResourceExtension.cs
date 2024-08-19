@@ -46,6 +46,22 @@ namespace Hl7.Fhir.Model
             res.Meta = new Meta();
             res.Meta.Profile = new string[] { profile };
         }
+
+        public static string GetIdentifier(this List<Identifier> identifiers, string codeSystem)
+        {
+            return identifiers.FirstOrDefault(r => r.System == codeSystem)?.Value;
+        }
+
+        public static string GetIdentifier(this Resource resource, string codeSystem)
+        {
+            var p = resource.GetType().GetProperty("Identifier");
+            if (p != null)
+            {
+                var identifier = (List<Identifier>)p.GetValue(resource, null);
+                return GetIdentifier(identifier, codeSystem);
+            }
+            return null;
+        }
     }
 
     public enum ResourceReferenceType

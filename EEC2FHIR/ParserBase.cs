@@ -16,6 +16,8 @@ namespace EEC2FHIR
         {
             this.client = client;
         }
+
+        public abstract Bundle Parse(string xml);
         
 
         protected T CreateResource<T>(T resource)

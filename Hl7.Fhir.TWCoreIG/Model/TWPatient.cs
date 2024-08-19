@@ -90,6 +90,11 @@ namespace Hl7.Fhir.Model
             }
             return patient;
         }
+
+        public static string GetTwIdentifier(this Patient patient)
+        {
+            return patient.GetIdentifier(CodeSystemTwIdentifier);
+        }
     }
 
     /// <summary>

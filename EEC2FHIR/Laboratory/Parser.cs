@@ -27,7 +27,7 @@ namespace EEC2FHIR.Laboratory
         public static string SystemCodeLoinc { get; } = "http://loinc.org";
         public static string SystemCodeSnomed { get; } = "http://snomed.info/sct";
 
-        public Bundle Parse(string xml)
+        public override Bundle Parse(string xml)
         {
             var doc = ConvertToDoc(xml);
             var nsMgr = CreateNamespaceManager(xml);
@@ -108,14 +108,14 @@ namespace EEC2FHIR.Laboratory
             composition.Type = new CodeableConcept(SystemCodeLoinc, "11503-0", "檢驗檢查");
 
             // 產生composition
-            CreateResource(composition);
+            composition = CreateResource(composition);
 
 
 
             // 組合bundle
             // 組合bundle
             var bundle = new Bundle();
-            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Bundle-twcore");
+            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckBundle");
             bundle.Type = Bundle.BundleType.Document;
             bundle.Identifier = new Identifier("https://twcore.mohw.gov.tw/ig/index.html", "Bundle-EMR");
             bundle.Timestamp = DateTimeOffset.Now;

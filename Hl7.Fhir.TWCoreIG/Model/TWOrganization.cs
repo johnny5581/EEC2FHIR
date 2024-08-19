@@ -24,12 +24,7 @@ namespace Hl7.Fhir.Model
 
         public static string GetTwIdentifier(this Organization organization)
         {
-            return GetIdentifier(organization, CodeSystemTwIdentifier);
-        }
-        public static string GetIdentifier(this Organization organization, string codeSystem)
-        {
-            var identifier = organization.Identifier.FirstOrDefault(r => r.System == codeSystem);
-            return identifier?.Value;
+            return organization.GetIdentifier(CodeSystemTwIdentifier);
         }
     }
 }

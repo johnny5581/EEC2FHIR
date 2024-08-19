@@ -5,20 +5,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EEC2FHIR.GUI
+namespace FhirConn.Utility
 {
-    public partial class Form2 : Form
+    public partial class TransactionHistoryForm : Form
     {
         private BindingSource bindingSource;
 
         private Scintilla textRequest;
         private Scintilla textResponse;
-        public Form2()
+
+        private readonly string fixText;
+        public TransactionHistoryForm()
         {
             InitializeComponent();
             bindingSource = new BindingSource();
@@ -35,6 +38,8 @@ namespace EEC2FHIR.GUI
             textResponse.Lexer = Lexer.Json;
             InitializeTextArea(textResponse);
             splitContainer.Panel2.Controls.Add(textResponse);
+
+            fixText = Text;
         }
         private void InitializeTextArea(Scintilla textArea)
         {
@@ -57,27 +62,42 @@ namespace EEC2FHIR.GUI
         }
 
 
-        public void LoadData(UploadHistory model)
+        public void LoadData(TransactionHistory model)
         {
-            bindingSource.DataSource = model.Requests;
+            if (model != null)
+            {
+                bindingSource.DataSource = model.Requests;
+                Text = $"{fixText} - {model.Token}";
+                listHistory.SelectedIndex = -1;
+                if (listHistory.Items.Count > 0)
+                    listHistory.SelectedIndex = 0;
+            }
         }
 
         private void listHistory_SelectedIndexChanged(object sender, EventArgs e)
         {
             var index = listHistory.SelectedIndex;
-            var item = bindingSource[index] as RequestHistory;
+            textRequest.Clear();
+            textResponse.Clear();
+            if (index > -1)
+            {
+                var item = bindingSource[index] as RequestHistory;
 
-            textRequest.Text = item.Request;
-            PrettyJson(textRequest);
+                textRequest.Text = item.Request;
+                PrettyJson(textRequest);
 
-            textResponse.Text = item.Response;            
-            PrettyJson(textResponse);
+                textResponse.Text = item.Response;
+                PrettyJson(textResponse);
+            }            
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            Hide();
+            if (e.CloseReason != CloseReason.ApplicationExitCall)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
         private void PrettyJson(Scintilla scintilla)
         {

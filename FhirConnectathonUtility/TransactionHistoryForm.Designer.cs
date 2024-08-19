@@ -1,6 +1,6 @@
-﻿namespace EEC2FHIR.GUI
+﻿namespace FhirConn.Utility
 {
-    partial class Form2
+    partial class TransactionHistoryForm
     {
         /// <summary>
         /// Required designer variable.

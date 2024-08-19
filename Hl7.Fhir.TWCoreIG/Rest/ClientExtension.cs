@@ -33,5 +33,6 @@ namespace Hl7.Fhir.Rest
         {
             return bundle.Entry.Select(entry => (T)entry.Resource).ToArray();
         }
+
     }
 }

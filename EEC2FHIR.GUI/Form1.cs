@@ -1,4 +1,5 @@
-﻿using Hl7.Fhir.Rest;
+﻿using FhirConn.Utility;
+using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,18 +24,18 @@ using System.Xml.Linq;
 
 namespace EEC2FHIR.GUI
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, FhirConn.Utility.IHttpMessageHandlerCallback
     {
         private Scintilla textAreaXml;
         private Scintilla textAreaJson;
         private int maxLineNumberCharLengthXml;
         private int maxLineNumberCharLengthJson;
         private FhirClient client;
-        private readonly List<UploadHistory> Histories
-            = new List<UploadHistory>();
-        private UploadHistory currentScope;
+        private readonly List<TransactionHistory> Histories
+            = new List<TransactionHistory>();
+        private TransactionHistory currentScope;
         private BindingSource bindingSource;
-        private Form2 subForm;
+        private TransactionHistoryForm subForm;
         public Form1()
         {
             InitializeComponent();
@@ -42,8 +43,11 @@ namespace EEC2FHIR.GUI
             bindingSource = new BindingSource();
             bindingSource.DataSource = Histories;
             listHistory.DataSource = bindingSource;
-            client = new FhirClient(ConfigurationManager.AppSettings["fhir.server"], new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new ExHttpClientHandler(this));
-            subForm = new Form2();
+            var server = ConfigurationManager.AppSettings["fhir.server"];
+            var tokenServer = ConfigurationManager.AppSettings["fhir.token.server"];
+            var tokenSecret = ConfigurationManager.AppSettings["fhir.token.secret"];            
+            client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, tokenSecret));
+            subForm = new TransactionHistoryForm();
         }
 
         private void InitializeCustomComponent()
@@ -128,13 +132,15 @@ namespace EEC2FHIR.GUI
         }
         private void menuUpload_Click(object sender, EventArgs e)
         {
-            currentScope = new UploadHistory(Guid.NewGuid().ToString());
+            currentScope = new TransactionHistory(Guid.NewGuid().ToString());
             bindingSource.Add(currentScope);
             //Histories.Add(currentScope);
             Execute(() =>
             {
                 var xml = textAreaXml.Text;
-                var parser = new Laboratory.Parser(client);                
+                var parser = new Laboratory.Parser(client);
+                parser.SystemCodeLocal = ConfigurationManager.AppSettings["fhir.codesystem.local"];
+                parser.SystemCodeGlobal = ConfigurationManager.AppSettings["fhir.codesystem.global"];
                 var bundle = parser.Parse(xml);
                 var json = new FhirJsonSerializer().SerializeToString(bundle);
                 textAreaJson.Text = json;
@@ -181,7 +187,7 @@ namespace EEC2FHIR.GUI
         {
             Execute(() =>
             {
-                var item = listHistory.SelectedItem as UploadHistory;
+                var item = listHistory.SelectedItem as TransactionHistory;
                 if (item == null)
                     throw new Exception("沒有選取紀錄");
                 subForm.LoadData(item);
@@ -196,119 +202,11 @@ namespace EEC2FHIR.GUI
         {
             bindingSource.Clear();
         }
-        private class ExHttpClientHandler : HttpClientHandler
-        {
-            private string lastToken;
-            private DateTime expiredTime;
-            private Form1 form1;
-            private string secret;
-            private string server;
-
-            public ExHttpClientHandler(Form1 form1)
-            {
-                this.form1 = form1;
-                server = ConfigurationManager.AppSettings["fhir.token.server"];
-                secret = ConfigurationManager.AppSettings["fhir.token.secret"];
-            }
-
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                if (server != null)
-                {
-                    var token = GetToken();
-                    request.Headers.Add("Authorization", "Bearer " + token);
-                }
-
-                var guid = Guid.NewGuid().ToString();
-                // 抓request
-                form1.SaveRequest(guid, request.Method.Method, request.RequestUri.ToString(), request.Content?.ReadAsStringAsync()?.Result);
-
-
-                var response = base.SendAsync(request, cancellationToken).Result;
-                // 抓response
-                var responseText = response.Content.ReadAsStringAsync().Result;
-                form1.SaveResponse(guid, responseText);
-
-                return Task.FromResult(response);
-            }
-
-
-
-            // 取Token
-            private string GetToken()
-            {
-                if (expiredTime > DateTime.Now)
-                    return lastToken;
-
-                // recreate token
-                var request = new HttpRequestMessage(HttpMethod.Post, server);
-                var parameters = new List<KeyValuePair<string, string>>()
-                {
-                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                    new KeyValuePair<string, string>("client_id", "fhir-twcore-0.2.0"),
-                    new KeyValuePair<string, string>("client_secret", secret),
-                };
-
-                var sendTime = DateTime.Now;
-                request.Content = new FormUrlEncodedContent(parameters);
-                using (var client = new HttpClient())
-                {
-                    var response = client.SendAsync(request).Result;
-                    var jsonContent = response.Content.ReadAsStringAsync().Result;
-                    var jsonObj = JObject.Parse(jsonContent);
-                    var bearerToken = Convert.ToString(jsonObj["access_token"]);
-
-                    lastToken = bearerToken;
-                    expiredTime = sendTime.AddMinutes(3);
-                    return lastToken;
-                }
-            }
-        }
+        
 
     }
 
-    public class UploadHistory
-    {
-        public UploadHistory(string token)
-        {
-            Token = token;
-        }
-
-        public string Token { get; }
-        public DateTime Time { get; set; } = DateTime.Now;
-        public RequestHistoryCollection Requests { get; set; } = new RequestHistoryCollection();
-
-        public override string ToString()
-        {
-            return $"{Time:HH:mm:ss} - {Token}";
-        }
-    }
-    public class RequestHistory
-    {
-        public RequestHistory(string guid, string method, string url)
-        {
-            Guid = guid;
-            Method = method;
-            Url = url;
-        }
-        public string Guid { get; }
-        public string Method { get; }
-        public string Url { get; }
-        public string Request { get; set; }
-        public string Response { get; set; }
-        public DateTime Time { get; } = DateTime.Now;
-        public override string ToString()
-        {
-            return $"{Time:HH:mm:ss} - {Method} - {Url}";
-        }
-    }
-    public class RequestHistoryCollection : KeyedCollection<string, RequestHistory>
-    {
-        protected override string GetKeyForItem(RequestHistory item)
-        {
-            return item.Guid;
-        }
-    }
+    
 
 
 }
