@@ -1,0 +1,2816 @@
+<cdp:ContentPackage xmlns="urn:hl7-org:v3" xmlns:cdp="http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0 CDA_Package_V01.xsd">
+	<cdp:ContentContainer range="0">
+		<cdp:StructuredContent>
+			<ClinicalDocument xmlns:voc="urn:hl7-org:v3/voc" classCode="DOCCLIN" moodCode="EVN" xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
+				<typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3"/>
+				<templateId extension="113_V101.0" root="2.16.886.101.20003.20014"/>
+				<!-- Id定義: -->
+				<id extension="1.0309020000.17.080801180" root="2.16.886.104.100565.100008"/>				
+				<code code="11502-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Laboratory report.total"/>
+				<title>血液檢驗報告</title>
+				<effectiveTime value="20240808163350"/>
+				<confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality" displayName="normal"/>
+				<languageCode code="zh-TW"/>
+				<recordTarget contextControlCode="OP" typeCode="RCT">
+					<patientRole classCode="PAT">
+						<id extension="501" root="2.16.886.104.100565.100008"/>
+						<patient classCode="PSN" determinerCode="INSTANCE">
+							<id extension="Q501000000" root="2.16.886.104.90004.100021"/>
+							<name>陳測試</name>
+							<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1"/>
+							<birthTime value="19360525"/>
+						</patient>
+						<providerOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1132070011" root="2.16.886.101.20003.20014"/>
+							<name>長庚紀念醫院林口總院</name>
+						</providerOrganization>
+					</patientRole>
+				</recordTarget>
+				<author contextControlCode="OP" typeCode="AUT">
+					<time value="202408081612"/>
+					<assignedAuthor classCode="ASSIGNED">
+						<id extension="XXX" root="2.16.886.111.100000.100000"/>
+						<assignedPerson classCode="PSN" determinerCode="INSTANCE">
+							<name>簡季施</name>
+						</assignedPerson>
+					</assignedAuthor>
+				</author>
+				<custodian typeCode="CST">
+					<assignedCustodian classCode="ASSIGNED">
+						<representedCustodianOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1132070011" root="2.16.886.101.20003.20014"/>
+							<name>長庚紀念醫院林口總院</name>
+						</representedCustodianOrganization>
+					</assignedCustodian>
+				</custodian>
+				<inFulfillmentOf typeCode="FLFS">
+					<order classCode="ACT" moodCode="RQO">
+						<id extension="24l000000002" root="2.16.886.111.100000.100000"/>
+					</order>
+				</inFulfillmentOf>
+				<componentOf typeCode="COMP">
+					<encompassingEncounter classCode="ENC" moodCode="EVN">
+						<effectiveTime value="202408081516"/>
+					</encompassingEncounter>
+				</componentOf>
+				<component contextConductionInd="true" typeCode="COMP">
+					<structuredBody classCode="DOCBODY" moodCode="EVN">
+						<component contextConductionInd="true" typeCode="COMP">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="30954-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Relevant diagnostic tests and/or laboratory data"/>
+								<title>檢驗結果</title>
+								<text>
+									<table>
+										<tbody>
+											<tr>
+												<td>(9)檢體來源</td>
+												<td>靜脈</td>
+												<td>(10)檢體類別</td>
+												<td>Blood</td>
+												<td>(11)檢體類別說明</td>
+												<td>血液</td>
+											</tr>
+											<tr>
+												<td>(12)健保檢驗項目代號</td>
+												<td/>
+												<td>(13)健保檢驗項目名稱</td>
+												<td>PDW+MPV</td>
+												<td>(15)收件日期時間</td>
+												<td>202408081516</td>
+											</tr>
+										</tbody>
+									</table>
+									<table>
+										<thead>
+											<tr>
+												<td>項次</td>
+												<td>報告日期時間</td>
+												<td>檢驗項目名稱</td>
+												<td>檢驗報告結果值</td>
+												<td>單位</td>
+												<td>檢驗方法</td>
+												<td>參考值</td>
+												<td>備註</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>4</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>5</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>6</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>7</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>8</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>9</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>10</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>6.1</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>3.9 ~10.6(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>11</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>12</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>13</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>14</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>15</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>16</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>17</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>18</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>19</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>20</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>7.13</td>
+												<td>million/uL</td>
+												<td>Automated count </td>
+												<td>4.5 ~5.9 (大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>21</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>22</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>23</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>24</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>25</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>26</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>27</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>28</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>29</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>30</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>13.3</td>
+												<td>g/dL</td>
+												<td>Automated count </td>
+												<td>13.5~17.5(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>31</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>32</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>34</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>35</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>36</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>37</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>38</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>39</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>40</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>43.3</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>41~53(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>41</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>42</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>43</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>44</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>45</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>46</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>47</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>48</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>49</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>50</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>60.7</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>80-100(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>51</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>52</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>53</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>54</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>55</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>56</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>57</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>58</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>59</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>60</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>18.7</td>
+												<td>pg/Cell</td>
+												<td>Automated count </td>
+												<td>26~34(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>61</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>62</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>63</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>64</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>65</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>66</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>67</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>68</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>69</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>70</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>30.7</td>
+												<td>gHb/dL</td>
+												<td>Automated count </td>
+												<td>31~37(大於6Y)</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>71</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>72</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>73</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>74</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>75</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>76</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>77</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>78</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>79</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>80</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>18.4</td>
+												<td>%</td>
+												<td>Automated count </td>
+												<td>11.5-14.5</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>81</td>
+												<td>202408081612</td>
+												<td>CBC</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>82</td>
+												<td>202408081612</td>
+												<td>WBC</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>83</td>
+												<td>202408081612</td>
+												<td>RBC</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>84</td>
+												<td>202408081612</td>
+												<td>Hemoglobin</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>85</td>
+												<td>202408081612</td>
+												<td>Hematocrit</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>86</td>
+												<td>202408081612</td>
+												<td>MCV</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>87</td>
+												<td>202408081612</td>
+												<td>MCH</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>88</td>
+												<td>202408081612</td>
+												<td>MCHC</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>89</td>
+												<td>202408081612</td>
+												<td>RDW</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>90</td>
+												<td>202408081612</td>
+												<td>Platelets</td>
+												<td>200</td>
+												<td>1000/uL</td>
+												<td>Automated count </td>
+												<td>150-400</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>91</td>
+												<td>202408081612</td>
+												<td>PDW+MPV</td>
+												<td>---</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>9.2-15.6</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>92</td>
+												<td>202408081612</td>
+												<td>PDW</td>
+												<td>---</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>9.2-15.6</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>93</td>
+												<td>202408081612</td>
+												<td>MPV</td>
+												<td>---</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>9.2-15.6</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>94</td>
+												<td>202408081612</td>
+												<td>PDW+MPV</td>
+												<td>---</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>M:8.0-12.2;F:8.6-12.0</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>95</td>
+												<td>202408081612</td>
+												<td>PDW</td>
+												<td>---</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>M:8.0-12.2;F:8.6-12.0</td>
+												<td/>
+											</tr>
+											<tr>
+												<td>96</td>
+												<td>202408081612</td>
+												<td>MPV</td>
+												<td>---</td>
+												<td>fL</td>
+												<td>Automated count </td>
+												<td>M:8.0-12.2;F:8.6-12.0</td>
+												<td/>
+											</tr>
+										</tbody>
+									</table>
+								</text>
+								<entry>
+									<organizer classCode="BATTERY" moodCode="EVN">
+										<code code="58410-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Complete blood count (hemogram) panel">
+											<originalText>
+												<reference value="#NHI_00000"/>
+											</originalText>
+											<translation code="00000" codeSystem="2.16.886.101.20003.20014" codeSystemName="NHI" displayName="PDW+MPV"/>
+										</code>
+										<statusCode code="completed"/>
+										<effectiveTime value="202408081516"/>
+										<specimen typeCode="SPC">
+											<specimenRole classCode="SPEC">
+												<specimenPlayingEntity classCode="ENT" determinerCode="INSTANCE">
+													<code code="Blood" codeSystem="2.16.840.1.113883.11.19464" codeSystemName="SpecimenEntityType" displayName="血液"/>
+													<name>血液</name>
+													<desc>靜脈抽血檢查</desc>
+												</specimenPlayingEntity>
+											</specimenRole>
+										</specimen>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="0"/>
+															<high unit="1000/uL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="3.90"/>
+															<high unit="1000/uL" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="4.50"/>
+															<high unit="1000/uL" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="13.50"/>
+															<high unit="1000/uL" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="41"/>
+															<high unit="1000/uL" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="80"/>
+															<high unit="1000/uL" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="26"/>
+															<high unit="1000/uL" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="31"/>
+															<high unit="1000/uL" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="11.50"/>
+															<high unit="1000/uL" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="6.1" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="150"/>
+															<high unit="1000/uL" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="0"/>
+															<high unit="million/uL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="3.90"/>
+															<high unit="million/uL" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="4.50"/>
+															<high unit="million/uL" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="13.50"/>
+															<high unit="million/uL" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="41"/>
+															<high unit="million/uL" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="80"/>
+															<high unit="million/uL" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="26"/>
+															<high unit="million/uL" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="31"/>
+															<high unit="million/uL" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="11.50"/>
+															<high unit="million/uL" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="million/uL" value="7.13" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="million/uL" value="150"/>
+															<high unit="million/uL" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="0"/>
+															<high unit="g/dL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="3.90"/>
+															<high unit="g/dL" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="4.50"/>
+															<high unit="g/dL" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="13.50"/>
+															<high unit="g/dL" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="41"/>
+															<high unit="g/dL" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="80"/>
+															<high unit="g/dL" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="26"/>
+															<high unit="g/dL" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="31"/>
+															<high unit="g/dL" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="11.50"/>
+															<high unit="g/dL" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="g/dL" value="13.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="g/dL" value="150"/>
+															<high unit="g/dL" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="0"/>
+															<high unit="%" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="3.90"/>
+															<high unit="%" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="4.50"/>
+															<high unit="%" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="13.50"/>
+															<high unit="%" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="41"/>
+															<high unit="%" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="80"/>
+															<high unit="%" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="26"/>
+															<high unit="%" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="31"/>
+															<high unit="%" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="11.50"/>
+															<high unit="%" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="43.3" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="150"/>
+															<high unit="%" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="0"/>
+															<high unit="fL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="3.90"/>
+															<high unit="fL" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="4.50"/>
+															<high unit="fL" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="13.50"/>
+															<high unit="fL" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="41"/>
+															<high unit="fL" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="80"/>
+															<high unit="fL" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="26"/>
+															<high unit="fL" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="31"/>
+															<high unit="fL" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="11.50"/>
+															<high unit="fL" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="60.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="150"/>
+															<high unit="fL" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="0"/>
+															<high unit="pg/Cell" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="3.90"/>
+															<high unit="pg/Cell" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="4.50"/>
+															<high unit="pg/Cell" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="13.50"/>
+															<high unit="pg/Cell" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="41"/>
+															<high unit="pg/Cell" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="80"/>
+															<high unit="pg/Cell" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="26"/>
+															<high unit="pg/Cell" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="31"/>
+															<high unit="pg/Cell" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="11.50"/>
+															<high unit="pg/Cell" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="pg/Cell" value="18.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="pg/Cell" value="150"/>
+															<high unit="pg/Cell" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="0"/>
+															<high unit="gHb/dL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="3.90"/>
+															<high unit="gHb/dL" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="4.50"/>
+															<high unit="gHb/dL" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="13.50"/>
+															<high unit="gHb/dL" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="41"/>
+															<high unit="gHb/dL" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="80"/>
+															<high unit="gHb/dL" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="26"/>
+															<high unit="gHb/dL" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="31"/>
+															<high unit="gHb/dL" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="11.50"/>
+															<high unit="gHb/dL" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="gHb/dL" value="30.7" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="gHb/dL" value="150"/>
+															<high unit="gHb/dL" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="0"/>
+															<high unit="%" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="3.90"/>
+															<high unit="%" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="4.50"/>
+															<high unit="%" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="13.50"/>
+															<high unit="%" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="41"/>
+															<high unit="%" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="80"/>
+															<high unit="%" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="26"/>
+															<high unit="%" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="31"/>
+															<high unit="%" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="11.50"/>
+															<high unit="%" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="%" value="18.4" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="%" value="150"/>
+															<high unit="%" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="CBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="0"/>
+															<high unit="1000/uL" value="0"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="WBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="3.90"/>
+															<high unit="1000/uL" value="10.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RBCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="4.50"/>
+															<high unit="1000/uL" value="5.90"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemoglobinby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="13.50"/>
+															<high unit="1000/uL" value="17.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocritby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="41"/>
+															<high unit="1000/uL" value="53"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCVby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="80"/>
+															<high unit="1000/uL" value="100"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="26"/>
+															<high unit="1000/uL" value="34"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MCHCby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="31"/>
+															<high unit="1000/uL" value="37"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="RDWby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="11.50"/>
+															<high unit="1000/uL" value="14.50"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plateletsby Automated count"/>
+												<text/>
+												<effectiveTime value="202408081612"/>
+												<value unit="1000/uL" value="200" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="1000/uL" value="150"/>
+															<high unit="1000/uL" value="400"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="PDW+MPVby Automated count"/>
+												<text>---</text>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="0"/>
+															<high unit="fL" value="9999"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="PDWby Automated count"/>
+												<text>---</text>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="9.20"/>
+															<high unit="fL" value="15.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MPVby Automated count"/>
+												<text>---</text>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="8"/>
+															<high unit="fL" value="12.20"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="PDW+MPVby Automated count"/>
+												<text>---</text>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="0"/>
+															<high unit="fL" value="9999"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="PDWby Automated count"/>
+												<text>---</text>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="9.20"/>
+															<high unit="fL" value="15.60"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+										<component>
+											<observation classCode="OBS" moodCode="EVN">
+												<id extension="1"/>
+												<code code="00000" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MPVby Automated count"/>
+												<text>---</text>
+												<effectiveTime value="202408081612"/>
+												<value unit="fL" value="0" xsi:type="PQ"/>
+												<methodCode code="0047" codeSystem="2.16.840.1.113883.11.14079" codeSystemName="ObservationMethod" displayName="Automated count"/>
+												<referenceRange>
+													<observationRange>
+														<value xsi:type="IVL_PQ">
+															<low unit="fL" value="8"/>
+															<high unit="fL" value="12.20"/>
+														</value>
+													</observationRange>
+												</referenceRange>
+											</observation>
+										</component>
+									</organizer>
+								</entry>
+							</section>
+						</component>
+					</structuredBody>
+				</component>
+			</ClinicalDocument>
+		</cdp:StructuredContent>
+	</cdp:ContentContainer>
+</cdp:ContentPackage>

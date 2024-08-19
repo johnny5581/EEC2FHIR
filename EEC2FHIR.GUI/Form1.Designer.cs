@@ -106,7 +106,7 @@
             this.listHistory.ContextMenuStrip = this.ctxMenuListBox;
             this.listHistory.FormattingEnabled = true;
             this.listHistory.ItemHeight = 16;
-            this.listHistory.Location = new System.Drawing.Point(12, 27);
+            this.listHistory.Location = new System.Drawing.Point(13, 27);
             this.listHistory.Name = "listHistory";
             this.listHistory.Size = new System.Drawing.Size(213, 356);
             this.listHistory.TabIndex = 7;
@@ -117,12 +117,12 @@
             this.ctxMenuListBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuClear});
             this.ctxMenuListBox.Name = "ctxMenuListBox";
-            this.ctxMenuListBox.Size = new System.Drawing.Size(181, 48);
+            this.ctxMenuListBox.Size = new System.Drawing.Size(99, 26);
             // 
             // menuClear
             // 
             this.menuClear.Name = "menuClear";
-            this.menuClear.Size = new System.Drawing.Size(180, 22);
+            this.menuClear.Size = new System.Drawing.Size(98, 22);
             this.menuClear.Text = "清除";
             this.menuClear.Click += new System.EventHandler(this.menuClear_Click);
             // 

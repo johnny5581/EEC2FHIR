@@ -1,11 +1,16 @@
-﻿using Hl7.Fhir.Model;
+﻿using EEC2FHIR.Utility;
+using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
+using Hl7.Fhir.Utility;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace EEC2FHIR
 {
@@ -16,6 +21,16 @@ namespace EEC2FHIR
         {
             this.client = client;
         }
+        /// <summary>
+        /// 體系SystemCode
+        /// </summary>
+        public string SystemCodeGlobal { get; set; } = "https://www.cgmh.org.tw";
+        /// <summary>
+        /// 院區SystemCode
+        /// </summary>
+        public string SystemCodeLocal { get; set; } = "https://lnk.cgmh.org.tw";
+        public static string SystemCodeLoinc { get; } = "http://loinc.org";
+        public static string SystemCodeSnomed { get; } = "http://snomed.info/sct";
 
         public abstract Bundle Parse(string xml);
         
@@ -51,5 +66,12 @@ namespace EEC2FHIR
                 return root + system;
             return root + "/" + system;
         }
+        protected Hl7.Fhir.Model.Quantity CreateQuantity(decimal value, string unit, string codeSystem = "http://www.cgmh.org.tw/unit")
+        {
+            return new Hl7.Fhir.Model.Quantity(value, unit, codeSystem);
+        }
+
+        
+        
     }
 }

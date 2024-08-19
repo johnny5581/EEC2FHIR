@@ -22,24 +22,13 @@ namespace EEC2FHIR.Laboratory
         {
         }
 
-        public string SystemCodeGlobal { get; set; } = "https://www.cgmh.org.tw";
-        public string SystemCodeLocal { get; set; } = "https://lnk.cgmh.org.tw";
-        public static string SystemCodeLoinc { get; } = "http://loinc.org";
-        public static string SystemCodeSnomed { get; } = "http://snomed.info/sct";
+        
 
         public override Bundle Parse(string xml)
         {
             var doc = ConvertToDoc(xml);
-            var nsMgr = CreateNamespaceManager(xml);
-
-            // 新增命名空間
-            nsMgr.AddNamespace("", "urn:hl7-org:v3");
-            nsMgr.AddNamespace("ns", "urn:hl7-org:v3");
-            nsMgr.AddNamespace("cdp", "http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0");
-            nsMgr.AddNamespace("ds", "http://www.w3.org/2000/09/xmldsig#");
-            nsMgr.AddNamespace("xades", "http://uri.etsi.org/01903/v1.4.1#");
-            nsMgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-
+            var nsMgr = doc.CreateCdaR2NamespaceManager();
+            
             // 取得根目錄
             var root = doc.XPathSelectElement("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument", nsMgr);
 
@@ -132,129 +121,6 @@ namespace EEC2FHIR.Laboratory
 
             return bundle;
         }
-
-
-        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
-        {
-            Patient patient = null;
-
-            var node = root.XPathSelectElement(xpath, nsMgr);
-
-            // 醫院病歷號
-            var chtNo = node.XPathEvaluateString("ns:patientRole/ns:id/@extension", nsMgr);
-            // 身份證字號
-            var idno = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:id/@extension", nsMgr);
-
-            // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
-            var querier = new TWPatientQuerier(client);
-            patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
-            if (patient != null)
-                return patient;
-
-            // 再來透過身分證字號查詢，如果有的話，把病歷號合併
-            patient = querier.GetByTwIdentifier(idno);
-            if (patient != null)
-            {
-                patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
-                return UpdateResource(patient); // 更新這筆病人資料
-            }
-
-            // 建立新的病人資料
-            patient = new Patient();
-            patient.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPatient");
-            patient.SetTwIdentifier(idno);
-            patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
-
-            // 中文姓名
-            var cnm = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:name", nsMgr);
-            patient.SetChineseName(cnm);
-
-            // 性別
-            var gender = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:administrativeGenderCode/@code", nsMgr);
-            patient.SetAdministrativeGenderV3(gender);
-
-            // 生日
-            var birthDat = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:birthTime/@value", nsMgr);
-            patient.BirthDate = DateUtility.Convert(birthDat);
-
-            // 管理機構
-            patient.ManagingOrganization = GetOrganizationResource(node, "ns:patientRole/ns:providerOrganization", nsMgr, composition).GetReference();
-
-            return CreateResource(patient);
-        }
-
-        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
-        {
-            Organization organization = null;
-
-            var node = root.XPathSelectElement(xpath, nsMgr);
-
-            // 醫療院所代碼
-            var hospId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
-
-            // 先檢查有沒有這個機構，有的話就使用目前資料
-            var querier = new TWOrganizationQuerier(client);
-            organization = querier.GetByTwIdentifier(hospId);
-            if (organization != null)
-                return organization;
-
-            // 因為FHIR建立資源比較慢，檢核composition.Custodian的資源是否相同
-            if (composition.Custodian != null)
-            {
-                var reference = composition.Custodian.Reference;
-                var org = client.Read<Organization>(reference);
-                if (org != null && org.GetTwIdentifier() == hospId)
-                    return org;
-            }
-
-            // 建立新的機構資料
-            organization = new Organization();
-            organization.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckOrganization");
-            organization.SetTwIdentifier(hospId);
-
-            var hospName = node.XPathEvaluateString("ns:name", nsMgr);
-            organization.Name = hospName;
-
-            return CreateResource(organization);
-        }
-
-        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
-        {
-            Practitioner practitioner = null;
-
-            var node = root.XPathSelectElement(xpath, nsMgr);
-
-            var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
-
-            // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
-            var querier = new TWPractitionerQuerier(client);
-            practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
-            if (practitioner != null)
-                return practitioner;
-
-            // !! 因為HAPI FHIR cahce的關係，檢查composition.author是否有這個資源，有的話就使用
-            if (composition.Author != null && !composition.Author.IsNullOrEmpty())
-            {
-                // composition.Author[0] 是院區，跳過
-                for (var i=1; i<composition.Author.Count; i++)
-                {
-                    var prac = client.Read<Practitioner>(composition.Author[i].Reference);
-                    if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
-                        return prac;
-                }
-            }
-
-            // 建立新的醫事人員資料
-            practitioner = new Practitioner();
-            practitioner.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPractitioner");
-            practitioner.SetHospitalIdentifier(SystemCodeGlobal, empId);
-
-            // 中文姓名
-            var cnm = node.XPathEvaluateString("ns:assignedPerson/ns:name", nsMgr);
-            practitioner.SetChineseName(cnm);
-
-            return CreateResource(practitioner);
-        }
         private Encounter GetEncounterResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
             Encounter encounter = null;
@@ -330,7 +196,11 @@ namespace EEC2FHIR.Laboratory
 
             // 設定檢驗單資訊            
             var id = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:id/@extension", nsMgr);
+            // 設定OID單號
             observation.Identifier.Add(new Identifier(SystemCodeLocal, id));
+
+            // TODO: 解析檢驗單號
+
 
             // 設定檢驗項目            
             var obsLoincCode = node.XPathEvaluateString("ns:code/@code", nsMgr);
@@ -437,16 +307,133 @@ namespace EEC2FHIR.Laboratory
             return observation;
         }
 
-        private XmlNamespaceManager CreateNamespaceManager(string xml)
+        /// <summary>
+        /// 轉換CDAR2的病人資訊
+        /// </summary>        
+        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
-            var reader = XmlReader.Create(new StringReader(xml));
-            var nameTable = reader.NameTable;
-            var namespaceManager = new XmlNamespaceManager(nameTable);
-            return namespaceManager;
+            Patient patient = null;
+
+            var node = root.XPathSelectElement(xpath, nsMgr);
+
+            // 醫院病歷號
+            var chtNo = node.XPathEvaluateString("ns:patientRole/ns:id/@extension", nsMgr);
+            // 身份證字號
+            var idno = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:id/@extension", nsMgr);
+
+            // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
+            var querier = new TWPatientQuerier(client);
+            patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
+            if (patient != null)
+                return patient;
+
+            // 再來透過身分證字號查詢，如果有的話，把病歷號合併
+            patient = querier.GetByTwIdentifier(idno);
+            if (patient != null)
+            {
+                patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
+                return UpdateResource(patient); // 更新這筆病人資料
+            }
+
+            // 建立新的病人資料
+            patient = new Patient();
+            patient.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPatient");
+            patient.SetTwIdentifier(idno);
+            patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
+
+            // 中文姓名
+            var cnm = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:name", nsMgr);
+            patient.SetChineseName(cnm);
+
+            // 性別
+            var gender = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:administrativeGenderCode/@code", nsMgr);
+            patient.SetAdministrativeGenderV3(gender);
+
+            // 生日
+            var birthDat = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:birthTime/@value", nsMgr);
+            patient.BirthDate = DateUtility.Convert(birthDat);
+
+            // 管理機構
+            patient.ManagingOrganization = GetOrganizationResource(node, "ns:patientRole/ns:providerOrganization", nsMgr, composition).GetReference();
+
+            return CreateResource(patient);
         }
-        private Hl7.Fhir.Model.Quantity CreateQuantity(decimal value, string unit)
+        /// <summary>
+        /// 轉換CDAR2的組織資訊
+        /// </summary>
+        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
         {
-            return new Hl7.Fhir.Model.Quantity(value, unit, "http://www.cgmh.org.tw/unit");
+            Organization organization = null;
+
+            var node = root.XPathSelectElement(xpath, nsMgr);
+
+            // 醫療院所代碼
+            var hospId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
+
+            // 先檢查有沒有這個機構，有的話就使用目前資料
+            var querier = new TWOrganizationQuerier(client);
+            organization = querier.GetByTwIdentifier(hospId);
+            if (organization != null)
+                return organization;
+
+            // 因為FHIR建立資源比較慢，檢核composition.Custodian的資源是否相同
+            if (composition.Custodian != null)
+            {
+                var reference = composition.Custodian.Reference;
+                var org = client.Read<Organization>(reference);
+                if (org != null && org.GetTwIdentifier() == hospId)
+                    return org;
+            }
+
+            // 建立新的機構資料
+            organization = new Organization();
+            organization.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckOrganization");
+            organization.SetTwIdentifier(hospId);
+
+            var hospName = node.XPathEvaluateString("ns:name", nsMgr);
+            organization.Name = hospName;
+
+            return CreateResource(organization);
+        }
+        /// <summary>
+        /// 轉換CDAR2的人員資訊
+        /// </summary>
+        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        {
+            Practitioner practitioner = null;
+
+            var node = root.XPathSelectElement(xpath, nsMgr);
+
+            var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
+
+            // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
+            var querier = new TWPractitionerQuerier(client);
+            practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
+            if (practitioner != null)
+                return practitioner;
+
+            // !! 因為HAPI FHIR cahce的關係，檢查composition.author是否有這個資源，有的話就使用
+            if (composition.Author != null && !composition.Author.IsNullOrEmpty())
+            {
+                // composition.Author[0] 是院區，跳過
+                for (var i = 1; i < composition.Author.Count; i++)
+                {
+                    var prac = client.Read<Practitioner>(composition.Author[i].Reference);
+                    if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
+                        return prac;
+                }
+            }
+
+            // 建立新的醫事人員資料
+            practitioner = new Practitioner();
+            practitioner.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPractitioner");
+            practitioner.SetHospitalIdentifier(SystemCodeGlobal, empId);
+
+            // 中文姓名
+            var cnm = node.XPathEvaluateString("ns:assignedPerson/ns:name", nsMgr);
+            practitioner.SetChineseName(cnm);
+
+            return CreateResource(practitioner);
         }
     }
 }

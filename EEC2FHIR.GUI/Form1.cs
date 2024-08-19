@@ -1,10 +1,12 @@
-﻿using FhirConn.Utility;
+﻿using EEC2FHIR.Utility;
+using FhirConn.Utility;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScintillaNET;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -21,6 +23,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace EEC2FHIR.GUI
 {
@@ -138,7 +141,7 @@ namespace EEC2FHIR.GUI
             Execute(() =>
             {
                 var xml = textAreaXml.Text;
-                var parser = new Laboratory.Parser(client);
+                ParserBase parser = CreateParserBase(xml);
                 parser.SystemCodeLocal = ConfigurationManager.AppSettings["fhir.codesystem.local"];
                 parser.SystemCodeGlobal = ConfigurationManager.AppSettings["fhir.codesystem.global"];
                 var bundle = parser.Parse(xml);
@@ -148,6 +151,30 @@ namespace EEC2FHIR.GUI
                 client.Create(bundle);
             });
             currentScope = null;
+        }
+
+        private ParserBase CreateParserBase(string xml)
+        {
+            // 決定xml類型要用哪種Parser
+            var doc = XDocument.Load(xml);
+
+            var docType = GetCdaR2DocumentType(doc);
+            switch(docType)
+            {
+                case "18782-3": // 影像報告
+                    return new ImageReport.Parser(client);
+                case "11502-2": // 檢驗檢查報告
+                    return new Laboratory.Parser(client);
+                default:
+                    throw new NotSupportedException("不支援的CDAR2文件類型: " + docType);
+            }
+        }
+
+        private string GetCdaR2DocumentType(XDocument doc)
+        {
+            var nsMgr = doc.CreateCdaR2NamespaceManager();
+            var code = doc.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ClinicalDocument/code/@code", nsMgr);
+            return code;
         }
 
 
