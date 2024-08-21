@@ -65,9 +65,18 @@ namespace FhirConn.Utility
 
             var sendTime = DateTime.Now;
             request.Content = new FormUrlEncodedContent(parameters);
+
+            // 紀錄request
+            var tokeGuid = Guid.NewGuid().ToString();
+            callback.SaveRequest(tokeGuid, request.Method.Method, request.RequestUri.ToString(), request.Content.ReadAsStringAsync().Result);
+
             using (var client = new HttpClient())
             {
                 var response = client.SendAsync(request).Result;
+
+                // 紀錄response
+                callback.SaveResponse(tokeGuid, response.Content.ReadAsStringAsync().Result);
+
                 var jsonContent = response.Content.ReadAsStringAsync().Result;
                 var jsonObj = JObject.Parse(jsonContent);
                 var bearerToken = Convert.ToString(jsonObj["access_token"]);
