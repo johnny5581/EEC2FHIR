@@ -21,7 +21,6 @@ namespace EEC2FHIR.Laboratory
         public Parser(FhirClient client) : base(client)
         {
         }
-        public string SystemCodeLab { get; set; }
         
 
         public override Bundle Parse(string xml)
@@ -103,9 +102,6 @@ namespace EEC2FHIR.Laboratory
             // 產生composition
             composition = CreateResource(composition);
 
-
-
-            // 組合bundle
             // 組合bundle
             var bundle = new Bundle();
             bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckBundle");
@@ -131,7 +127,7 @@ namespace EEC2FHIR.Laboratory
 
             var node = root.XPathSelectElement(xpath, nsMgr);
 
-            var opdNo = root.XPathEvaluateString("ns:id/@extension", nsMgr);
+            var opdNo = node.XPathEvaluateString("ns:id/@extension", nsMgr);
 
             // 先查看看有沒有這個就診紀錄，有的話就使用
             var querier = new FhirResourceQuerier<Encounter>(client);
@@ -203,7 +199,7 @@ namespace EEC2FHIR.Laboratory
             observation.Identifier.Add(new Identifier(SystemCodeLocal, oid));
             // 設定檢驗單號
             var id = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:inFulfillmentOf/ns:order/ns:id/@extension", nsMgr);
-            observation.Identifier.Add(new Identifier(SystemCodeLocal, id));
+            observation.Identifier.Add(new Identifier(SystemCodeLocal + "/lab", id));
 
             // 設定檢驗項目            
             var obsLoincCode = node.XPathEvaluateString("ns:code/@code", nsMgr);

@@ -27,12 +27,12 @@ namespace EECViewer
 
         private void menuQryLab_Click(object sender, EventArgs e)
         {
-            ShowMdiChild(typeof(Laboratory.QueryForm));
+            ShowMdiChild(typeof(Laboratory.SearchForm));
         }
 
         private void menuQryImage_Click(object sender, EventArgs e)
         {
-            ShowMdiChild(typeof(ImageReport.QueryForm));
+            ShowMdiChild(typeof(ImageReport.SearchForm));
         }
 
 
@@ -52,6 +52,5 @@ namespace EECViewer
             form.WindowState = FormWindowState.Maximized;
             form.Show();
         }
-
     }
 }

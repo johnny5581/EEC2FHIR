@@ -1,5 +1,4 @@
-﻿using EEC2FHIR.Utility;
-using FhirConn.Utility;
+﻿using FhirConn.Utility;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using System;
@@ -9,30 +8,38 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EECViewer.Laboratory
+namespace EECViewer
 {
-    public partial class QueryForm : FormBase, FhirConn.Utility.IHttpMessageHandlerCallback
+    public partial class SearchFormBase : FormBase, IHttpMessageHandlerCallback
     {
-        private readonly FhirClient client;
-        private TransactionHistory history;
-        private TransactionHistoryForm subForm;
-        public QueryForm()
+        protected readonly FhirClient client;
+        protected TransactionHistory history;
+        protected TransactionHistoryForm subForm;
+        public SearchFormBase()
         {
             InitializeComponent();
             var server = ConfigurationManager.AppSettings["fhir.server"];
             var tokenServer = ConfigurationManager.AppSettings["fhir.token.server"];
             var tokenSecret = ConfigurationManager.AppSettings["fhir.token.secret"];
             client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, tokenSecret));
-            
+
 
             dgvData.AutoGenerateColumns = true;
         }
-
+        public virtual string DocumentType
+        {
+            get
+            {
+                if (DocumentTypeValue == null)
+                    throw new NullReferenceException("缺少要查詢的文件類別");
+                return DocumentTypeValue;
+            }
+        }
+        protected string DocumentTypeValue { get; set; }
 
         public void SaveRequest(string guid, string method, string uri, string requestText)
         {
@@ -51,12 +58,14 @@ namespace EECViewer.Laboratory
         {
             Execute(() =>
             {
+                bindingSource.DataSource = null;
+
                 // 準備查詢參數
                 var querier = new FhirResourceQuerier<Bundle>(client);
                 var searchParams = new SearchParams();
 
                 // 基礎: 類別為檢驗報告 (11503-0)
-                searchParams.Add("type", "11503-0");
+                searchParams.Add("type", DocumentType);
 
                 // 日期，當日或區間
                 if (!string.IsNullOrEmpty(textDocumentTime.Text))
@@ -100,7 +109,7 @@ namespace EECViewer.Laboratory
                 }
 
 
-                if (searchParams.Parameters.Count == 0)
+                if (searchParams.Parameters.Count <= 1)
                     throw new Exception("至少要有一個查詢條件");
 
 
@@ -122,7 +131,7 @@ namespace EECViewer.Laboratory
                         var model = new ViewModel();
                         model.Data.Add("root", composition);
 
-                        model.Id = composition.Id;                        
+                        model.Id = composition.Id;
 
                         // 讀取病人資料
                         var pat = client.Read<Patient>(composition.Subject.Reference);
@@ -188,24 +197,17 @@ namespace EECViewer.Laboratory
                 var item = dgvData.Rows[index].DataBoundItem as ViewModel;
                 if (item != null)
                 {
-                    using (var d = new DetailForm(client))
-                    {
-                        var model = new DetailForm.ViewData();
-                        var composition = item.Data["root"] as Composition;
-                        model.Composition = composition;
-                        model.Patient = item.Data[composition.Subject.Reference] as Patient;
-                        model.Encounter = item.Data[composition.Encounter.Reference] as Encounter;
-                        if (composition.Custodian?.Reference != null)
-                            model.Organization = item.Data[composition.Custodian?.Reference] as Organization;
-                        model.Author = item.Data[composition.Author[1].Reference] as Practitioner;
-                        model.EncounterPractitioner = item.Data[model.Encounter.Participant[0].Individual.Reference] as Practitioner;
-                        d.LoadData(model);
-                        d.ShowDialog();
-                    }
+                    ShowDetailView(item);                    
                 }
             }
         }
-        private class ViewModel
+
+        protected virtual void ShowDetailView(ViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public class ViewModel
         {
             [DisplayName("#")]
             public string Id { get; set; }
@@ -236,5 +238,18 @@ namespace EECViewer.Laboratory
             public Dictionary<string, object> Data { get; } = new Dictionary<string, object>();
         }
 
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                buttonSearch.PerformClick();
+        }
     }
+
+    public interface IDetailView
+    {
+        void LoadData(object data);
+        DialogResult ShowDialog();
+    }
+
+    
 }

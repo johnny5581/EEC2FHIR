@@ -30,7 +30,7 @@ namespace EECViewer.Laboratory
         {
             // 填寫資訊
             groupDocument.Text = model.Composition.Title;
-            textDocId.Text = model.Composition.GetIdentifier(codeSystemLocal);
+            textDocId.Text = model.Composition.GetIdentifier(codeSystemLocal + "/lab") ?? model.Composition.GetIdentifier(codeSystemLocal);
             textDocDate.Text = DateTime.Parse(model.Composition.Date).ToString("yyyy/MM/dd");
             textPatId.Text = model.Patient.GetIdentifier(TWPatient.CodeSystemTwIdentifier);
             textPatChtno.Text = $"{model.Patient.GetIdentifier(codeSystemLocal)} ({codeSystemLocal})";
