@@ -44,7 +44,7 @@
 				</custodian>
 				<inFulfillmentOf typeCode="FLFS">
 					<order classCode="ACT" moodCode="RQO">
-						<id extension="24l000000001" root="2.16.886.104.100565.100008"/>
+						<id extension="C00000001" root="2.16.886.104.100565.100008"/>
 					</order>
 				</inFulfillmentOf>
 				<componentOf typeCode="COMP">

@@ -156,7 +156,7 @@ namespace EEC2FHIR.GUI
         private ParserBase CreateParserBase(string xml)
         {
             // 決定xml類型要用哪種Parser
-            var doc = XDocument.Load(xml);
+            var doc = XDocument.Parse(xml);
 
             var docType = GetCdaR2DocumentType(doc);
             switch(docType)
@@ -173,7 +173,7 @@ namespace EEC2FHIR.GUI
         private string GetCdaR2DocumentType(XDocument doc)
         {
             var nsMgr = doc.CreateCdaR2NamespaceManager();
-            var code = doc.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ClinicalDocument/code/@code", nsMgr);
+            var code = doc.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:code/@code", nsMgr);
             return code;
         }
 

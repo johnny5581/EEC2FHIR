@@ -47,20 +47,56 @@ namespace Hl7.Fhir.Model
             res.Meta.Profile = new string[] { profile };
         }
 
-        public static string GetIdentifier(this List<Identifier> identifiers, string codeSystem)
+        public static string GetIdentifier(this Identifier identifier, bool full = false)
+        {            
+            if (full)
+                return $"{identifier.Value} ({identifier.System})";
+            return identifier.Value;
+        }
+        public static string GetIdentifier(this List<Identifier> identifiers, string codeSystem, bool full = false)
         {
-            return identifiers.FirstOrDefault(r => r.System == codeSystem)?.Value;
+            var identifier = identifiers.FirstOrDefault(r => r.System == codeSystem);
+            return GetIdentifier(identifier, full);
         }
 
-        public static string GetIdentifier(this Resource resource, string codeSystem)
+        public static string GetIdentifier(this Resource resource, string codeSystem, bool full = false)
         {
             var p = resource.GetType().GetProperty("Identifier");
             if (p != null)
             {
-                var identifier = (List<Identifier>)p.GetValue(resource, null);
-                return GetIdentifier(identifier, codeSystem);
+                var value = p.GetValue(resource, null);                
+                if (value is Identifier)
+                {
+                    var identifier = value as Identifier;
+                    if(identifier.System == codeSystem)
+                        return GetIdentifier(identifier, full);
+                }
+                else if (value is List<Identifier>)
+                    return GetIdentifier(value as List<Identifier>, codeSystem, full);
             }
             return null;
+        }
+
+        
+        public static string ToText(this HumanName humanName)
+        {
+            return humanName.Family + humanName.Given.FirstOrDefault();
+        }
+
+        public static string ToText(this List<HumanName> humanNames, HumanName.NameUse use = HumanName.NameUse.Official)
+        {
+            var humanName = humanNames.FirstOrDefault(r => r.Use == use);
+            return ToText(humanName);
+        }
+
+        public static string ToText(this Coding coding)
+        {
+            return coding.Display ?? $"{coding.Code} ({coding.System})";
+        }
+
+        public static string ToText(this CodeableConcept codeableConcept)
+        {
+            return codeableConcept.Text ?? codeableConcept.Coding.FirstOrDefault()?.ToText();
         }
     }
 

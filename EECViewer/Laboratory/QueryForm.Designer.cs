@@ -1,6 +1,6 @@
-﻿namespace EECViewer
+﻿namespace EECViewer.Laboratory
 {
-    partial class LaboratoryQueryForm
+    partial class QueryForm
     {
         /// <summary>
         /// Required designer variable.

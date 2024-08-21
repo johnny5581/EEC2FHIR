@@ -1,6 +1,6 @@
-﻿namespace EECViewer
+﻿namespace EECViewer.ImageReport
 {
-    partial class ImageReportQueryForm
+    partial class QueryForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.SuspendLayout();
+            // 
+            // QueryForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "ImageReportQueryForm";
+            this.Name = "QueryForm";
+            this.Text = "影像檢查報告";
+            this.ResumeLayout(false);
+
         }
 
         #endregion

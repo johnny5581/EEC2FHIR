@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EECViewer
+namespace EECViewer.ImageReport
 {
-    public partial class ImageReportQueryForm : FormBase
+    public partial class QueryForm : FormBase
     {
-        public ImageReportQueryForm()
+        public QueryForm()
         {
             InitializeComponent();
         }

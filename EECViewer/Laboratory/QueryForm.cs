@@ -9,28 +9,26 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EECViewer
+namespace EECViewer.Laboratory
 {
-    public partial class LaboratoryQueryForm : FormBase, FhirConn.Utility.IHttpMessageHandlerCallback
+    public partial class QueryForm : FormBase, FhirConn.Utility.IHttpMessageHandlerCallback
     {
         private readonly FhirClient client;
         private TransactionHistory history;
         private TransactionHistoryForm subForm;
-        private readonly string codeSystemLocal;
-        private readonly string codeSystemGlobal;
-        public LaboratoryQueryForm()
+        public QueryForm()
         {
             InitializeComponent();
             var server = ConfigurationManager.AppSettings["fhir.server"];
             var tokenServer = ConfigurationManager.AppSettings["fhir.token.server"];
             var tokenSecret = ConfigurationManager.AppSettings["fhir.token.secret"];
             client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, tokenSecret));
-            codeSystemLocal = ConfigurationManager.AppSettings["fhir.codesystem.local"];
-            codeSystemGlobal = ConfigurationManager.AppSettings["fhir.codesystem.global"];
+            
 
             dgvData.AutoGenerateColumns = true;
         }
@@ -122,30 +120,43 @@ namespace EECViewer
                     {
                         var composition = entry.Resource as Composition;
                         var model = new ViewModel();
+                        model.Data.Add("root", composition);
 
-                        model.Id = composition.Id;
+                        model.Id = composition.Id;                        
 
                         // 讀取病人資料
                         var pat = client.Read<Patient>(composition.Subject.Reference);
                         model.PatId = pat.GetTwIdentifier();
-                        model.PatChtNo = pat.GetIdentifier(codeSystemLocal);
-                        var humanName = pat.Name.FirstOrDefault(r => r.Use == HumanName.NameUse.Official);
-                        model.PatName = humanName.Family + humanName.Given.FirstOrDefault();
+                        model.PatChtNo = pat.GetIdentifier(codeSystemLocal, true);
+                        model.PatName = pat.Name.ToText();
                         model.PatGender = Convert.ToString(pat.Gender);
+                        model.Data.Add(composition.Subject.Reference, pat);
 
                         // 讀取機構資料
                         if (composition.Custodian != null)
                         {
                             var org = client.Read<Organization>(composition.Custodian.Reference);
                             model.Org = $"{org.Name} ({org.GetTwIdentifier()})";
+                            model.Data.Add(composition.Custodian.Reference, org);
                         }
+
+                        // 報告作者
+                        var author = client.Read<Practitioner>(composition.Author[1].Reference);
+                        model.Author = author.Name.ToText();
+                        model.Data.Add(composition.Author[1].Reference, author);
 
                         // 讀取開單資料
                         var encounter = client.Read<Encounter>(composition.Encounter.Reference);
-                        model.OpdNo = encounter.GetIdentifier(codeSystemLocal);
+                        model.OpdNo = encounter.GetIdentifier(codeSystemLocal, true);
+                        model.Data.Add(composition.Encounter.Reference, encounter);
+
+                        // 開單醫師
+                        var encPratitioner = client.Read<Practitioner>(encounter.Participant[0].Individual.Reference);
+                        model.OdrDr = encPratitioner.Name.ToText();
+                        model.Data.Add(encounter.Participant[0].Individual.Reference, encPratitioner);
 
                         model.Title = composition.Title;
-                        model.Date = composition.Date;
+                        model.Date = DateTimeOffset.Parse(composition.Date).ToString("yyyy-MM-dd HH:mm");
                         model.Status = Convert.ToString(composition.Status);
 
                         models.Add(model);
@@ -177,7 +188,20 @@ namespace EECViewer
                 var item = dgvData.Rows[index].DataBoundItem as ViewModel;
                 if (item != null)
                 {
-
+                    using (var d = new DetailForm(client))
+                    {
+                        var model = new DetailForm.ViewData();
+                        var composition = item.Data["root"] as Composition;
+                        model.Composition = composition;
+                        model.Patient = item.Data[composition.Subject.Reference] as Patient;
+                        model.Encounter = item.Data[composition.Encounter.Reference] as Encounter;
+                        if (composition.Custodian?.Reference != null)
+                            model.Organization = item.Data[composition.Custodian?.Reference] as Organization;
+                        model.Author = item.Data[composition.Author[1].Reference] as Practitioner;
+                        model.EncounterPractitioner = item.Data[model.Encounter.Participant[0].Individual.Reference] as Practitioner;
+                        d.LoadData(model);
+                        d.ShowDialog();
+                    }
                 }
             }
         }
@@ -197,12 +221,19 @@ namespace EECViewer
             public string Org { get; set; }
             [DisplayName("報告標題")]
             public string Title { get; set; }
+            [DisplayName("報告作者")]
+            public string Author { get; set; }
             [DisplayName("報告時間")]
             public string Date { get; set; }
             [DisplayName("報告狀態")]
             public string Status { get; set; }
             [DisplayName("就診號")]
             public string OpdNo { get; set; }
+            [DisplayName("開單醫師")]
+            public string OdrDr { get; set; }
+
+            [Browsable(false)]
+            public Dictionary<string, object> Data { get; } = new Dictionary<string, object>();
         }
 
     }

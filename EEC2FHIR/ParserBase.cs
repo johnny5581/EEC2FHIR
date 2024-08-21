@@ -29,6 +29,8 @@ namespace EEC2FHIR
         /// 院區SystemCode
         /// </summary>
         public string SystemCodeLocal { get; set; } = "https://lnk.cgmh.org.tw";
+
+        
         public static string SystemCodeLoinc { get; } = "http://loinc.org";
         public static string SystemCodeSnomed { get; } = "http://snomed.info/sct";
 

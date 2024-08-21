@@ -21,7 +21,7 @@ namespace EEC2FHIR.Laboratory
         public Parser(FhirClient client) : base(client)
         {
         }
-
+        public string SystemCodeLab { get; set; }
         
 
         public override Bundle Parse(string xml)
@@ -85,6 +85,10 @@ namespace EEC2FHIR.Laboratory
 
             // 摘要標題
             composition.Title = root.XPathEvaluateString("ns:title", nsMgr);
+
+            // 檢驗單號
+            var id = root.XPathEvaluateString("ns:id/@extension", nsMgr);
+            composition.Identifier = new Identifier(SystemCodeLocal, id);
 
             // 摘要時間
             var effectiveTime = root.XPathEvaluateString("ns:effectiveTime/@value", nsMgr);
@@ -194,13 +198,12 @@ namespace EEC2FHIR.Laboratory
             observation.Performer.Add(composition.Author[1]);
             observation.Specimen = specimen.GetReference();
 
-            // 設定檢驗單資訊            
-            var id = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:id/@extension", nsMgr);
             // 設定OID單號
+            var oid = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:id/@extension", nsMgr);
+            observation.Identifier.Add(new Identifier(SystemCodeLocal, oid));
+            // 設定檢驗單號
+            var id = root.Document.Root.XPathEvaluateString("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument/ns:inFulfillmentOf/ns:order/ns:id/@extension", nsMgr);
             observation.Identifier.Add(new Identifier(SystemCodeLocal, id));
-
-            // TODO: 解析檢驗單號
-
 
             // 設定檢驗項目            
             var obsLoincCode = node.XPathEvaluateString("ns:code/@code", nsMgr);

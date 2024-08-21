@@ -16,6 +16,7 @@ namespace EEC2FHIR.Demo
         {
             var client = new FhirClient("http://localhost:11180/fhir", settings: new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new ProxyMessageHandler());
             var parser = new Laboratory.Parser(client);
+
             var text = File.ReadAllText("lab.xml");
             var bundle = parser.Parse(text);
             client.Create(bundle);

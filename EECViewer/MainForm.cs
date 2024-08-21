@@ -27,12 +27,12 @@ namespace EECViewer
 
         private void menuQryLab_Click(object sender, EventArgs e)
         {
-            ShowMdiChild(typeof(LaboratoryQueryForm));
+            ShowMdiChild(typeof(Laboratory.QueryForm));
         }
 
         private void menuQryImage_Click(object sender, EventArgs e)
         {
-            ShowMdiChild(typeof(ImageReportQueryForm));
+            ShowMdiChild(typeof(ImageReport.QueryForm));
         }
 
 
