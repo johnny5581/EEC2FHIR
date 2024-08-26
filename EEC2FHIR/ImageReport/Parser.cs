@@ -15,6 +15,8 @@ namespace EEC2FHIR.ImageReport
 {
     public class Parser : ParserBase
     {
+        private const string SystemObservationCategory = "http://terminology.hl7.org/CodeSystem/observation-category";
+
         public Parser(FhirClient client) : base(client)
         {
         }
@@ -35,33 +37,28 @@ namespace EEC2FHIR.ImageReport
             // 取得醫院資訊
             var organization = GetOrganizationResource(root, "ns:custodian/ns:assignedCustodian/ns:representedCustodianOrganization", nsMgr, composition);
             composition.Custodian = organization.GetReference();
-            composition.Author.Add(organization.GetReference());
+            composition.Author.Add(organization.GetReference()); //只能有一個
 
             // 取得病人資料
             var patient = GetPatientResource(root, "ns:recordTarget", nsMgr, composition);
             composition.Subject = patient.GetReference();
 
-            // 取得影像報告人員資訊
+            //// 取得影像報告人員資訊
             var author = GetPractitionerResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition);
-            composition.Author.Add(author.GetReference());
+            //composition.Author.Add(author.GetReference());
 
-            // 取得影像報告認證人員資訊
+            //// 取得影像報告認證人員資訊
             var legalAuthor = GetPractitionerResource(root, "ns:legalAuthenticator/ns:assignedEntity", nsMgr, composition);
-            composition.Author.Add(legalAuthor.GetReference());
+            //composition.Author.Add(legalAuthor.GetReference());
 
             // 取得開單資訊
             var encounter = GetEncounterResource(root, "ns:componentOf/ns:encompassingEncounter", nsMgr, composition);
             composition.Encounter = encounter.GetReference();
 
-            
-
             // 取得影像報告內容
             var components = root.XPathSelectElements("ns:component/ns:structuredBody/ns:component/ns:section", nsMgr);
 
-            var sectionComponent = new Composition.SectionComponent();
-            sectionComponent.Code = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests/laboratory data Narrative");
-            // TODO: composition - sections (影像內容)
-            composition.Section.Add(sectionComponent);
+
 
             // 摘要標題
             composition.Title = root.XPathEvaluateString("ns:title", nsMgr);
@@ -74,28 +71,175 @@ namespace EEC2FHIR.ImageReport
             composition.Status = CompositionStatus.Final;
 
             // 摘要類型
-            composition.Type = new CodeableConcept(SystemCodeLoinc, "18782-3", "Radiology Study observation (narrative)");
+            composition.Type = new CodeableConcept(SystemCodeLoinc, "18782-3", "Radiology Study observation (narrative)", "Radiology Study observation (narrative)");
 
+
+
+            var observation = new Observation();
+            observation.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/Observation-Imaging-Result");
+            var pPACSNOList = root.XPathSelectElements("ns:inFulfillmentOf/ns:order/ns:id", nsMgr);
+            string pPACSNOValueRaw = null;
+            foreach (var pPACSNO in pPACSNOList)
+            {
+                var pPACSNOValue = pPACSNO.XPathEvaluateString("@extension", nsMgr);
+                if (pPACSNOValueRaw == null)
+                {
+                    pPACSNOValueRaw = pPACSNOValue;
+                }
+                observation.Identifier.Add(new Identifier(SystemCodeLocal, pPACSNOValue));//可能有缺要注意
+            }
+            observation.Status = ObservationStatus.Final;
+            observation.Category.Add(new CodeableConcept(SystemObservationCategory, "imaging", "Imaging", "Imaging"));
+            observation.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");//需要設定對應檔案
+            observation.Subject = composition.Subject;
+            observation.Effective = new FhirDateTime(composition.Date);
+
+            observation = CreateResource(observation);
+
+            var endpoint = new Endpoint();
+            endpoint.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/MitwEndpoint");
+            endpoint.Address = "http://localhost:8081/dicom-web";//影像網址!
+            endpoint.Status = Endpoint.EndpointStatus.Active;
+            endpoint.ConnectionType = new Coding("http://terminology.hl7.org/CodeSystem/endpoint-connection-type", "dicom-wado-rs", "DICOM WADO-RS");
+            endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
+            endpoint = CreateResource(endpoint);
+
+            var condition = new Condition();
+            var imagingStudy = new ImagingStudy();
+            string pBodySite = "";
+            string pReport = "";
+            foreach (var component in components)
+            {
+                var pCode = component.XPathEvaluateString("ns:code/@code", nsMgr);
+                var pDisplayName = component.XPathEvaluateString("ns:code/@displayName", nsMgr);
+                if (pCode == "55286-9")//病史 應該只有一個
+                {
+                    pBodySite = component.XPathEvaluateString("ns:text", nsMgr);
+                }
+                if (pCode == "11515-4")//病史 應該只有一個
+                {
+                    pReport = component.XPathEvaluateString("ns:text", nsMgr);
+                }
+
+            }
+            foreach (var component in components)
+            {
+                var pCode = component.XPathEvaluateString("ns:code/@code", nsMgr);
+                var pDisplayName = component.XPathEvaluateString("ns:code/@displayName", nsMgr);
+                if (pCode == "10164-2")//病史 應該只有一個
+                {
+                    var pText = component.XPathEvaluateString("ns:text", nsMgr);
+                    condition.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/TWCoreCondition");
+                    condition.ClinicalStatus = new CodeableConcept("http://terminology.hl7.org/CodeSystem/condition-clinical", "active", "Active", "Active");//???
+                    condition.Category.Add(new CodeableConcept("http://terminology.hl7.org/CodeSystem/condition-category", "encounter-diagnosis", "Encounter Diagnosis", "Encounter Diagnosis"));//???
+                    condition.Code = new CodeableConcept(SystemCodeLoinc, pCode, pDisplayName, pText);
+                    condition.Subject = composition.Subject;
+                    condition = CreateResource(condition);
+                }
+                if (pCode == "121181")
+                {
+                    var pStudyUID = component.XPathEvaluateString("ns:entry/ns:act/ns:id/@root", nsMgr);
+
+                    imagingStudy.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/ImagingStudyBase");
+                    var pStudyUID_identifier = new Identifier();
+                    pStudyUID_identifier.Use = Identifier.IdentifierUse.Official;
+                    pStudyUID_identifier.Type = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ImageIdentifierType", "SIUID", "Study instancce UID", "DICOM Study Instance UID");
+                    pStudyUID_identifier.System = "urn:dicom:uid";
+                    pStudyUID_identifier.Value = "urn:oid:"+pStudyUID;
+                    imagingStudy.Identifier.Add(pStudyUID_identifier);
+                    var pAccession_ID_identifier = new Identifier();
+                    pAccession_ID_identifier.Use = Identifier.IdentifierUse.Official;
+                    pAccession_ID_identifier.Type = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ImageIdentifierType", "ACSN", "Accession ID", "Accession No 檢查單號");
+                    pAccession_ID_identifier.System = SystemCodeLocal;
+                    pAccession_ID_identifier.Value = pPACSNOValueRaw;
+                    imagingStudy.Identifier.Add(pAccession_ID_identifier);
+                    imagingStudy.Status = ImagingStudy.ImagingStudyStatus.Available;
+                    imagingStudy.Subject = composition.Subject;
+                    imagingStudy.Started = composition.Date;//需要改為影像時間(收件時間)，需要從DICOM來
+                    imagingStudy.Endpoint.Add( endpoint.GetReference());
+                    var pSeries = component.XPathSelectElements("ns:entry/ns:act/ns:entryRelationship/ns:act", nsMgr);
+                    var pImageNumber = component.XPathSelectElements("ns:entry/ns:act/ns:entryRelationship/ns:act/ns:entryRelationship", nsMgr);
+
+                    imagingStudy.NumberOfSeries = pSeries.Count();
+                    imagingStudy.NumberOfInstances = pImageNumber.Count();
+                    imagingStudy.ProcedureCode.Add(new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", ""));//需要對應檔
+
+                    foreach (var pSerie in pSeries)
+                    {
+
+                        var pUID = pSerie.XPathEvaluateString("ns:id/@root", nsMgr);
+                        var pMod = pSerie.XPathEvaluateString("ns:code/ns:qualifier/ns:value/@code", nsMgr);
+
+                        var pImageNumberS = pSerie.XPathSelectElements("ns:entryRelationship", nsMgr);
+
+                        List<Hl7.Fhir.Model.ImagingStudy.InstanceComponent> Instance = new List<ImagingStudy.InstanceComponent>();
+                        foreach (var imageInstance in pImageNumberS)
+                        {
+                            var pInsUID = imageInstance.XPathEvaluateString("ns:observation/ns:id/@root", nsMgr);
+                            Instance.Add(new ImagingStudy.InstanceComponent
+                            {
+                                Uid = pInsUID,
+                                SopClass = new Coding("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/DicomsopClass", "urn:oid:1.2.840.10008.5.1.4.1.1.2", "CT Image Storage"),//需要有對應資料
+                            });
+                        }
+                        imagingStudy.Series.Add(new ImagingStudy.SeriesComponent
+                        {
+                            Uid = pUID,
+                            Modality = new Coding("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/AcquisitionModality", pMod),
+                            BodySite = new Coding(SystemCodeLoinc, "55286-9", pBodySite),//需要有對應資料
+                            Instance = Instance,
+                        });
+                    }
+                }
+            }
+            imagingStudy = CreateResource(imagingStudy);
+
+            var diagnosticReport = new DiagnosticReport();
+            diagnosticReport.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/DiagnosticReport-Image");
+            diagnosticReport.Identifier.Add(new Identifier(SystemCodeLocal, pPACSNOValueRaw));
+            diagnosticReport.Status = DiagnosticReport.DiagnosticReportStatus.Final;
+            diagnosticReport.Category.Add(new CodeableConcept(SystemCodeLoinc, "LP29684-5", "Radiology", "Radiology"));
+            diagnosticReport.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");
+            diagnosticReport.Subject = composition.Subject;
+            diagnosticReport.Encounter = encounter.GetReference();
+            diagnosticReport.Effective = new FhirDateTime(composition.Date);
+            diagnosticReport.Performer.Add(author.GetReference());
+            //diagnosticReport.ResultsInterpreter.Add(legalAuthor.GetReference());
+            diagnosticReport.Result.Add(observation.GetReference());//診斷結果(Finding) 需要更改
+            diagnosticReport.ImagingStudy.Add(imagingStudy.GetReference());//影像檢查
+            diagnosticReport.Conclusion = pReport;//報告內容
+            diagnosticReport = CreateResource(diagnosticReport);
+
+            var sectionComponent = new Composition.SectionComponent();
+            sectionComponent.Code = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests/laboratory data Narrative", "Relevant diagnostic tests/laboratory data Narrative");
+            sectionComponent.Entry.Add(author.GetReference());
+            sectionComponent.Entry.Add(condition.GetReference());
+            sectionComponent.Entry.Add(imagingStudy.GetReference());
+            sectionComponent.Entry.Add(observation.GetReference());
+            sectionComponent.Entry.Add(diagnosticReport.GetReference());
+            // TODO: composition - sections (影像內容)
+            composition.Section.Add(sectionComponent);
             // 產生composition
             composition = CreateResource(composition);
 
-
-
             // 組合bundle
             var bundle = new Bundle();
-            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckBundle");
+            bundle.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/ImageBundle");
             bundle.Type = Bundle.BundleType.Document;
             bundle.Identifier = new Identifier("https://twcore.mohw.gov.tw/ig/index.html", "Bundle-EMR");
             bundle.Timestamp = DateTimeOffset.Now;
 
             bundle.AppendEntryResource(composition);
-            bundle.AppendEntryResource(organization);
             bundle.AppendEntryResource(patient);
-            
-            // TODO: bundle entry
+            bundle.AppendEntryResource(organization);
 
-            bundle.AppendEntryResource(author);
+            bundle.AppendEntryResource(author);//Practitioner
             bundle.AppendEntryResource(encounter);
+            bundle.AppendEntryResource(condition);
+
+            bundle.AppendEntryResource(observation);
+            bundle.AppendEntryResource(diagnosticReport);
+            bundle.AppendEntryResource(imagingStudy);
 
             return bundle;
         }
@@ -118,7 +262,7 @@ namespace EEC2FHIR.ImageReport
             encounter = new Encounter();
             encounter.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/TWCoreEncounter");
             encounter.Identifier.Add(new Identifier(SystemCodeLocal, opdNo));
-            encounter.Class = new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "PRENC");            
+            encounter.Class = new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "PRENC");
             encounter.Status = Encounter.EncounterStatus.Finished;
             encounter.Subject = composition.Subject;
 
