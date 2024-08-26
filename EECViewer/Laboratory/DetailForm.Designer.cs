@@ -65,6 +65,8 @@
             this.bindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dgvDetail = new System.Windows.Forms.DataGridView();
             this.bindingSourceDetail = new System.Windows.Forms.BindingSource(this.components);
+            this.textDocAuthor = new System.Windows.Forms.TextBox();
+            this.labelDocAuthor = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -126,7 +128,7 @@
             this.groupEncounter.Controls.Add(this.textOdrId);
             this.groupEncounter.Controls.Add(this.labelOdrId);
             this.groupEncounter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupEncounter.Location = new System.Drawing.Point(0, 424);
+            this.groupEncounter.Location = new System.Drawing.Point(0, 455);
             this.groupEncounter.Margin = new System.Windows.Forms.Padding(5);
             this.groupEncounter.Name = "groupEncounter";
             this.groupEncounter.Padding = new System.Windows.Forms.Padding(5);
@@ -202,7 +204,7 @@
             this.groupOrganization.Controls.Add(this.textOrgId);
             this.groupOrganization.Controls.Add(this.labelOrgId);
             this.groupOrganization.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupOrganization.Location = new System.Drawing.Point(0, 326);
+            this.groupOrganization.Location = new System.Drawing.Point(0, 357);
             this.groupOrganization.Margin = new System.Windows.Forms.Padding(5);
             this.groupOrganization.Name = "groupOrganization";
             this.groupOrganization.Padding = new System.Windows.Forms.Padding(5);
@@ -264,7 +266,7 @@
             this.groupPatient.Controls.Add(this.textPatChtno);
             this.groupPatient.Controls.Add(this.labelPatChtno);
             this.groupPatient.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupPatient.Location = new System.Drawing.Point(0, 112);
+            this.groupPatient.Location = new System.Drawing.Point(0, 143);
             this.groupPatient.Margin = new System.Windows.Forms.Padding(5);
             this.groupPatient.Name = "groupPatient";
             this.groupPatient.Padding = new System.Windows.Forms.Padding(5);
@@ -375,6 +377,8 @@
             // 
             // groupDocument
             // 
+            this.groupDocument.Controls.Add(this.textDocAuthor);
+            this.groupDocument.Controls.Add(this.labelDocAuthor);
             this.groupDocument.Controls.Add(this.textDocDate);
             this.groupDocument.Controls.Add(this.labelDocDate);
             this.groupDocument.Controls.Add(this.textDocId);
@@ -384,7 +388,7 @@
             this.groupDocument.Margin = new System.Windows.Forms.Padding(5);
             this.groupDocument.Name = "groupDocument";
             this.groupDocument.Padding = new System.Windows.Forms.Padding(5);
-            this.groupDocument.Size = new System.Drawing.Size(258, 112);
+            this.groupDocument.Size = new System.Drawing.Size(258, 143);
             this.groupDocument.TabIndex = 0;
             this.groupDocument.TabStop = false;
             this.groupDocument.Text = "報告";
@@ -493,6 +497,26 @@
             this.dgvDetail.Size = new System.Drawing.Size(541, 278);
             this.dgvDetail.TabIndex = 1;
             // 
+            // textDocAuthor
+            // 
+            this.textDocAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textDocAuthor.BackColor = System.Drawing.SystemColors.Window;
+            this.textDocAuthor.Location = new System.Drawing.Point(103, 96);
+            this.textDocAuthor.Name = "textDocAuthor";
+            this.textDocAuthor.ReadOnly = true;
+            this.textDocAuthor.Size = new System.Drawing.Size(147, 29);
+            this.textDocAuthor.TabIndex = 5;
+            // 
+            // labelDocAuthor
+            // 
+            this.labelDocAuthor.Location = new System.Drawing.Point(8, 97);
+            this.labelDocAuthor.Name = "labelDocAuthor";
+            this.labelDocAuthor.Size = new System.Drawing.Size(89, 26);
+            this.labelDocAuthor.TabIndex = 4;
+            this.labelDocAuthor.Text = "報告人員：";
+            this.labelDocAuthor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // DetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -566,5 +590,7 @@
         private System.Windows.Forms.DataGridView dgvDetail;
         private System.Windows.Forms.BindingSource bindingSource;
         private System.Windows.Forms.BindingSource bindingSourceDetail;
+        private System.Windows.Forms.TextBox textDocAuthor;
+        private System.Windows.Forms.Label labelDocAuthor;
     }
 }
