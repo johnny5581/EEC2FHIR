@@ -21,7 +21,7 @@ namespace EECViewer
         }
         public static SearchParams AddDateRange(this SearchParams searchParam, string name, string from, string to, string text, string outFormat = "yyyy-MM-dd", string inFormat = "yyyyMMdd")
         {
-            if (from != null)
+            if (!string.IsNullOrEmpty(from))
             {
                 var formattedValue = DateUtility.Convert(from, outFormat, inFormat);
                 if (formattedValue == null)
@@ -29,7 +29,7 @@ namespace EECViewer
                 searchParam.Add(name, "gt" + formattedValue);
             }
 
-            if (to != null)
+            if (!string.IsNullOrEmpty(to))
             {
                 var formattedValue = DateUtility.Convert(to, outFormat, inFormat);
                 if (formattedValue == null)

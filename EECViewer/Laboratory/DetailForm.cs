@@ -32,6 +32,7 @@ namespace EECViewer.Laboratory
             groupDocument.Text = model.Composition.Title;
             textDocId.Text = model.Composition.GetIdentifier(codeSystemLocal + "/lab") ?? model.Composition.GetIdentifier(codeSystemLocal);
             textDocDate.Text = DateTime.Parse(model.Composition.Date).ToString("yyyy/MM/dd");
+            textDocAuthor.Text = model.Author.Name.ToText();
             textPatId.Text = model.Patient.GetIdentifier(TWPatient.CodeSystemTwIdentifier);
             textPatChtno.Text = $"{model.Patient.GetIdentifier(codeSystemLocal)} ({codeSystemLocal})";
             textPatName.Text = model.Patient.Name.ToText();
