@@ -1,323 +1,325 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <cdp:ContentPackage xmlns="urn:hl7-org:v3" xmlns:cdp="http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hl7.org.tw/EMR/CDocumentPayload/v1.0CDA_Package_V01.xsd">
-    <cdp:ContentContainer range="0">
-        <cdp:StructuredContent>
-            <ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:voc="urn:hl7-org:v3/voc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
-                <typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3" />
-                <templateId extension="116_V108.0" root="2.16.886.101.20003.20014" />
-                <id extension="330401.8873538.20240809140235.24080931584" root="2.16.886.104.100565.100008" />
-                <!--extension 科別(需要轉數字).病歷號.收件日期時間.收件號(需要轉數字) root 醫院的OID -->
-                <code code="18782-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="X-ray Report">
-                    <translation code="33070B" codeSystem="2.16.886.101.20003.20014" displayName="Computered tomography (C. T.) - without contrast" />
-                    <!--健保碼對應之名稱  -->
-                </code>
-                <title>X光檢查報告單</title>
-                <effectiveTime value="20240811143308" />
-                <!--報告日期時間  -->
-                <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" />
-                <!--機密等級N、R、V  -->
-                <languageCode code="zh-TW" />
-                <recordTarget typeCode="RCT" contextControlCode="OP">
-                    <patientRole classCode="PAT">
-                        <id extension="500" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
-                        <!--extension  病歷號  -->
-                        <patient classCode="PSN" determinerCode="INSTANCE">
-                            <id extension="A123456789" root="2.16.886.101.20003.20001" assigningAuthorityName="行政院內政部" />
-                            <name>王測試</name>
-                            <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7" displayName="Male" />
-                            <birthTime value="19910421" />
-                        </patient>
-                        <providerOrganization classCode="ORG" determinerCode="INSTANCE">
-                            <id extension="1132070011" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
-                            <name>長庚醫療財團法人林口長庚紀念醫院</name>
-                        </providerOrganization>
-                    </patientRole>
-                </recordTarget>
-                <author typeCode="AUT" contextControlCode="OP">
-                    <time value="20240811143308" />
-                    <assignedAuthor classCode="ASSIGNED">
-                        <id extension="M010" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
-                        <assignedPerson classCode="PSN" determinerCode="INSTANCE">
-                            <name>王報告</name>
-                        </assignedPerson>
-                    </assignedAuthor>
-                </author>
-                <custodian typeCode="CST">
-                    <assignedCustodian classCode="ASSIGNED">
-                        <representedCustodianOrganization classCode="ORG" determinerCode="INSTANCE">
-                            <id extension="1132070011" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
-                            <name>長庚醫療財團法人林口長庚紀念醫院</name>
-                        </representedCustodianOrganization>
-                    </assignedCustodian>
-                </custodian>
-                <legalAuthenticator typeCode="LA">
-                    <time value="20240811143308" />
-                    <signatureCode code="S" />
-                    <assignedEntity classCode="ASSIGNED">
-                        <id extension="M010" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
-                        <assignedPerson classCode="PSN" determinerCode="INSTANCE">
-                            <name>王報告</name>
-                        </assignedPerson>
-                        <representedOrganization classCode="ORG" determinerCode="INSTANCE">
-                            <id extension="1133060019" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
-                            <name>長庚醫療財團法人林口長庚紀念醫院</name>
-                        </representedOrganization>
-                    </assignedEntity>
-                </legalAuthenticator>
-                <!-- 醫令相關資料 -->
-                <inFulfillmentOf typeCode="FLFS">
-                    <order classCode="ACT" moodCode="RQO">
-                        <!-- 資料來自DICOM影像             1.2.840.113619.2.182.1080861361112.1723357993.5402574-->
-                        <id extension="248931584X01" root="1.2.840.10008.5.1.4.31.8.80" assigningAuthorityName="DCM" />
-                        <id extension="R221589751-15" root="1.2.840.10008.5.1.4.31.64.8214" assigningAuthorityName="DCM" />
-                        <id extension="R221589751-15" root="1.2.840.10008.5.1.4.31.64.8215" assigningAuthorityName="DCM" />
-                    </order>
-                </inFulfillmentOf>
-                <documentationOf typeCode="DOC">
-                    <!-- 資料來自DICOM影像 -->
-                    <serviceEvent classCode="ACT" moodCode="EVN">
-                        <id root="1.2.826.0.1.3680043.2.163.20100705162152.968.2" />
-                        <effectiveTime>
-                            <low value="202408111433" />
-                            <!-- 最後修改時間 沒有秒 -->
-                            <high value="202408111433" />
-                        </effectiveTime>
-                        <performer typeCode="PRF">
-                            <assignedEntity classCode="ASSIGNED">
-                                <id extension="M010" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
-                                <id extension="33DA" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
-                                <assignedPerson classCode="PSN" determinerCode="INSTANCE">
-                                    <name>王報告</name>
-                                </assignedPerson>
-                                <representedOrganization classCode="ORG" determinerCode="INSTANCE">
-                                    <id extension="82" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
-                                    <name>放射線科</name>
-                                </representedOrganization>
-                            </assignedEntity>
-                        </performer>
-                    </serviceEvent>
-                </documentationOf>
-                <componentOf typeCode="COMP">
-                    <encompassingEncounter classCode="ENC" moodCode="EVN">
-                        <id extension="L024070302352" root="2.16.886.104.100565.100008" /><!-- extension : 門診或住診編號 --> 
-                        <code code="AMB" displayName="ambulatory" codeSystem="2.16.840.1.113883.11.13955" codeSystemName="ActEncounterCode" />
-                        <effectiveTime value="202407041252" /><!-- 開單日期時間 yyyymmddhhmm --> 
-                        <encounterParticipant typeCode="ATND">
-                            <templateId root="2.16.840.1.113883.10.20.6.2.2" />
-                            <assignedEntity classCode="ASSIGNED">
-                                <!-- 開單醫師 -->
-                                <id extension="2111" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
-                                <assignedPerson classCode="PSN" determinerCode="INSTANCE">
-                                    <name>王主治</name>
-                                </assignedPerson>
-                            </assignedEntity>
-                        </encounterParticipant>
-                        <location typeCode="LOC">
-                            <healthCareFacility classCode="SDLOC">
-                                <location classCode="PLC" determinerCode="INSTANCE">
-                                    <!-- 開單科別 -->
-                                    <name>腦血管科</name>
-                                    <!-- 門診代號 或 住院急診放床號? -->
-                                    <addr>33730</addr>
-                                </location>
-                            </healthCareFacility>
-                        </location>
-                    </encompassingEncounter>
-                </componentOf>
-                <component typeCode="COMP" contextConductionInd="true">
-                    <structuredBody classCode="DOCBODY" moodCode="EVN">
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="121181" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="DICOM Object Catalog" />
-                                <entry typeCode="COMP" contextConductionInd="true">
-                                    <act classCode="ACT" moodCode="EVN">
-                                        <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184290.736002" />
-                                        <code code="113014" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Study" />
-                                        <entryRelationship typeCode="COMP" contextConductionInd="true">
-                                            <act classCode="ACT" moodCode="EVN">
-                                                <!-- DICOM Series Instance UID (0020,000E) root : 影像之 Series Instance UID-->
-                                                <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184323.495035" />
-                                                <code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
-                                                    <!-- DICOM Modality (0008,0060) -->
-                                                    <qualifier>
-                                                        <name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Modality" />
-                                                        <value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
-                                                    </qualifier>
-                                                </code>
-                                                <entryRelationship typeCode="COMP" contextConductionInd="true">
-                                                    <observation classCode="DGIMG" moodCode="EVN">
-                                                        <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184323.498852" />
-                                                        <code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-                                                        <value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
-                                                            <qualifier>
-                                                                <name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
-                                                            </qualifier>
-                                                        </value>
-                                                    </observation>
-                                                </entryRelationship>
-                                                <entryRelationship typeCode="COMP" contextConductionInd="true">
-                                                    <observation classCode="DGIMG" moodCode="EVN">
-                                                        <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184338.279957" />
-                                                        <code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-                                                        <value code="9CC1F548A8B6C69C249E2E01CB0033EACD1C4D50" codeSystem="1.3.14.3.2.26" xsi:type="CD">
-                                                            <qualifier>
-                                                                <name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
-                                                            </qualifier>
-                                                        </value>
-                                                    </observation>
-                                                </entryRelationship>
-                                            </act>
-                                        </entryRelationship>
-                                        <entryRelationship typeCode="COMP" contextConductionInd="true">
-                                            <act classCode="ACT" moodCode="EVN">
-                                                <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.707821" />
-                                                <code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
-                                                    <qualifier>
-                                                        <name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series" />
-                                                        <value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
-                                                    </qualifier>
-                                                </code>
-                                                <entryRelationship typeCode="COMP" contextConductionInd="true">
-                                                    <observation classCode="DGIMG" moodCode="EVN">
-                                                        <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.715952" />
-                                                        <code code="1.2.840.10008.5.1.4.1.1.7" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-                                                        <value code="0C53ACAF23D40B7537BC831B6F044AA5F2D313F9" codeSystem="1.3.14.3.2.26" xsi:type="CD">
-                                                            <qualifier>
-                                                                <name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
-                                                            </qualifier>
-                                                        </value>
-                                                    </observation>
-                                                </entryRelationship>
-                                                <entryRelationship typeCode="COMP" contextConductionInd="true">
-                                                    <observation classCode="DGIMG" moodCode="EVN">
-                                                        <id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.790716" />
-                                                        <code code="1.2.840.10008.5.1.4.1.1.7" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-                                                        <value code="CDECF33EAF727337603EA42ADBFBAA5D7AB8FE5E" codeSystem="1.3.14.3.2.26" xsi:type="CD">
-                                                            <qualifier>
-                                                                <name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
-                                                            </qualifier>
-                                                        </value>
-                                                    </observation>
-                                                </entryRelationship>
-                                            </act>
-                                        </entryRelationship>
-                                    </act>
-                                </entry>
-                            </section>
-                        </component> 
-                        <!-- 影像發現  Findings ????? -->
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="18782-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LONIC" displayName="Radiology Study Observation" />
-                                <title>Findings</title>
-                                <text>Pre-C head CT  </text> 
-                            </section>
-                        </component>
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="55286-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Physical examination by body areas" />
-                                <title>檢查部位</title>
-                                <text>胸部</text>
-                                <!-- 檢查部位，需與健保申報相同 必要欄位-->
-                                <entry typeCode="COMP" contextConductionInd="true">
-                                    <observation classCode="DGIMG" moodCode="EVN">
-                                        <!--中央健康保險署部位代碼-->
-                                        <code code="U" codeSystem="2.16.886.101.20003.20014" displayName="胸部" />
-                                    </observation>
-                                </entry>
-                            </section>
-                        </component>
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="33034-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Negative events" />
-                                <title>檢查張數</title>
-                                <entry typeCode="COMP" contextConductionInd="true">
-                                    <observation classCode="DGIMG" moodCode="EVN">
-                                        <code code="110028" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Instances Imported" />
-                                        <value xsi:type="INT" value="34" />
-                                        <!--檢查張數????? -->
-                                    </observation>
-                                </entry>
-                            </section>
-                        </component>
-                        <!-- 病史History of presentt illness -->
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="10164-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of present illness" />
-                                <title>病史</title>
-                                <text>No history of allergy</text>
-                                <component typeCode="COMP" contextConductionInd="true">
-                                    <section classCode="DOCSECT" moodCode="EVN">
-                                        <code code="10154-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Chief complaint" />
-                                        <title>主訴</title>
-                                        <text>Chest pain and epigastric pain</text>
-                                    </section>
-                                </component>
-                                <component typeCode="COMP" contextConductionInd="true">
-                                    <!-- 適應症 可選欄位-->
-                                    <section classCode="DOCSECT" moodCode="EVN">
-                                        <code code="19777-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Indications" />
-                                        <title>適應症</title>
-                                        <text>N/A</text>
-                                    </section>
-                                </component>
-                            </section>
-                        </component>
-                        <!-- 疾病診斷代碼 Diagnosis Code可選欄位 -->
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="52797-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosis ICD code" />
-                                <title>疾病診斷</title>
-                                <text>Liver disease, unspecified</text>
-                                <entry typeCode="COMP" contextConductionInd="true">
-                                    <observation classCode="OBS" moodCode="EVN">
-                                        <code code="K76.9" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD-10-CM" displayName="Liver disease, unspecified" />
-                                        <statusCode code="Completed" />
-                                    </observation>
-                                </entry>
-                            </section>
-                        </component>
-                        <!-- 影像報告結果 -->
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="11515-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Records total" />
-                                <title>影像報告結果</title>
-                                <text>TECHNIQUE: Brain CT without contrast enhancement COMPARISON: No relevant comparison studies available from PACS </text>
-                                <component typeCode="COMP" contextConductionInd="true">
-                                    <section classCode="DOCSECT" moodCode="EVN">
-                                        <code code="29545-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Physical findings" />
-                                        <title>影像發現</title>
-                                        <text>同影像報告結果</text>
-                                    </section>
-                                </component>
-                                <component typeCode="COMP" contextConductionInd="true">
-                                    <section classCode="DOCSECT" moodCode="EVN">
-                                        <code code="44833-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosis preliminary" />
-                                        <title>臆斷</title>
-                                        <text>同影像報告結果</text>
-                                    </section>
-                                </component>
-                                <component typeCode="COMP" contextConductionInd="true">
-                                    <!-- 註記 可選欄位-->
-                                    <section classCode="DOCSECT" moodCode="EVN">
-                                        <code code="51855-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Note" />
-                                        <title>註記</title>
-                                        <text>N/A</text>
-                                    </section>
-                                </component>
-                            </section>
-                        </component>
-                        <component typeCode="COMP" contextConductionInd="true">
-                            <!--建議 -->
-                            <section classCode="DOCSECT" moodCode="EVN">
-                                <code code="18783-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Radiology Study recommendation" />
-                                <title>建議</title>
-                                <text>N/A</text>
-                            </section>
-                        </component>
-                    </structuredBody>
-                </component>
-            </ClinicalDocument>
-        </cdp:StructuredContent>
-    </cdp:ContentContainer>
+	<cdp:ContentContainer range="0">
+		<cdp:StructuredContent>
+			<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:voc="urn:hl7-org:v3/voc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
+				<typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3" />
+				<templateId extension="116_V108.0" root="2.16.886.101.20003.20014" />
+				<id extension="0303131000.8873538.20240809140235.24080931584" root="2.16.886.104.100565.100008" />
+				<!--extension 科別(5碼).收件號(需要轉數字) root 醫院的OID -->
+				<code code="18782-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="X-ray Report">
+					<translation code="33070B" codeSystem="2.16.886.101.20003.20014" displayName="Computered tomography (C. T.) - without contrast" />
+					<!--健保碼對應之名稱  -->
+				</code>
+				<title>X光檢查報告單</title>
+				<effectiveTime value="20240811143308" />
+				<!--報告日期時間  -->
+				<confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" />
+				<!--機密等級N、R、V  -->
+				<languageCode code="zh-TW" />
+				<recordTarget typeCode="RCT" contextControlCode="OP">
+					<patientRole classCode="PAT">
+						<id extension="501" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+						<!--extension  病歷號  -->
+						<patient classCode="PSN" determinerCode="INSTANCE">
+							<id extension="A123456789" root="2.16.886.101.20003.20001" assigningAuthorityName="行政院內政部" />
+							<name>王測試</name>
+							<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7" displayName="Male" />
+							<birthTime value="19910421" />
+						</patient>
+						<providerOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1132070011" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
+							<name>長庚醫療財團法人林口長庚紀念醫院</name>
+						</providerOrganization>
+					</patientRole>
+				</recordTarget>
+				<author typeCode="AUT" contextControlCode="OP">
+					<time value="20240811143308" />
+					<assignedAuthor classCode="ASSIGNED">
+						<id extension="M010" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+						<assignedPerson classCode="PSN" determinerCode="INSTANCE">
+							<name>王報告</name>
+						</assignedPerson>
+					</assignedAuthor>
+				</author>
+				<custodian typeCode="CST">
+					<assignedCustodian classCode="ASSIGNED">
+						<representedCustodianOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1132070011" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
+							<name>長庚醫療財團法人林口長庚紀念醫院</name>
+						</representedCustodianOrganization>
+					</assignedCustodian>
+				</custodian>
+				<legalAuthenticator typeCode="LA">
+					<time value="20240811143308" />
+					<signatureCode code="S" />
+					<assignedEntity classCode="ASSIGNED">
+						<id extension="M010" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+						<assignedPerson classCode="PSN" determinerCode="INSTANCE">
+							<name>王報告</name>
+						</assignedPerson>
+						<representedOrganization classCode="ORG" determinerCode="INSTANCE">
+							<id extension="1133060019" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
+							<name>長庚醫療財團法人林口長庚紀念醫院</name>
+						</representedOrganization>
+					</assignedEntity>
+				</legalAuthenticator>
+				<!-- 醫令相關資料 -->
+				<inFulfillmentOf typeCode="FLFS">
+					<order classCode="ACT" moodCode="RQO">
+						<!-- 資料來自DICOM影像             1.2.840.113619.2.182.1080861361112.1723357993.5402574-->
+						<id extension="248931584X01" root="1.2.840.10008.5.1.4.31.8.80" assigningAuthorityName="DCM" />
+						<id extension="R221589751-15" root="1.2.840.10008.5.1.4.31.64.8214" assigningAuthorityName="DCM" />
+						<id extension="R221589751-15" root="1.2.840.10008.5.1.4.31.64.8215" assigningAuthorityName="DCM" />
+					</order>
+				</inFulfillmentOf>
+				<documentationOf typeCode="DOC">
+					<!-- 資料來自DICOM影像 -->
+					<serviceEvent classCode="ACT" moodCode="EVN">
+						<id root="1.2.826.0.1.3680043.2.163.20100705162152.968.2" />
+						<effectiveTime>
+							<low value="202408111433" />
+							<!-- 最後修改時間 沒有秒 -->
+							<high value="202408111433" />
+						</effectiveTime>
+						<performer typeCode="PRF">
+							<assignedEntity classCode="ASSIGNED">
+								<id extension="M010" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+								<id extension="33DA" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+								<assignedPerson classCode="PSN" determinerCode="INSTANCE">
+									<name>王報告</name>
+								</assignedPerson>
+								<representedOrganization classCode="ORG" determinerCode="INSTANCE">
+									<id extension="82" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
+									<name>放射線科</name>
+								</representedOrganization>
+							</assignedEntity>
+						</performer>
+					</serviceEvent>
+				</documentationOf>
+				<componentOf typeCode="COMP">
+					<encompassingEncounter classCode="ENC" moodCode="EVN">
+						<id extension="L024070302352" root="2.16.886.104.100565.100008" />
+						<!-- extension : 門診或住診編號 -->
+						<code code="AMB" displayName="ambulatory" codeSystem="2.16.840.1.113883.11.13955" codeSystemName="ActEncounterCode" />
+						<effectiveTime value="202407041252" />
+						<!-- 開單日期時間 yyyymmddhhmm -->
+						<encounterParticipant typeCode="ATND">
+							<templateId root="2.16.840.1.113883.10.20.6.2.2" />
+							<assignedEntity classCode="ASSIGNED">
+								<!-- 開單醫師 -->
+								<id extension="2111" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+								<assignedPerson classCode="PSN" determinerCode="INSTANCE">
+									<name>王主治</name>
+								</assignedPerson>
+							</assignedEntity>
+						</encounterParticipant>
+						<location typeCode="LOC">
+							<healthCareFacility classCode="SDLOC">
+								<location classCode="PLC" determinerCode="INSTANCE">
+									<!-- 開單科別 -->
+									<name>腦血管科</name>
+									<!-- 門診代號 或 住院急診放床號? -->
+									<addr>33730</addr>
+								</location>
+							</healthCareFacility>
+						</location>
+					</encompassingEncounter>
+				</componentOf>
+				<component typeCode="COMP" contextConductionInd="true">
+					<structuredBody classCode="DOCBODY" moodCode="EVN">
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="121181" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="DICOM Object Catalog" />
+								<entry typeCode="COMP" contextConductionInd="true">
+									<act classCode="ACT" moodCode="EVN">
+										<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184290.736002" />
+										<code code="113014" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Study" />
+										<entryRelationship typeCode="COMP" contextConductionInd="true">
+											<act classCode="ACT" moodCode="EVN">
+												<!-- DICOM Series Instance UID (0020,000E) root : 影像之 Series Instance UID-->
+												<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184323.495035" />
+												<code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
+													<!-- DICOM Modality (0008,0060) -->
+													<qualifier>
+														<name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Modality" />
+														<value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+													</qualifier>
+												</code>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184323.498852" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184338.279957" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<value code="9CC1F548A8B6C69C249E2E01CB0033EACD1C4D50" codeSystem="1.3.14.3.2.26" xsi:type="CD">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+											</act>
+										</entryRelationship>
+										<entryRelationship typeCode="COMP" contextConductionInd="true">
+											<act classCode="ACT" moodCode="EVN">
+												<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.707821" />
+												<code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
+													<qualifier>
+														<name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series" />
+														<value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+													</qualifier>
+												</code>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.715952" />
+														<code code="1.2.840.10008.5.1.4.1.1.7" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<value code="0C53ACAF23D40B7537BC831B6F044AA5F2D313F9" codeSystem="1.3.14.3.2.26" xsi:type="CD">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.790716" />
+														<code code="1.2.840.10008.5.1.4.1.1.7" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<value code="CDECF33EAF727337603EA42ADBFBAA5D7AB8FE5E" codeSystem="1.3.14.3.2.26" xsi:type="CD">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+											</act>
+										</entryRelationship>
+									</act>
+								</entry>
+							</section>
+						</component>
+						<!-- 影像發現  Findings ????? -->
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="18782-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LONIC" displayName="Radiology Study Observation" />
+								<title>Findings</title>
+								<text>Pre-C head CT  </text>
+							</section>
+						</component>
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="55286-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Physical examination by body areas" />
+								<title>檢查部位</title>
+								<text>胸部</text>
+								<!-- 檢查部位，需與健保申報相同 必要欄位-->
+								<entry typeCode="COMP" contextConductionInd="true">
+									<observation classCode="DGIMG" moodCode="EVN">
+										<!--中央健康保險署部位代碼-->
+										<code code="U" codeSystem="2.16.886.101.20003.20014" displayName="胸部" />
+									</observation>
+								</entry>
+							</section>
+						</component>
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="33034-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Negative events" />
+								<title>檢查張數</title>
+								<entry typeCode="COMP" contextConductionInd="true">
+									<observation classCode="DGIMG" moodCode="EVN">
+										<code code="110028" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Instances Imported" />
+										<value xsi:type="INT" value="34" />
+										<!--檢查張數????? -->
+									</observation>
+								</entry>
+							</section>
+						</component>
+						<!-- 病史History of presentt illness -->
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="10164-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of present illness" />
+								<title>病史</title>
+								<text>No history of allergy</text>
+								<component typeCode="COMP" contextConductionInd="true">
+									<section classCode="DOCSECT" moodCode="EVN">
+										<code code="10154-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Chief complaint" />
+										<title>主訴</title>
+										<text>Chest pain and epigastric pain</text>
+									</section>
+								</component>
+								<component typeCode="COMP" contextConductionInd="true">
+									<!-- 適應症 可選欄位-->
+									<section classCode="DOCSECT" moodCode="EVN">
+										<code code="19777-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Indications" />
+										<title>適應症</title>
+										<text>N/A</text>
+									</section>
+								</component>
+							</section>
+						</component>
+						<!-- 疾病診斷代碼 Diagnosis Code可選欄位 -->
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="52797-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosis ICD code" />
+								<title>疾病診斷</title>
+								<text>Liver disease, unspecified</text>
+								<entry typeCode="COMP" contextConductionInd="true">
+									<observation classCode="OBS" moodCode="EVN">
+										<code code="K76.9" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD-10-CM" displayName="Liver disease, unspecified" />
+										<statusCode code="Completed" />
+									</observation>
+								</entry>
+							</section>
+						</component>
+						<!-- 影像報告結果 -->
+						<component typeCode="COMP" contextConductionInd="true">
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="11515-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Records total" />
+								<title>影像報告結果</title>
+								<text>TECHNIQUE: Brain CT without contrast enhancement COMPARISON: No relevant comparison studies available from PACS </text>
+								<component typeCode="COMP" contextConductionInd="true">
+									<section classCode="DOCSECT" moodCode="EVN">
+										<code code="29545-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Physical findings" />
+										<title>影像發現</title>
+										<text>同影像報告結果</text>
+									</section>
+								</component>
+								<component typeCode="COMP" contextConductionInd="true">
+									<section classCode="DOCSECT" moodCode="EVN">
+										<code code="44833-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosis preliminary" />
+										<title>臆斷</title>
+										<text>同影像報告結果</text>
+									</section>
+								</component>
+								<component typeCode="COMP" contextConductionInd="true">
+									<!-- 註記 可選欄位-->
+									<section classCode="DOCSECT" moodCode="EVN">
+										<code code="51855-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Note" />
+										<title>註記</title>
+										<text>N/A</text>
+									</section>
+								</component>
+							</section>
+						</component>
+						<component typeCode="COMP" contextConductionInd="true">
+							<!--建議 -->
+							<section classCode="DOCSECT" moodCode="EVN">
+								<code code="18783-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Radiology Study recommendation" />
+								<title>建議</title>
+								<text>N/A</text>
+							</section>
+						</component>
+					</structuredBody>
+				</component>
+			</ClinicalDocument>
+		</cdp:StructuredContent>
+	</cdp:ContentContainer>
 </cdp:ContentPackage>
