@@ -26,8 +26,10 @@ namespace EECViewer.Laboratory
                 model.Encounter = item.Data[composition.Encounter.Reference] as Encounter;
                 if (composition.Custodian?.Reference != null)
                     model.Organization = item.Data[composition.Custodian?.Reference] as Organization;
-                model.Author = item.Data[composition.Author[1].Reference] as Practitioner;
-                model.EncounterPractitioner = item.Data[model.Encounter.Participant[0].Individual.Reference] as Practitioner;
+                if (composition.Author.Count > 1)
+                    model.Author = item.Data[composition.Author[1].Reference] as Practitioner;
+                if (model.Encounter != null && model.Encounter.Participant.Count > 0)
+                    model.EncounterPractitioner = item.Data[model.Encounter.Participant[0].Individual.Reference] as Practitioner;
                 d.LoadData(model);
                 d.ShowDialog();
             }

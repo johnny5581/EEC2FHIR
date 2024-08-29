@@ -8,6 +8,18 @@ namespace Hl7.Fhir.Model
 {
     public static class ResourceExtension
     {
+        public static TResource ToInternalResource<TResource>(this TResource resource)
+            where TResource : Resource
+        {
+            if (resource.Meta != null)
+            {
+                resource.Meta.VersionId = null;
+                resource.Meta.LastUpdated = null;
+                resource.Meta.Source = null;
+            }
+            return resource;
+        }
+
         /// <summary>
         /// 取得reference
         /// </summary>        
@@ -16,7 +28,7 @@ namespace Hl7.Fhir.Model
             var reference = new ResourceReference();
 
             reference.Type = resource.TypeName;
-            switch(refType)
+            switch (refType)
             {
                 case ResourceReferenceType.Normal:
                     reference.Reference = $"{resource.TypeName}/{resource.Id}";
@@ -28,7 +40,7 @@ namespace Hl7.Fhir.Model
                     reference.Reference = $"#{resource.Id}";
                     break;
             }
-                
+
             return reference;
         }
 
@@ -48,7 +60,7 @@ namespace Hl7.Fhir.Model
         }
 
         public static string GetIdentifier(this Identifier identifier, bool full = false)
-        {            
+        {
             if (full)
                 return $"{identifier.Value} ({identifier.System})";
             return identifier.Value;
@@ -64,11 +76,11 @@ namespace Hl7.Fhir.Model
             var p = resource.GetType().GetProperty("Identifier");
             if (p != null)
             {
-                var value = p.GetValue(resource, null);                
+                var value = p.GetValue(resource, null);
                 if (value is Identifier)
                 {
                     var identifier = value as Identifier;
-                    if(identifier.System == codeSystem)
+                    if (identifier.System == codeSystem)
                         return GetIdentifier(identifier, full);
                 }
                 else if (value is List<Identifier>)
@@ -77,7 +89,7 @@ namespace Hl7.Fhir.Model
             return null;
         }
 
-        
+
         public static string ToText(this HumanName humanName)
         {
             return humanName.Family + humanName.Given.FirstOrDefault();

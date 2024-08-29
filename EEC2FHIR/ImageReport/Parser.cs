@@ -33,22 +33,23 @@ namespace EEC2FHIR.ImageReport
             // 建立摘要
             var composition = new Composition();
             composition.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/ImageComposition");
+            composition.Identifier = new Identifier(SystemCodeLocal, root.XPathEvaluateString("ns:id/@extension", nsMgr));
 
             // 取得醫院資訊
             var organization = GetOrganizationResource(root, "ns:custodian/ns:assignedCustodian/ns:representedCustodianOrganization", nsMgr, composition);
             composition.Custodian = organization.GetReference();
-            composition.Author.Add(organization.GetReference()); //只能有一個
+            composition.Author.Add(organization.GetReference()); //只能有一個，限定Organization
 
             // 取得病人資料
             var patient = GetPatientResource(root, "ns:recordTarget", nsMgr, composition);
             composition.Subject = patient.GetReference();
 
-            //// 取得影像報告人員資訊
-            var author = GetPractitionerResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition);
-            //composition.Author.Add(author.GetReference());
+            // 取得影像報告人員資訊
+            var author = GetPractitionerResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition, internalResource: true);
+            // composition.Author.Add(author.GetReference( ResourceReferenceType.IdOnly ));
 
-            //// 取得影像報告認證人員資訊
-            var legalAuthor = GetPractitionerResource(root, "ns:legalAuthenticator/ns:assignedEntity", nsMgr, composition);
+            // 取得影像報告認證人員資訊
+            //var legalAuthor = GetPractitionerResource(root, "ns:legalAuthenticator/ns:assignedEntity", nsMgr, composition);            
             //composition.Author.Add(legalAuthor.GetReference());
 
             // 取得開單資訊
@@ -57,8 +58,6 @@ namespace EEC2FHIR.ImageReport
 
             // 取得影像報告內容
             var components = root.XPathSelectElements("ns:component/ns:structuredBody/ns:component/ns:section", nsMgr);
-
-
 
             // 摘要標題
             composition.Title = root.XPathEvaluateString("ns:title", nsMgr);
@@ -88,22 +87,29 @@ namespace EEC2FHIR.ImageReport
                 }
                 observation.Identifier.Add(new Identifier(SystemCodeLocal, pPACSNOValue));//可能有缺要注意
             }
+            observation.Id = Guid.NewGuid().ToString();
             observation.Status = ObservationStatus.Final;
             observation.Category.Add(new CodeableConcept(SystemObservationCategory, "imaging", "Imaging", "Imaging"));
             observation.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");//需要設定對應檔案
             observation.Subject = composition.Subject;
             observation.Effective = new FhirDateTime(composition.Date);
 
-            observation = CreateResource(observation);
+            //observation = CreateResource(observation);            
 
-            var endpoint = new Endpoint();
-            endpoint.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/MitwEndpoint");
-            endpoint.Address = "http://localhost:8081/dicom-web";//影像網址!
-            endpoint.Status = Endpoint.EndpointStatus.Active;
-            endpoint.ConnectionType = new Coding("http://terminology.hl7.org/CodeSystem/endpoint-connection-type", "dicom-wado-rs", "DICOM WADO-RS");
-            endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
-            endpoint = CreateResource(endpoint);
-
+            // 使用既有的endpoint
+            var querier = new FhirResourceQuerier<Endpoint>(client);
+            var endpoint = querier.GetByIdentifier(SystemCodeLocal, "PACS DICOM");
+            if (endpoint == null)
+            {
+                endpoint = new Endpoint();
+                endpoint.Identifier.Add(new Identifier(SystemCodeLocal, "PACS DICOM"));
+                endpoint.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/MitwEndpoint");
+                endpoint.Address = "http://localhost:8081/dicom-web";//影像網址!
+                endpoint.Status = Endpoint.EndpointStatus.Active;
+                endpoint.ConnectionType = new Coding("http://terminology.hl7.org/CodeSystem/endpoint-connection-type", "dicom-wado-rs", "DICOM WADO-RS");
+                endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
+                endpoint = CreateResource(endpoint);
+            }
             var condition = new Condition();
             var imagingStudy = new ImagingStudy();
             string pBodySite = "";
@@ -134,7 +140,8 @@ namespace EEC2FHIR.ImageReport
                     condition.Category.Add(new CodeableConcept("http://terminology.hl7.org/CodeSystem/condition-category", "encounter-diagnosis", "Encounter Diagnosis", "Encounter Diagnosis"));//???
                     condition.Code = new CodeableConcept(SystemCodeLoinc, pCode, pDisplayName, pText);
                     condition.Subject = composition.Subject;
-                    condition = CreateResource(condition);
+                    //condition = CreateResource(condition);
+                    condition.Id = Guid.NewGuid().ToString();
                 }
                 if (pCode == "121181")
                 {
@@ -145,7 +152,7 @@ namespace EEC2FHIR.ImageReport
                     pStudyUID_identifier.Use = Identifier.IdentifierUse.Official;
                     pStudyUID_identifier.Type = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ImageIdentifierType", "SIUID", "Study instancce UID", "DICOM Study Instance UID");
                     pStudyUID_identifier.System = "urn:dicom:uid";
-                    pStudyUID_identifier.Value = "urn:oid:"+pStudyUID;
+                    pStudyUID_identifier.Value = "urn:oid:" + pStudyUID;
                     imagingStudy.Identifier.Add(pStudyUID_identifier);
                     var pAccession_ID_identifier = new Identifier();
                     pAccession_ID_identifier.Use = Identifier.IdentifierUse.Official;
@@ -156,13 +163,13 @@ namespace EEC2FHIR.ImageReport
                     imagingStudy.Status = ImagingStudy.ImagingStudyStatus.Available;
                     imagingStudy.Subject = composition.Subject;
                     imagingStudy.Started = composition.Date;//需要改為影像時間(收件時間)，需要從DICOM來
-                    imagingStudy.Endpoint.Add( endpoint.GetReference());
+                    imagingStudy.Endpoint.Add(endpoint.GetReference());
                     var pSeries = component.XPathSelectElements("ns:entry/ns:act/ns:entryRelationship/ns:act", nsMgr);
                     var pImageNumber = component.XPathSelectElements("ns:entry/ns:act/ns:entryRelationship/ns:act/ns:entryRelationship", nsMgr);
 
                     imagingStudy.NumberOfSeries = pSeries.Count();
                     imagingStudy.NumberOfInstances = pImageNumber.Count();
-                    imagingStudy.ProcedureCode.Add(new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", ""));//需要對應檔
+                    imagingStudy.ProcedureCode.Add(new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen"));//需要對應檔
 
                     foreach (var pSerie in pSeries)
                     {
@@ -192,7 +199,8 @@ namespace EEC2FHIR.ImageReport
                     }
                 }
             }
-            imagingStudy = CreateResource(imagingStudy);
+            //imagingStudy = CreateResource(imagingStudy);
+            imagingStudy.Id = Guid.NewGuid().ToString();
 
             var diagnosticReport = new DiagnosticReport();
             diagnosticReport.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/DiagnosticReport-Image");
@@ -208,15 +216,24 @@ namespace EEC2FHIR.ImageReport
             diagnosticReport.Result.Add(observation.GetReference());//診斷結果(Finding) 需要更改
             diagnosticReport.ImagingStudy.Add(imagingStudy.GetReference());//影像檢查
             diagnosticReport.Conclusion = pReport;//報告內容
-            diagnosticReport = CreateResource(diagnosticReport);
+            //diagnosticReport = CreateResource(diagnosticReport);
+            diagnosticReport.Id = Guid.NewGuid().ToString();
 
             var sectionComponent = new Composition.SectionComponent();
             sectionComponent.Code = new CodeableConcept(SystemCodeLoinc, "30954-2", "Relevant diagnostic tests/laboratory data Narrative", "Relevant diagnostic tests/laboratory data Narrative");
-            sectionComponent.Entry.Add(author.GetReference());
-            sectionComponent.Entry.Add(condition.GetReference());
-            sectionComponent.Entry.Add(imagingStudy.GetReference());
-            sectionComponent.Entry.Add(observation.GetReference());
-            sectionComponent.Entry.Add(diagnosticReport.GetReference());
+            sectionComponent.Entry.Add(author.GetReference(ResourceReferenceType.IdOnly));
+            sectionComponent.Entry.Add(condition.GetReference(ResourceReferenceType.IdOnly));
+            sectionComponent.Entry.Add(imagingStudy.GetReference(ResourceReferenceType.IdOnly));
+            sectionComponent.Entry.Add(observation.GetReference(ResourceReferenceType.IdOnly));
+            sectionComponent.Entry.Add(diagnosticReport.GetReference(ResourceReferenceType.IdOnly));
+
+            // 加到containered
+            composition.Contained.Add(author);
+            composition.Contained.Add(condition);
+            composition.Contained.Add(imagingStudy);
+            composition.Contained.Add(observation);
+            composition.Contained.Add(diagnosticReport);
+
             // TODO: composition - sections (影像內容)
             composition.Section.Add(sectionComponent);
             // 產生composition
@@ -244,7 +261,7 @@ namespace EEC2FHIR.ImageReport
             return bundle;
         }
 
-        private Encounter GetEncounterResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Encounter GetEncounterResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Encounter encounter = null;
 
@@ -252,11 +269,14 @@ namespace EEC2FHIR.ImageReport
 
             var opdNo = root.XPathEvaluateString("ns:id/@extension", nsMgr);
 
-            // 先查看看有沒有這個就診紀錄，有的話就使用
-            var querier = new FhirResourceQuerier<Encounter>(client);
-            encounter = querier.GetByIdentifier(SystemCodeLocal, opdNo);
-            if (encounter != null)
-                return encounter;
+            if (!internalResource)
+            {
+                // 先查看看有沒有這個就診紀錄，有的話就使用
+                var querier = new FhirResourceQuerier<Encounter>(client);
+                encounter = querier.GetByIdentifier(SystemCodeLocal, opdNo);
+                if (encounter != null)
+                    return encounter;
+            }
 
             // 建立新的就診紀錄
             encounter = new Encounter();
@@ -267,7 +287,7 @@ namespace EEC2FHIR.ImageReport
             encounter.Subject = composition.Subject;
 
             // 開單醫師
-            var practitoner = GetPractitionerResource(node, "ns:encounterParticipant", nsMgr, composition);
+            var practitoner = GetPractitionerResource(node, "ns:encounterParticipant/ns:assignedEntity", nsMgr, composition);
             encounter.Participant.Add(new Encounter.ParticipantComponent
             {
                 Individual = practitoner.GetReference(),
@@ -280,7 +300,10 @@ namespace EEC2FHIR.ImageReport
                 Start = DateUtility.Convert(time, inFormat: "yyyyMMddHHmm")
             };
 
-            return CreateResource(encounter);
+            if (!internalResource)
+                return CreateResource(encounter);
+            encounter.Id = Guid.NewGuid().ToString();
+            return encounter;
         }
 
         //private Specimen CreateSpecimenResource(XElement organizer, string xpath, XmlNamespaceManager nsMgr, Composition composition)
@@ -432,7 +455,7 @@ namespace EEC2FHIR.ImageReport
         /// <summary>
         /// 轉換CDAR2的病人資訊
         /// </summary>        
-        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Patient patient = null;
 
@@ -443,18 +466,21 @@ namespace EEC2FHIR.ImageReport
             // 身份證字號
             var idno = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:id/@extension", nsMgr);
 
-            // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
-            var querier = new TWPatientQuerier(client);
-            patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
-            if (patient != null)
-                return patient;
-
-            // 再來透過身分證字號查詢，如果有的話，把病歷號合併
-            patient = querier.GetByTwIdentifier(idno);
-            if (patient != null)
+            if (!internalResource)
             {
-                patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
-                return UpdateResource(patient); // 更新這筆病人資料
+                // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
+                var querier = new TWPatientQuerier(client);
+                patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
+                if (patient != null)
+                    return patient;
+
+                // 再來透過身分證字號查詢，如果有的話，把病歷號合併
+                patient = querier.GetByTwIdentifier(idno);
+                if (patient != null)
+                {
+                    patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
+                    return UpdateResource(patient); // 更新這筆病人資料
+                }
             }
 
             // 建立新的病人資料
@@ -478,12 +504,15 @@ namespace EEC2FHIR.ImageReport
             // 管理機構
             patient.ManagingOrganization = GetOrganizationResource(node, "ns:patientRole/ns:providerOrganization", nsMgr, composition).GetReference();
 
-            return CreateResource(patient);
+            if (!internalResource)
+                return CreateResource(patient);
+            patient.Id = Guid.NewGuid().ToString();
+            return patient;
         }
         /// <summary>
         /// 轉換CDAR2的組織資訊
         /// </summary>
-        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Organization organization = null;
 
@@ -491,12 +520,6 @@ namespace EEC2FHIR.ImageReport
 
             // 醫療院所代碼
             var hospId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
-
-            // 先檢查有沒有這個機構，有的話就使用目前資料
-            var querier = new TWOrganizationQuerier(client);
-            organization = querier.GetByTwIdentifier(hospId);
-            if (organization != null)
-                return organization;
 
             // 因為FHIR建立資源比較慢，檢核composition.Custodian的資源是否相同
             if (composition.Custodian != null)
@@ -507,6 +530,15 @@ namespace EEC2FHIR.ImageReport
                     return org;
             }
 
+            if (!internalResource)
+            {
+                // 先檢查有沒有這個機構，有的話就使用目前資料
+                var querier = new TWOrganizationQuerier(client);
+                organization = querier.GetByTwIdentifier(hospId);
+                if (organization != null)
+                    return organization;
+            }
+
             // 建立新的機構資料
             organization = new Organization();
             organization.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/TWCoreOrganization");
@@ -515,12 +547,15 @@ namespace EEC2FHIR.ImageReport
             var hospName = node.XPathEvaluateString("ns:name", nsMgr);
             organization.Name = hospName;
 
-            return CreateResource(organization);
+            if (!internalResource)
+                return CreateResource(organization);
+            organization.Id = Guid.NewGuid().ToString();
+            return organization;
         }
         /// <summary>
         /// 轉換CDAR2的人員資訊
         /// </summary>
-        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Practitioner practitioner = null;
 
@@ -529,22 +564,25 @@ namespace EEC2FHIR.ImageReport
             // 抓第一個代碼
             var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
 
-            // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
-            var querier = new TWPractitionerQuerier(client);
-            practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
-            if (practitioner != null)
-                return practitioner;
-
-            // !! 因為HAPI FHIR cahce的關係，檢查composition.author是否有這個資源，有的話就使用
             if (composition.Author != null && !composition.Author.IsNullOrEmpty())
             {
-                // composition.Author[0] 是院區，跳過
-                for (var i = 1; i < composition.Author.Count; i++)
+                
+                for (var i = 0; i < composition.Author.Count; i++)
                 {
-                    var prac = client.Read<Practitioner>(composition.Author[i].Reference);
+                    var prac = ReadResource<Practitioner>(composition.Contained, composition.Author[i].Reference);                    
                     if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
                         return prac;
                 }
+            }
+
+            // 非內部資源才可以抓線上資料
+            if (!internalResource)
+            {
+                // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
+                var querier = new TWPractitionerQuerier(client);
+                practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
+                if (practitioner != null)
+                    return practitioner;
             }
 
             // 建立新的醫事人員資料
@@ -556,7 +594,10 @@ namespace EEC2FHIR.ImageReport
             var cnm = node.XPathEvaluateString("ns:assignedPerson/ns:name", nsMgr);
             practitioner.SetChineseName(cnm);
 
-            return CreateResource(practitioner);
+            if (!internalResource)
+                return CreateResource(practitioner);
+            practitioner.Id = Guid.NewGuid().ToString();
+            return practitioner;
         }
     }
 }

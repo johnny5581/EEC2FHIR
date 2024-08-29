@@ -30,12 +30,12 @@ namespace EEC2FHIR
         /// </summary>
         public string SystemCodeLocal { get; set; } = "https://lnk.cgmh.org.tw";
 
-        
+
         public static string SystemCodeLoinc { get; } = "http://loinc.org";
         public static string SystemCodeSnomed { get; } = "http://snomed.info/sct";
 
         public abstract Bundle Parse(string xml);
-        
+
 
         protected T CreateResource<T>(T resource)
             where T : Resource
@@ -51,6 +51,19 @@ namespace EEC2FHIR
             }
         }
 
+        protected T ReadResource<T>(List<Resource> containedResources, string reference)
+            where T : Resource
+        {
+            if (reference.StartsWith("#"))
+            {
+                // 內部資源
+                var id = reference.Substring(1);
+                return containedResources.OfType<T>().FirstOrDefault(r => r.Id == id);
+            }
+            if(reference.StartsWith(typeof(T).Name))
+                return client.Read<T>(reference);
+            return null;
+        }
         protected T UpdateResource<T>(T resource)
             where T : Resource
         {
@@ -73,7 +86,7 @@ namespace EEC2FHIR
             return new Hl7.Fhir.Model.Quantity(value, unit, codeSystem);
         }
 
-        
-        
+
+
     }
 }

@@ -21,13 +21,13 @@ namespace EEC2FHIR.Laboratory
         public Parser(FhirClient client) : base(client)
         {
         }
-        
+
 
         public override Bundle Parse(string xml)
         {
             var doc = ConvertToDoc(xml);
             var nsMgr = doc.CreateCdaR2NamespaceManager();
-            
+
             // 取得根目錄
             var root = doc.XPathSelectElement("/cdp:ContentPackage/cdp:ContentContainer/cdp:StructuredContent/ns:ClinicalDocument", nsMgr);
 
@@ -59,6 +59,7 @@ namespace EEC2FHIR.Laboratory
             var organizers = componentRoot.XPathSelectElements("ns:entry/ns:organizer", nsMgr);
             var observations = new List<Observation>();
             var specimens = new List<Specimen>();
+            
             foreach (var organizer in organizers)
             {
                 var sectionComponent = new Composition.SectionComponent();
@@ -66,17 +67,29 @@ namespace EEC2FHIR.Laboratory
 
                 // 處理採檢資訊
                 var specimen = CreateSpecimenResource(organizer, "ns:specimen", nsMgr, composition);
-                // 給予特定ID
-                specimen.Id = Guid.NewGuid().ToString();
-                sectionComponent.Entry.Add(specimen.GetReference(ResourceReferenceType.IdOnly));
-                composition.Contained.Add(specimen);
+
+                //// 獨立驗證Composition，使用internal resource將資源放到contained裡面                  
+                //specimen.Id = Guid.NewGuid().ToString();
+                //sectionComponent.Entry.Add(specimen.GetReference(ResourceReferenceType.IdOnly));
+                //composition.Contained.Add(specimen);
+
+                // 統包bundle驗證
+                specimen = CreateResource(specimen);
+                sectionComponent.Entry.Add(specimen.GetReference());
+
                 specimens.Add(specimen);
 
                 var observation = CreateObservationResource(organizer, "", nsMgr, composition, specimen);
-                // 給予特定ID
-                observation.Id = Guid.NewGuid().ToString();
-                sectionComponent.Entry.Add(observation.GetReference(ResourceReferenceType.IdOnly));
-                composition.Contained.Add(observation);
+
+                //// 獨立驗證Composition，使用internal resource將資源放到contained裡面 
+                //observation.Id = Guid.NewGuid().ToString();
+                //sectionComponent.Entry.Add(observation.GetReference(ResourceReferenceType.IdOnly));
+                //composition.Contained.Add(observation);
+
+                // 統包bundle驗證
+                observation = CreateResource(observation);
+                sectionComponent.Entry.Add(observation.GetReference());
+
                 observations.Add(observation);
 
                 composition.Section.Add(sectionComponent);
@@ -100,7 +113,8 @@ namespace EEC2FHIR.Laboratory
             composition.Type = new CodeableConcept(SystemCodeLoinc, "11503-0", "檢驗檢查");
 
             // 產生composition
-            composition = CreateResource(composition);
+            //composition = CreateResource(composition);
+            //composition.Id = Guid.NewGuid().ToString();
 
             // 組合bundle
             var bundle = new Bundle();
@@ -121,7 +135,7 @@ namespace EEC2FHIR.Laboratory
 
             return bundle;
         }
-        private Encounter GetEncounterResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Encounter GetEncounterResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Encounter encounter = null;
 
@@ -129,11 +143,14 @@ namespace EEC2FHIR.Laboratory
 
             var opdNo = node.XPathEvaluateString("ns:id/@extension", nsMgr);
 
-            // 先查看看有沒有這個就診紀錄，有的話就使用
-            var querier = new FhirResourceQuerier<Encounter>(client);
-            encounter = querier.GetByIdentifier(SystemCodeLocal, opdNo);
-            if (encounter != null)
-                return encounter;
+            if (!internalResource)
+            {
+                // 先查看看有沒有這個就診紀錄，有的話就使用
+                var querier = new FhirResourceQuerier<Encounter>(client);
+                encounter = querier.GetByIdentifier(SystemCodeLocal, opdNo);
+                if (encounter != null)
+                    return encounter;
+            }
 
             // 建立新的就診紀錄
             encounter = new Encounter();
@@ -158,7 +175,11 @@ namespace EEC2FHIR.Laboratory
                 Start = DateUtility.Convert(time, inFormat: "yyyyMMddHHmm")
             };
 
-            return CreateResource(encounter);
+            if (!internalResource)
+                return CreateResource(encounter);
+
+            encounter.Id = Guid.NewGuid().ToString();
+            return encounter;
         }
 
         private Specimen CreateSpecimenResource(XElement organizer, string xpath, XmlNamespaceManager nsMgr, Composition composition)
@@ -178,7 +199,7 @@ namespace EEC2FHIR.Laboratory
             // 檢體來源，使用固定值
             specimen.Collection = new Specimen.CollectionComponent();
             specimen.Collection.BodySite = new CodeableConcept(SystemCodeSnomed, "408512008", "Posterior carpal region", "Posterior carpal region");
-
+            
             return specimen;
         }
         private Observation CreateObservationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, Specimen specimen)
@@ -309,7 +330,7 @@ namespace EEC2FHIR.Laboratory
         /// <summary>
         /// 轉換CDAR2的病人資訊
         /// </summary>        
-        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Patient GetPatientResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Patient patient = null;
 
@@ -320,18 +341,23 @@ namespace EEC2FHIR.Laboratory
             // 身份證字號
             var idno = node.XPathEvaluateString("ns:patientRole/ns:patient/ns:id/@extension", nsMgr);
 
-            // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
-            var querier = new TWPatientQuerier(client);
-            patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
-            if (patient != null)
-                return patient;
 
-            // 再來透過身分證字號查詢，如果有的話，把病歷號合併
-            patient = querier.GetByTwIdentifier(idno);
-            if (patient != null)
+            // 如果不是內部資源就去查看線上既有資源
+            if (!internalResource)
             {
-                patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
-                return UpdateResource(patient); // 更新這筆病人資料
+                // 先透過病歷號查詢看看有沒有這個病人，有的話就使用目前資料
+                var querier = new TWPatientQuerier(client);
+                patient = querier.GetByIdentifier(SystemCodeLocal, chtNo);
+                if (patient != null)
+                    return patient;
+
+                // 再來透過身分證字號查詢，如果有的話，把病歷號合併
+                patient = querier.GetByTwIdentifier(idno);
+                if (patient != null)
+                {
+                    patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
+                    return UpdateResource(patient); // 更新這筆病人資料
+                }
             }
 
             // 建立新的病人資料
@@ -355,12 +381,18 @@ namespace EEC2FHIR.Laboratory
             // 管理機構
             patient.ManagingOrganization = GetOrganizationResource(node, "ns:patientRole/ns:providerOrganization", nsMgr, composition).GetReference();
 
-            return CreateResource(patient);
+            // 非內部資源就直接建立
+            if (!internalResource)
+                return CreateResource(patient);
+
+            // 否則賦予ID
+            patient.Id = Guid.NewGuid().ToString();
+            return patient;
         }
         /// <summary>
         /// 轉換CDAR2的組織資訊
         /// </summary>
-        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Organization GetOrganizationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Organization organization = null;
 
@@ -369,22 +401,27 @@ namespace EEC2FHIR.Laboratory
             // 醫療院所代碼
             var hospId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
 
-            // 先檢查有沒有這個機構，有的話就使用目前資料
-            var querier = new TWOrganizationQuerier(client);
-            organization = querier.GetByTwIdentifier(hospId);
-            if (organization != null)
-                return organization;
-
-            // 因為FHIR建立資源比較慢，檢核composition.Custodian的資源是否相同
+            // 先查詢local是否已經有這個機構
             if (composition.Custodian != null)
             {
                 var reference = composition.Custodian.Reference;
-                var org = client.Read<Organization>(reference);
+                var org = ReadResource<Organization>(composition.Contained, reference);
                 if (org != null && org.GetTwIdentifier() == hospId)
                     return org;
             }
 
-            // 建立新的機構資料
+            // 如果不是內部資源才去查詢線上既有資源
+            if (!internalResource)
+            {
+                // 先檢查有沒有這個機構，有的話就使用目前資料
+                var querier = new TWOrganizationQuerier(client);
+                organization = querier.GetByTwIdentifier(hospId);
+                if (organization != null)
+                    return organization;
+            }
+
+
+            // 以上都沒有才建立新的機構資料
             organization = new Organization();
             organization.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckOrganization");
             organization.SetTwIdentifier(hospId);
@@ -392,12 +429,16 @@ namespace EEC2FHIR.Laboratory
             var hospName = node.XPathEvaluateString("ns:name", nsMgr);
             organization.Name = hospName;
 
-            return CreateResource(organization);
+            if (!internalResource)
+                return CreateResource(organization);
+
+            organization.Id = Guid.NewGuid().ToString();
+            return organization;
         }
         /// <summary>
         /// 轉換CDAR2的人員資訊
         /// </summary>
-        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition)
+        private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Practitioner practitioner = null;
 
@@ -405,23 +446,27 @@ namespace EEC2FHIR.Laboratory
 
             var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
 
-            // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
-            var querier = new TWPractitionerQuerier(client);
-            practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
-            if (practitioner != null)
-                return practitioner;
-
-            // !! 因為HAPI FHIR cahce的關係，檢查composition.author是否有這個資源，有的話就使用
+            // 先檢查是否已經有這個醫事人員
             if (composition.Author != null && !composition.Author.IsNullOrEmpty())
             {
                 // composition.Author[0] 是院區，跳過
                 for (var i = 1; i < composition.Author.Count; i++)
                 {
-                    var prac = client.Read<Practitioner>(composition.Author[i].Reference);
+                    var prac = ReadResource<Practitioner>(composition.Contained, composition.Author[i].Reference);                    
                     if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
                         return prac;
                 }
             }
+            // 如果不是內部資源才去查詢線上既有資源
+            if (!internalResource)
+            {
+                // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
+                var querier = new TWPractitionerQuerier(client);
+                practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
+                if (practitioner != null)
+                    return practitioner;
+            }
+
 
             // 建立新的醫事人員資料
             practitioner = new Practitioner();
@@ -432,7 +477,11 @@ namespace EEC2FHIR.Laboratory
             var cnm = node.XPathEvaluateString("ns:assignedPerson/ns:name", nsMgr);
             practitioner.SetChineseName(cnm);
 
-            return CreateResource(practitioner);
+            if (!internalResource)
+                return CreateResource(practitioner);
+
+            practitioner.Id = Guid.NewGuid().ToString();
+            return practitioner;
         }
     }
 }

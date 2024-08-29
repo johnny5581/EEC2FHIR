@@ -47,7 +47,7 @@ namespace EECViewer.Laboratory
             textOdrDate.Text = model.Encounter.Period.Start;
             textOdrDr.Text = model.EncounterPractitioner.Name.ToText();
 
-
+            Text = model.Composition.Title;
 
             var viewModels = model.Composition.Section.Select(section =>
             {
