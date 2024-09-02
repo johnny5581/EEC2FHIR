@@ -48,8 +48,10 @@ namespace EEC2FHIR.GUI
             listHistory.DataSource = bindingSource;
             var server = ConfigurationManager.AppSettings["fhir.server"];
             var tokenServer = ConfigurationManager.AppSettings["fhir.token.server"];
-            var tokenSecret = ConfigurationManager.AppSettings["fhir.token.secret"];            
-            client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, tokenSecret));
+            var clientId = ConfigurationManager.AppSettings["fhir.token.client.id"];
+            var clientSecret = ConfigurationManager.AppSettings["fhir.token.client.secret"];            
+
+            client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, clientId, clientSecret));
             subForm = new TransactionHistoryForm();
         }
 

@@ -15,15 +15,17 @@ namespace FhirConn.Utility
     {
         private string lastToken;
         private DateTime expiredTime;        
-        private string secret;
+        private string clientSecret;
         private readonly IHttpMessageHandlerCallback callback;
         private string server;
+        private readonly string clientId;
 
-        public HttpBearerTokenHandler(IHttpMessageHandlerCallback callback, string server, string secret)
+        public HttpBearerTokenHandler(IHttpMessageHandlerCallback callback, string server, string clientId, string clientSecret)
         {
             this.callback = callback;
             this.server = server;
-            this.secret = secret;
+            this.clientId = clientId;
+            this.clientSecret = clientSecret;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -59,8 +61,8 @@ namespace FhirConn.Utility
             var parameters = new List<KeyValuePair<string, string>>()
                 {
                     new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                    new KeyValuePair<string, string>("client_id", "fhir-twcore-0.2.0"),
-                    new KeyValuePair<string, string>("client_secret", secret),
+                    new KeyValuePair<string, string>("client_id", clientId),
+                    new KeyValuePair<string, string>("client_secret", clientSecret),
                 };
 
             var sendTime = DateTime.Now;
