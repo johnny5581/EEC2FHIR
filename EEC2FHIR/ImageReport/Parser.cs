@@ -90,7 +90,7 @@ namespace EEC2FHIR.ImageReport
             observation.Id = Guid.NewGuid().ToString();
             observation.Status = ObservationStatus.Final;
             observation.Category.Add(new CodeableConcept(SystemObservationCategory, "imaging", "Imaging", "Imaging"));
-            observation.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");//需要設定對應檔案
+            observation.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "B920Y0Z", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");//需要設定對應檔案
             observation.Subject = composition.Subject;
             observation.Effective = new FhirDateTime(composition.Date);
 
@@ -169,7 +169,7 @@ namespace EEC2FHIR.ImageReport
 
                     imagingStudy.NumberOfSeries = pSeries.Count();
                     imagingStudy.NumberOfInstances = pImageNumber.Count();
-                    imagingStudy.ProcedureCode.Add(new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen"));//需要對應檔
+                    imagingStudy.ProcedureCode.Add(new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "B920Y0Z", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen"));//需要對應檔
 
                     foreach (var pSerie in pSeries)
                     {
@@ -207,7 +207,7 @@ namespace EEC2FHIR.ImageReport
             diagnosticReport.Identifier.Add(new Identifier(SystemCodeLocal, pPACSNOValueRaw));
             diagnosticReport.Status = DiagnosticReport.DiagnosticReportStatus.Final;
             diagnosticReport.Category.Add(new CodeableConcept(SystemCodeLoinc, "LP29684-5", "Radiology", "Radiology"));
-            diagnosticReport.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "BW24ZZZ", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");
+            diagnosticReport.Code = new CodeableConcept("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/ICD-10-procedurecode", "B920Y0Z", "Computerized Tomography (CT Scan) of Chest and Abdomen", "Computerized Tomography (CT Scan) of Chest and Abdomen");
             diagnosticReport.Subject = composition.Subject;
             diagnosticReport.Encounter = encounter.GetReference();
             diagnosticReport.Effective = new FhirDateTime(composition.Date);
