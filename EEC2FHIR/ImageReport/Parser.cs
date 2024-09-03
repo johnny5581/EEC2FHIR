@@ -475,12 +475,12 @@ namespace EEC2FHIR.ImageReport
                     return patient;
 
                 // 再來透過身分證字號查詢，如果有的話，把病歷號合併
-                patient = querier.GetByTwIdentifier(idno);
-                if (patient != null)
-                {
-                    patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
-                    return UpdateResource(patient); // 更新這筆病人資料
-                }
+                //patient = querier.GetByTwIdentifier(idno);
+                //if (patient != null)
+                //{
+                //    patient.SetMedicalRecordNumber(SystemCodeLocal, chtNo);
+                //    return UpdateResource(patient); // 更新這筆病人資料
+                //}
             }
 
             // 建立新的病人資料
