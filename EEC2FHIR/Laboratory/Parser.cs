@@ -113,8 +113,8 @@ namespace EEC2FHIR.Laboratory
             composition.Type = new CodeableConcept(SystemCodeLoinc, "11503-0", "檢驗檢查");
 
             // 產生composition
-            //composition = CreateResource(composition);
-            //composition.Id = Guid.NewGuid().ToString();
+            composition = CreateResource(composition);
+            composition.Id = Guid.NewGuid().ToString();
 
             // 組合bundle
             var bundle = new Bundle();
