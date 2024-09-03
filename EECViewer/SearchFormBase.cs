@@ -35,8 +35,8 @@ namespace EECViewer
         {
             get
             {
-                if (DocumentTypeValue == null)
-                    throw new NullReferenceException("缺少要查詢的文件類別");
+                //if (DocumentTypeValue == null)
+                //    throw new NullReferenceException("缺少要查詢的文件類別");
                 return DocumentTypeValue;
             }
         }
@@ -66,7 +66,8 @@ namespace EECViewer
                 var searchParams = new SearchParams();
 
                 // 基礎: 類別為檢驗報告 (11503-0)
-                searchParams.Add("type", DocumentType);
+                if (!string.IsNullOrEmpty(DocumentType))
+                    searchParams.Add("type", DocumentType);
 
                 // 日期，當日或區間
                 if (!string.IsNullOrEmpty(textDocumentTime.Text))
@@ -110,7 +111,7 @@ namespace EECViewer
                 }
 
 
-                if (searchParams.Parameters.Count <= 1)
+                if (searchParams.Parameters.Count == 0)
                     throw new Exception("至少要有一個查詢條件");
 
 
@@ -187,6 +188,8 @@ namespace EECViewer
             model.Date = DateTimeOffset.Parse(composition.Date).ToString("yyyy-MM-dd HH:mm");
             model.Status = Convert.ToString(composition.Status);
 
+            model.DocumentType = composition.Type.ToText();
+
             return model;
         }
         private void buttonLog_Click(object sender, EventArgs e)
@@ -207,7 +210,7 @@ namespace EECViewer
                 var item = dgvData.Rows[index].DataBoundItem as ViewModel;
                 if (item != null)
                 {
-                    ShowDetailView(item);                    
+                    ShowDetailView(item);
                 }
             }
         }
@@ -221,6 +224,8 @@ namespace EECViewer
         {
             [DisplayName("#")]
             public string Id { get; set; }
+            [DisplayName("文件類型")]
+            public string DocumentType { get; set; }
             [DisplayName("身分證號")]
             public string PatId { get; set; }
             [DisplayName("病歷號")]
@@ -261,5 +266,5 @@ namespace EECViewer
         DialogResult ShowDialog();
     }
 
-    
+
 }

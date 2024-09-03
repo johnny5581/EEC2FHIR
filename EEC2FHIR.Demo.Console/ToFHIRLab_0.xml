@@ -14,7 +14,7 @@
 					<patientRole classCode="PAT">
 						<id extension="500" root="2.16.886.104.100565.100008"/>
 						<patient classCode="PSN" determinerCode="INSTANCE">
-							<id extension="Z123456789" root="2.16.886.101.20003.20001"/>
+							<id extension="AA44444460" root="2.16.886.101.20003.20001"/>
 							<name>王測試</name>
 							<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1"/>
 							<birthTime value="19900101"/>

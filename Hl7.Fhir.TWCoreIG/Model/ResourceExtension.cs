@@ -61,6 +61,8 @@ namespace Hl7.Fhir.Model
 
         public static string GetIdentifier(this Identifier identifier, bool full = false)
         {
+            if (identifier == null)
+                return null;
             if (full)
                 return $"{identifier.Value} ({identifier.System})";
             return identifier.Value;
@@ -92,6 +94,8 @@ namespace Hl7.Fhir.Model
 
         public static string ToText(this HumanName humanName)
         {
+            if (humanName == null)
+                return null;
             return humanName.Family + humanName.Given.FirstOrDefault();
         }
 

@@ -11,7 +11,7 @@ namespace EECViewer.ImageReport
     {
         public SearchForm()
         {
-            DocumentTypeValue = "18782-3";
+            //DocumentTypeValue = "18782-3";
             Text = "影像報告查詢";
         }
 

@@ -11,7 +11,7 @@ namespace EECViewer.Laboratory
     {
         public SearchForm()
         {
-            DocumentTypeValue = "11503-0";
+            //DocumentTypeValue = "11503-0";
             Text = "檢驗報告查詢";
         }
 
