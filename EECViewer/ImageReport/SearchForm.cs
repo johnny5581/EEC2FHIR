@@ -1,4 +1,5 @@
 ﻿using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,21 @@ namespace EECViewer.ImageReport
                 d.LoadData(model);
                 d.ShowDialog();
             }
+        }
+
+        protected override ViewModel ConvertToViewModel(Bundle bundle)
+        {
+            var model =  base.ConvertToViewModel(bundle);
+
+            // 修正報告作者，從bundle取得
+            var author = bundle.GetEntryResource<Practitioner>();
+            if (author != null)
+            {
+                model.Author = author.Name.ToText();
+                model.Data.Add("author", author);
+            }
+
+            return model;
         }
         protected override ViewModel ConvertToViewModel(Composition composition)
         {
