@@ -171,9 +171,9 @@ namespace EECViewer
             // 報告作者
             if (composition.Author.Count > 1)
             {
-                var author = bundle.GetEntryResource<Practitioner>();
-                model.Author = author.Name.ToText();
-                model.Data.Add(composition.Author[1].Reference, author);
+                var authorReferences = composition.Author.Skip(1).Select(r => r.Reference);
+                var authors = authorReferences.Select(r => client.Read<Practitioner>(r)).ToArray();
+                model.Data.Add("authors", authors);
             }
 
             // 讀取開單資料
@@ -221,9 +221,12 @@ namespace EECViewer
             // 報告作者
             if (composition.Author.Count > 1)
             {
-                var author = client.Read<Practitioner>(composition.Author[1].Reference);
-                model.Author = author.Name.ToText();
-                model.Data.Add(composition.Author[1].Reference, author);
+                var authorReferences = composition.Author.Skip(1).Select(r => r.Reference);
+                var authors = authorReferences.Select(r => client.Read<Practitioner>(r)).ToArray();
+                //var author = client.Read<Practitioner>(composition.Author[1].Reference);
+                //model.Author = author.Name.ToText();
+                //model.Data.Add(composition.Author[1].Reference, author);
+                model.Data.Add("authors", authors);
             }
 
             // 讀取開單資料

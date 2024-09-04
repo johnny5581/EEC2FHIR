@@ -4,6 +4,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Utility;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,8 +46,10 @@ namespace EEC2FHIR.Laboratory
             composition.Subject = patient.GetReference();
 
             // 取得檢驗報告醫技人員資訊
-            var author = GetPractitionerResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition);
-            composition.Author.Add(author.GetReference());
+            //var author = GetPractitionerResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition);
+            //composition.Author.Add(author.GetReference());
+            var authors = GetPractitionersResource(root, "ns:author/ns:assignedAuthor", nsMgr, composition).ToArray();
+            composition.Author.AddRange(authors.Select(a => a.GetReference()));
 
             // 取得開單資訊
             var encounter = GetEncounterResource(root, "ns:documentationOf/ns:serviceEvent", nsMgr, composition);
@@ -59,7 +62,7 @@ namespace EEC2FHIR.Laboratory
             var organizers = componentRoot.XPathSelectElements("ns:entry/ns:organizer", nsMgr);
             var observations = new List<Observation>();
             var specimens = new List<Specimen>();
-            
+
             foreach (var organizer in organizers)
             {
                 var sectionComponent = new Composition.SectionComponent();
@@ -130,7 +133,8 @@ namespace EEC2FHIR.Laboratory
                 bundle.AppendEntryResource(obs);
             foreach (var spe in specimens)
                 bundle.AppendEntryResource(spe);
-            bundle.AppendEntryResource(author);
+            foreach (var author in authors)
+                bundle.AppendEntryResource(author);
             bundle.AppendEntryResource(encounter);
 
             return bundle;
@@ -199,7 +203,7 @@ namespace EEC2FHIR.Laboratory
             // 檢體來源，使用固定值
             specimen.Collection = new Specimen.CollectionComponent();
             specimen.Collection.BodySite = new CodeableConcept(SystemCodeSnomed, "408512008", "Posterior carpal region", "Posterior carpal region");
-            
+
             return specimen;
         }
         private Observation CreateObservationResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, Specimen specimen)
@@ -435,13 +439,62 @@ namespace EEC2FHIR.Laboratory
             organization.Id = Guid.NewGuid().ToString();
             return organization;
         }
+        private Practitioner GetPractitionerResource(XElement node, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
+        {
+            Practitioner practitioner = null;
+            var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
+
+            // 先檢查是否已經有這個醫事人員
+            if (composition.Author != null && !composition.Author.IsNullOrEmpty())
+            {
+                // composition.Author[0] 是院區，跳過
+                for (var i = 1; i < composition.Author.Count; i++)
+                {
+                    var prac = ReadResource<Practitioner>(composition.Contained, composition.Author[i].Reference);
+                    if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
+                        return prac;
+                }
+            }
+            // 如果不是內部資源才去查詢線上既有資源
+            if (!internalResource)
+            {
+                // 先查看看有沒有這個醫事人員的代碼，有的話就用這個代碼
+                var querier = new TWPractitionerQuerier(client);
+                practitioner = querier.GetByIdentifier(SystemCodeGlobal, empId);
+                if (practitioner != null)
+                    return practitioner;
+            }
+
+
+            // 建立新的醫事人員資料
+            practitioner = new Practitioner();
+            practitioner.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/InspectionCheckPractitioner");
+            practitioner.SetHospitalIdentifier(SystemCodeGlobal, empId);
+
+            // 中文姓名
+            var cnm = node.XPathEvaluateString("ns:assignedPerson/ns:name", nsMgr);
+            practitioner.SetChineseName(cnm);
+
+            if (!internalResource)
+                return CreateResource(practitioner);
+
+            practitioner.Id = Guid.NewGuid().ToString();
+            return practitioner;
+        }
+        private IEnumerable<Practitioner> GetPractitionersResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
+        {
+            var nodes = root.XPathSelectElements(xpath, nsMgr);
+            foreach (var node in nodes)
+            {
+                yield return GetPractitionerResource(node, nsMgr, composition, internalResource);
+            }
+        }
         /// <summary>
         /// 轉換CDAR2的人員資訊
         /// </summary>
         private Practitioner GetPractitionerResource(XElement root, string xpath, XmlNamespaceManager nsMgr, Composition composition, bool internalResource = false)
         {
             Practitioner practitioner = null;
-
             var node = root.XPathSelectElement(xpath, nsMgr);
 
             var empId = node.XPathEvaluateString("ns:id/@extension", nsMgr);
@@ -452,7 +505,7 @@ namespace EEC2FHIR.Laboratory
                 // composition.Author[0] 是院區，跳過
                 for (var i = 1; i < composition.Author.Count; i++)
                 {
-                    var prac = ReadResource<Practitioner>(composition.Contained, composition.Author[i].Reference);                    
+                    var prac = ReadResource<Practitioner>(composition.Contained, composition.Author[i].Reference);
                     if (prac != null && prac.GetIdentifier(SystemCodeGlobal) == empId)
                         return prac;
                 }

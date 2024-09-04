@@ -32,7 +32,7 @@ namespace EECViewer.Laboratory
             groupDocument.Text = model.Composition.Title;
             textDocId.Text = model.Composition.GetIdentifier(codeSystemLocal + "/lab") ?? model.Composition.GetIdentifier(codeSystemLocal);
             textDocDate.Text = DateTime.Parse(model.Composition.Date).ToString("yyyy/MM/dd");
-            textDocAuthor.Text = model.Author.Name.ToText();
+            textDocAuthor.Text = string.Join(",", model.Authors.Select(r => r.Name.ToText()));
             textPatId.Text = model.Patient.GetIdentifier(TWPatient.CodeSystemTwIdentifier);
             textPatChtno.Text = $"{model.Patient.GetIdentifier(codeSystemLocal)} ({codeSystemLocal})";
             textPatName.Text = model.Patient.Name.ToText();
@@ -128,7 +128,7 @@ namespace EECViewer.Laboratory
             public Organization Organization { get; set; }
             public Encounter Encounter { get; set; }
             public Practitioner EncounterPractitioner { get; set; }
-            public Practitioner Author { get; set; }
+            public Practitioner[] Authors { get; set; }
         }
         public class ViewModel
         {
