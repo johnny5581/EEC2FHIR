@@ -67,16 +67,16 @@ namespace EECViewer
 
                 // 基礎: 類別為檢驗報告 (11503-0)
                 if (!string.IsNullOrEmpty(DocumentType))
-                    searchParams.Add("type", DocumentType);
+                    searchParams.Add("composition.type", DocumentType);
 
                 // 日期，當日或區間
                 if (!string.IsNullOrEmpty(textDocumentTime.Text))
                 {
-                    searchParams.AddDate("date", textDocumentTime.Text, "文件產生日期");
+                    searchParams.AddDate("composition.date", textDocumentTime.Text, "文件產生日期");
                 }
                 else if (!string.IsNullOrEmpty(textDocumentTimeBegin.Text) || !string.IsNullOrEmpty(textDocumentTimeEnd.Text))
                 {
-                    searchParams.AddDateRange("date", textDocumentTimeBegin.Text, textDocumentTimeEnd.Text, "文件產生日期(起迄)");
+                    searchParams.AddDateRange("composition.date", textDocumentTimeBegin.Text, textDocumentTimeEnd.Text, "文件產生日期(起迄)");
                 }
 
                 // 病歷號
@@ -87,19 +87,19 @@ namespace EECViewer
                     if (string.IsNullOrEmpty(system))
                         throw new Exception("病歷號查詢必須要搭配醫療院所系統代碼(SystemCode)");
 
-                    searchParams.Add("patient.identifier", $"{system}|{chtno}");
+                    searchParams.Add("composition.patient.identifier", $"{system}|{chtno}");
                 }
 
                 // 身分證號
                 if (!string.IsNullOrEmpty(textPatientId.Text))
                 {
-                    searchParams.Add("patient.identifier", $"{TWPatient.CodeSystemTwIdentifier}|{textPatientId.Text}");
+                    searchParams.Add("composition.patient.identifier", $"{TWPatient.CodeSystemTwIdentifier}|{textPatientId.Text}");
                 }
 
                 // 姓名
                 if (!string.IsNullOrEmpty(textPatientName.Text))
                 {
-                    searchParams.Add("patient.name", textPatientName.Text);
+                    searchParams.Add("composition.patient.name", textPatientName.Text);
                 }
 
                 // 組織
@@ -107,7 +107,7 @@ namespace EECViewer
                 {
                     // 查不出來，先直接用代碼查詢
                     //searchParams.Add("patient.organization.identifier", $"{TWOrganization.CodeSystemTwIdentifier}|{textOrganizationId.Text}");
-                    searchParams.Add("patient.organization.identifier", textOrganizationId.Text);
+                    searchParams.Add("composition.patient.organization.identifier", textOrganizationId.Text);
                 }
 
 
@@ -119,19 +119,20 @@ namespace EECViewer
                 history = new TransactionHistory(Guid.NewGuid().ToString());
                 try
                 {
-                    var bundle = client.Search<Composition>(searchParams);
-                    if (bundle == null || bundle.Entry == null || bundle.Entry.Count == 0)
+                    var resultBundle = client.Search<Bundle>(searchParams);
+                    if (resultBundle == null || resultBundle.Entry == null || resultBundle.Entry.Count == 0)
                     {
                         MessageBox.Show("查無資料");
                         return;
                     }
 
                     var models = new List<ViewModel>();
-                    foreach (var entry in bundle.Entry)
+                    foreach (var entry in resultBundle.Entry)
                     {
-                        var composition = entry.Resource as Composition;
-                        var model = ConvertToViewModel(composition);
-                        models.Add(model);
+                        var bundle = entry.Resource as Bundle;
+                        var model = ConvertToViewModel(bundle);
+                        if (model != null)
+                            models.Add(model);
                     }
                     bindingSource.DataSource = models;
                     dgvData.AutoResizeColumns();
@@ -141,6 +142,57 @@ namespace EECViewer
                     subForm?.LoadData(history);
                 }
             });
+        }
+        protected virtual ViewModel ConvertToViewModel(Bundle bundle)
+        {
+            var model = new ViewModel();
+
+            var composition = bundle.GetEntryResource<Composition>(); // 取出唯一的bundle
+            if (composition == null)
+                return null;
+            model.Data.Add("root", composition);
+            model.Id = composition.Id;
+
+            var pat = bundle.GetEntryResource<Patient>();
+            model.PatId = pat.GetTwIdentifier();
+            model.PatChtNo = pat.GetIdentifier(codeSystemLocal, true);
+            model.PatName = pat.Name.ToText();
+            model.PatGender = Convert.ToString(pat.Gender);
+            model.Data.Add(composition.Subject.Reference, pat);
+
+            // 讀取機構資料
+            if (composition.Custodian != null)
+            {
+                var org = bundle.GetEntryResource<Organization>();
+                model.Org = $"{org.Name} ({org.GetTwIdentifier()})";
+                model.Data.Add(composition.Custodian.Reference, org);
+            }
+
+            // 報告作者
+            if (composition.Author.Count > 1)
+            {
+                var author = bundle.GetEntryResource<Practitioner>();
+                model.Author = author.Name.ToText();
+                model.Data.Add(composition.Author[1].Reference, author);
+            }
+
+            // 讀取開單資料
+            var encounter = bundle.GetEntryResource<Encounter>();
+            model.OpdNo = encounter.GetIdentifier(codeSystemLocal, true);
+            model.Data.Add(composition.Encounter.Reference, encounter);
+
+            // 開單醫師
+            var encPratitioner = bundle.GetEntryResource<Practitioner>();
+            model.OdrDr = encPratitioner.Name.ToText();
+            model.Data.Add(encounter.Participant[0].Individual.Reference, encPratitioner);
+
+            model.Title = composition.Title;
+            model.Date = DateTimeOffset.Parse(composition.Date).ToString("yyyy-MM-dd HH:mm");
+            model.Status = Convert.ToString(composition.Status);
+
+            model.DocumentType = composition.Type.ToText();
+
+            return model;
         }
 
         protected virtual ViewModel ConvertToViewModel(Composition composition)

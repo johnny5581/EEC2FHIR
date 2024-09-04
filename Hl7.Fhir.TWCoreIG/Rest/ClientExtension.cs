@@ -14,11 +14,11 @@ namespace Hl7.Fhir.Rest
         {
             return Search<T>(client, null, criteria);
         }
-        public static T[] Search<T>(this FhirClient client, int? pageSize, params string[] criteria) 
+        public static T[] Search<T>(this FhirClient client, int? pageSize, params string[] criteria)
             where T : Resource, new()
         {
             var bundle = criteria.Length == 0 ? client.Search<T>(pageSize: pageSize) : client.Search<T>(criteria, pageSize: pageSize);
-            return ToResources<T>(bundle);            
+            return ToResources<T>(bundle);
         }
 
         public static T Get<T>(this FhirClient client, string id)
@@ -34,5 +34,11 @@ namespace Hl7.Fhir.Rest
             return bundle.Entry.Select(entry => (T)entry.Resource).ToArray();
         }
 
+        public static T GetEntryResource<T>(this Bundle bundle)
+            where T : Resource
+        {
+            var composition = bundle.Entry.FirstOrDefault(r => r.Resource is T);
+            return (T)composition?.Resource;
+        }
     }
 }

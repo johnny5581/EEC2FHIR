@@ -81,8 +81,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvData);
-            this.splitContainer1.Size = new System.Drawing.Size(801, 450);
-            this.splitContainer1.SplitterDistance = 242;
+            this.splitContainer1.Size = new System.Drawing.Size(800, 450);
+            this.splitContainer1.SplitterDistance = 241;
             this.splitContainer1.TabIndex = 1;
             // 
             // panel1
@@ -94,7 +94,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 52);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(242, 398);
+            this.panel1.Size = new System.Drawing.Size(241, 398);
             this.panel1.TabIndex = 5;
             // 
             // groupOrganization
@@ -104,7 +104,7 @@
             this.groupOrganization.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupOrganization.Location = new System.Drawing.Point(0, 383);
             this.groupOrganization.Name = "groupOrganization";
-            this.groupOrganization.Size = new System.Drawing.Size(225, 89);
+            this.groupOrganization.Size = new System.Drawing.Size(224, 89);
             this.groupOrganization.TabIndex = 1;
             this.groupOrganization.TabStop = false;
             this.groupOrganization.Text = "醫療機構";
@@ -113,9 +113,10 @@
             // 
             this.textOrganizationId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textOrganizationId.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textOrganizationId.Location = new System.Drawing.Point(13, 48);
             this.textOrganizationId.Name = "textOrganizationId";
-            this.textOrganizationId.Size = new System.Drawing.Size(187, 29);
+            this.textOrganizationId.Size = new System.Drawing.Size(186, 29);
             this.textOrganizationId.TabIndex = 1;
             this.textOrganizationId.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -141,7 +142,7 @@
             this.groupPatient.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupPatient.Location = new System.Drawing.Point(0, 186);
             this.groupPatient.Name = "groupPatient";
-            this.groupPatient.Size = new System.Drawing.Size(225, 197);
+            this.groupPatient.Size = new System.Drawing.Size(224, 197);
             this.groupPatient.TabIndex = 0;
             this.groupPatient.TabStop = false;
             this.groupPatient.Text = "病患";
@@ -161,7 +162,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textPatientName.Location = new System.Drawing.Point(13, 158);
             this.textPatientName.Name = "textPatientName";
-            this.textPatientName.Size = new System.Drawing.Size(187, 29);
+            this.textPatientName.Size = new System.Drawing.Size(186, 29);
             this.textPatientName.TabIndex = 7;
             this.textPatientName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -178,9 +179,10 @@
             // 
             this.textPatientId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textPatientId.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textPatientId.Location = new System.Drawing.Point(13, 103);
             this.textPatientId.Name = "textPatientId";
-            this.textPatientId.Size = new System.Drawing.Size(187, 29);
+            this.textPatientId.Size = new System.Drawing.Size(186, 29);
             this.textPatientId.TabIndex = 5;
             this.textPatientId.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -195,6 +197,7 @@
             // 
             // textPatientChtno
             // 
+            this.textPatientChtno.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textPatientChtno.Location = new System.Drawing.Point(13, 48);
             this.textPatientChtno.Name = "textPatientChtno";
             this.textPatientChtno.Size = new System.Drawing.Size(89, 29);
@@ -205,9 +208,10 @@
             // 
             this.textPatientChtnoSystem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textPatientChtnoSystem.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textPatientChtnoSystem.Location = new System.Drawing.Point(139, 48);
             this.textPatientChtnoSystem.Name = "textPatientChtnoSystem";
-            this.textPatientChtnoSystem.Size = new System.Drawing.Size(60, 29);
+            this.textPatientChtnoSystem.Size = new System.Drawing.Size(59, 29);
             this.textPatientChtnoSystem.TabIndex = 1;
             this.textPatientChtnoSystem.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -230,7 +234,7 @@
             this.groupDocument.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupDocument.Location = new System.Drawing.Point(0, 0);
             this.groupDocument.Name = "groupDocument";
-            this.groupDocument.Size = new System.Drawing.Size(225, 186);
+            this.groupDocument.Size = new System.Drawing.Size(224, 186);
             this.groupDocument.TabIndex = 2;
             this.groupDocument.TabStop = false;
             this.groupDocument.Text = "文件摘要";
@@ -239,9 +243,10 @@
             // 
             this.textDocumentTimeEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textDocumentTimeEnd.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textDocumentTimeEnd.Location = new System.Drawing.Point(12, 147);
             this.textDocumentTimeEnd.Name = "textDocumentTimeEnd";
-            this.textDocumentTimeEnd.Size = new System.Drawing.Size(187, 29);
+            this.textDocumentTimeEnd.Size = new System.Drawing.Size(186, 29);
             this.textDocumentTimeEnd.TabIndex = 4;
             this.textDocumentTimeEnd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -249,9 +254,10 @@
             // 
             this.textDocumentTimeBegin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textDocumentTimeBegin.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textDocumentTimeBegin.Location = new System.Drawing.Point(12, 112);
             this.textDocumentTimeBegin.Name = "textDocumentTimeBegin";
-            this.textDocumentTimeBegin.Size = new System.Drawing.Size(187, 29);
+            this.textDocumentTimeBegin.Size = new System.Drawing.Size(186, 29);
             this.textDocumentTimeBegin.TabIndex = 3;
             this.textDocumentTimeBegin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -268,9 +274,10 @@
             // 
             this.textDocumentTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textDocumentTime.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.textDocumentTime.Location = new System.Drawing.Point(13, 48);
             this.textDocumentTime.Name = "textDocumentTime";
-            this.textDocumentTime.Size = new System.Drawing.Size(187, 29);
+            this.textDocumentTime.Size = new System.Drawing.Size(186, 29);
             this.textDocumentTime.TabIndex = 1;
             this.textDocumentTime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyDown);
             // 
@@ -296,13 +303,13 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(242, 52);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(241, 52);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // buttonLog
             // 
             this.buttonLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonLog.Location = new System.Drawing.Point(172, 3);
+            this.buttonLog.Location = new System.Drawing.Point(171, 3);
             this.buttonLog.Name = "buttonLog";
             this.buttonLog.Size = new System.Drawing.Size(67, 46);
             this.buttonLog.TabIndex = 4;
@@ -315,7 +322,7 @@
             this.buttonSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonSearch.Location = new System.Drawing.Point(3, 3);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(163, 46);
+            this.buttonSearch.Size = new System.Drawing.Size(162, 46);
             this.buttonSearch.TabIndex = 3;
             this.buttonSearch.Text = "查詢";
             this.buttonSearch.UseVisualStyleBackColor = true;
