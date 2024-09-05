@@ -33,12 +33,32 @@ namespace Hl7.Fhir.Rest
         {
             return bundle.Entry.Select(entry => (T)entry.Resource).ToArray();
         }
-
         public static T GetEntryResource<T>(this Bundle bundle)
             where T : Resource
         {
-            var composition = bundle.Entry.FirstOrDefault(r => r.Resource is T);
-            return (T)composition?.Resource;
+            var resource = bundle.Entry.FirstOrDefault(r => r.Resource is T);
+            return resource?.Resource as T;
+        }
+        public static T GetEntryResource<T>(this Bundle bundle, string reference)
+            where T : Resource
+        {
+            var resources = bundle.Entry.Where(r => r.Resource is T);
+            foreach(var resource in resources)
+            {
+                if (reference.StartsWith("#"))
+                {
+                    var id = reference.Substring(1);
+                    if (resource.Resource.Id == id)
+                        return resource.Resource as T;
+                }
+                else if(reference.Contains("/"))
+                {
+                    var id = reference.Substring(reference.LastIndexOf("/") + 1);
+                    if (resource.Resource.Id == id)
+                        return resource.Resource as T;
+                }
+            }
+            return null;
         }
     }
 }

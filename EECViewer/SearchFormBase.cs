@@ -182,10 +182,14 @@ namespace EECViewer
             model.Data.Add(composition.Encounter.Reference, encounter);
 
             // 開單醫師
-            var encPratitioner = bundle.GetEntryResource<Practitioner>();
-            model.OdrDr = encPratitioner.Name.ToText();
-            model.Data.Add(encounter.Participant[0].Individual.Reference, encPratitioner);
-
+            var encPratitioner = bundle.GetEntryResource<Practitioner>(encounter.Participant[0].Individual.Reference);
+            if (encPratitioner == null)
+                encPratitioner = client.Read<Practitioner>(encounter.Participant[0].Individual.Reference);
+            if (encPratitioner != null)
+            {
+                model.OdrDr = encPratitioner.Name.ToText();
+                model.Data.Add(encounter.Participant[0].Individual.Reference, encPratitioner);
+            }
             model.Title = composition.Title;
             model.Date = DateTimeOffset.Parse(composition.Date).ToString("yyyy-MM-dd HH:mm");
             model.Status = Convert.ToString(composition.Status);

@@ -96,7 +96,7 @@ namespace Hl7.Fhir.Model
         {
             if (humanName == null)
                 return null;
-            return humanName.Family + humanName.Given.FirstOrDefault();
+            return humanName.Text ?? (humanName.Family + humanName.Given.FirstOrDefault());
         }
 
         public static string ToText(this List<HumanName> humanNames, HumanName.NameUse use = HumanName.NameUse.Official)
