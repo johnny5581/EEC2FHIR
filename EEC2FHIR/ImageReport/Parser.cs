@@ -96,20 +96,20 @@ namespace EEC2FHIR.ImageReport
 
             //observation = CreateResource(observation);            
 
-            // 使用既有的endpoint
-            var querier = new FhirResourceQuerier<Endpoint>(client);
-            var endpoint = querier.GetByIdentifier(SystemCodeLocal, "PACS DICOM");
-            if (endpoint == null)
-            {
-                endpoint = new Endpoint();
-                endpoint.Identifier.Add(new Identifier(SystemCodeLocal, "PACS DICOM"));
-                endpoint.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/MitwEndpoint");
-                endpoint.Address = "http://localhost:8081/dicom-web";//影像網址!
-                endpoint.Status = Endpoint.EndpointStatus.Active;
-                endpoint.ConnectionType = new Coding("http://terminology.hl7.org/CodeSystem/endpoint-connection-type", "dicom-wado-rs", "DICOM WADO-RS");
-                endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
-                endpoint = CreateResource(endpoint);
-            }
+            //// 使用既有的endpoint
+            //var querier = new FhirResourceQuerier<Endpoint>(client);
+            //var endpoint = querier.GetByIdentifier(SystemCodeLocal, "PACS DICOM");
+            //if (endpoint == null)
+            //{
+            //    endpoint = new Endpoint();
+            //    endpoint.Identifier.Add(new Identifier(SystemCodeLocal, "PACS DICOM"));
+            //    endpoint.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/MitwEndpoint");
+            //    endpoint.Address = "http://172.18.0.53:10000/dcm4chee-arc/aets/DCM4CHEE/wado?requestType=WADO&studyUID=1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586";//影像網址!
+            //    endpoint.Status = Endpoint.EndpointStatus.Active;
+            //    endpoint.ConnectionType = new Coding("http://terminology.hl7.org/CodeSystem/endpoint-connection-type", "dicom-wado-rs", "DICOM WADO-RS");
+            //    endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
+            //    endpoint = CreateResource(endpoint);
+            //}
             var condition = new Condition();
             var imagingStudy = new ImagingStudy();
             string pBodySite = "";
@@ -163,7 +163,7 @@ namespace EEC2FHIR.ImageReport
                     imagingStudy.Status = ImagingStudy.ImagingStudyStatus.Available;
                     imagingStudy.Subject = composition.Subject;
                     imagingStudy.Started = composition.Date;//需要改為影像時間(收件時間)，需要從DICOM來
-                    imagingStudy.Endpoint.Add(endpoint.GetReference());
+                    //imagingStudy.Endpoint.Add(endpoint.GetReference());
                     var pSeries = component.XPathSelectElements("ns:entry/ns:act/ns:entryRelationship/ns:act", nsMgr);
                     var pImageNumber = component.XPathSelectElements("ns:entry/ns:act/ns:entryRelationship/ns:act/ns:entryRelationship", nsMgr);
 
@@ -188,6 +188,17 @@ namespace EEC2FHIR.ImageReport
                                 Uid = pInsUID,
                                 SopClass = new Coding("https://twcore.mohw.gov.tw/ig/emr/CodeSystem/DicomsopClass", "urn:oid:1.2.840.10008.5.1.4.1.1.2", "CT Image Storage"),//需要有對應資料
                             });
+
+                            var wadoUrl = imageInstance.XPathEvaluateString("ns:observation/ns:text/ns:reference/@value", nsMgr);
+                            var endpoint = new Endpoint();
+                            endpoint.Identifier.Add(new Identifier(SystemCodeLocal, "PACS DICOM"));
+                            endpoint.SetMetaProfile("https://twcore.mohw.gov.tw/ig/emr/StructureDefinition/MitwEndpoint");
+                            endpoint.Address = wadoUrl;//影像網址!
+                            endpoint.Status = Endpoint.EndpointStatus.Active;
+                            endpoint.ConnectionType = new Coding("http://terminology.hl7.org/CodeSystem/endpoint-connection-type", "dicom-wado-rs", "DICOM WADO-RS");
+                            endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
+                            endpoint = CreateResource(endpoint);
+                            imagingStudy.Endpoint.Add(endpoint.GetReference());
                         }
                         imagingStudy.Series.Add(new ImagingStudy.SeriesComponent
                         {

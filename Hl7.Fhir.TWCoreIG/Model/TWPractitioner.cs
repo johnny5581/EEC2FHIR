@@ -56,7 +56,7 @@ namespace Hl7.Fhir.Model
         /// </summary>        
         public static Practitioner SetChineseName(this Practitioner practitioner, string name, IChineseHumanNameConverter converter = null)
         {
-            var humanName = (converter ?? ChineseNameByLengthConverter.Default).Convert(name);
+            var humanName = (converter ?? ChineseNameTextOnlyConverter.Default).Convert(name);
             humanName.Use = HumanName.NameUse.Official;
             humanName.Text = name;
             practitioner.Name.Add(humanName);

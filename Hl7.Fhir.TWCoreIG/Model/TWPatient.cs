@@ -139,4 +139,15 @@ namespace Hl7.Fhir.Model
                 throw new NotSupportedException("不支援的姓名格式");
         }
     }
+    public class ChineseNameTextOnlyConverter : IChineseHumanNameConverter
+    {
+        public static ChineseNameTextOnlyConverter Default { get; } = new ChineseNameTextOnlyConverter();
+        public HumanName Convert(string name)
+        {
+            return new HumanName
+            {
+                Text = name,
+            };
+        }
+    }
 }
