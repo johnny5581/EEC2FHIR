@@ -6,7 +6,7 @@
 				<typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3" />
 				<templateId extension="116_V108.0" root="2.16.886.101.20003.20014" />
 				<id extension="0303131000.8873538.20240809140235.24080931584" root="2.16.886.104.100565.100008" />
-				<!--extension 科別(5碼).收件號(需要轉數字) root 醫院的OID -->
+
 				<code code="18782-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="X-ray Report">
 					<translation code="33070B" codeSystem="2.16.886.101.20003.20014" displayName="Computered tomography (C. T.) - without contrast" />
 					<!--健保碼對應之名稱  -->
@@ -19,13 +19,13 @@
 				<languageCode code="zh-TW" />
 				<recordTarget typeCode="RCT" contextControlCode="OP">
 					<patientRole classCode="PAT">
-						<id extension="501" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
+						<id extension="C3N-00953" root="2.16.886.104.100565.100008" assigningAuthorityName="長庚醫療財團法人林口長庚紀念醫院" />
 						<!--extension  病歷號  -->
 						<patient classCode="PSN" determinerCode="INSTANCE">
-							<id extension="A123456789" root="2.16.886.101.20003.20001" assigningAuthorityName="行政院內政部" />
-							<name>王測試</name>
-							<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7" displayName="Male" />
-							<birthTime value="19910421" />
+							<id extension="AA44444453" root="2.16.886.101.20003.20001" assigningAuthorityName="行政院內政部" />
+							<name>C3N-00953</name>
+							<administrativeGenderCode code="F" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7" displayName="Male" />
+							<birthTime value="19900203" />
 						</patient>
 						<providerOrganization classCode="ORG" determinerCode="INSTANCE">
 							<id extension="1132070011" root="2.16.886.101.20003.20014" assigningAuthorityName="衛生福利部" />
@@ -67,20 +67,24 @@
 				<!-- 醫令相關資料 -->
 				<inFulfillmentOf typeCode="FLFS">
 					<order classCode="ACT" moodCode="RQO">
-						<!-- 資料來自DICOM影像             1.2.840.113619.2.182.1080861361112.1723357993.5402574-->
-						<id extension="248931584X01" root="1.2.840.10008.5.1.4.31.8.80" assigningAuthorityName="DCM" />
-						<id extension="R221589751-15" root="1.2.840.10008.5.1.4.31.64.8214" assigningAuthorityName="DCM" />
-						<id extension="R221589751-15" root="1.2.840.10008.5.1.4.31.64.8215" assigningAuthorityName="DCM" />
+						<!-- 影像號 資料來自DICOM影像 DICOM Modality Worklist - Accession Number (0008,0050-->
+						<id extension="2794663908550664" root="1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586" assigningAuthorityName="DCM" />
+						<!-- 影像號 資料來自DICOM影像 DICOM Modality Worklist - Placer Order Number (0040,2016)-->
+						<id extension="XXX" root="1.2.840.10008.5.1.4.31.64.8214" assigningAuthorityName="DCM" />
+						<!-- 影像號 資料來自DICOM影像 DICOM Modality Worklist - Filler Order Number (0040,2017)-->
+						<id extension="XXX" root="1.2.840.10008.5.1.4.31.64.8215" assigningAuthorityName="DCM" />
 					</order>
 				</inFulfillmentOf>
 				<documentationOf typeCode="DOC">
-					<!-- 資料來自DICOM影像 -->
+
 					<serviceEvent classCode="ACT" moodCode="EVN">
-						<id root="1.2.826.0.1.3680043.2.163.20100705162152.968.2" />
+						<!-- 資料來自DICOM影像 Study Instance UID (0020,000D)  -->
+						<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586" />
+						<!-- 資料來自DICOM影像 Study Instance UID (0040,1001)  無-->
 						<effectiveTime>
-							<low value="202408111433" />
+							<low value="20100213" />
 							<!-- 最後修改時間 沒有秒 -->
-							<high value="202408111433" />
+							<high value="20100213" />
 						</effectiveTime>
 						<performer typeCode="PRF">
 							<assignedEntity classCode="ASSIGNED">
@@ -133,12 +137,13 @@
 								<code code="121181" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="DICOM Object Catalog" />
 								<entry typeCode="COMP" contextConductionInd="true">
 									<act classCode="ACT" moodCode="EVN">
-										<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184290.736002" />
+										<!-- DICOM Study Instance UID (0020,000D)-->
+										<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586" />
 										<code code="113014" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Study" />
 										<entryRelationship typeCode="COMP" contextConductionInd="true">
 											<act classCode="ACT" moodCode="EVN">
 												<!-- DICOM Series Instance UID (0020,000E) root : 影像之 Series Instance UID-->
-												<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184323.495035" />
+												<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.831285735928731782652048570955" />
 												<code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
 													<!-- DICOM Modality (0008,0060) -->
 													<qualifier>
@@ -146,10 +151,47 @@
 														<value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
 													</qualifier>
 												</code>
+												<!-- 第一張DICOM 影像索引 -->
 												<entryRelationship typeCode="COMP" contextConductionInd="true">
 													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
 														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184323.498852" />
 														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link (選項) -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.831285735928731782652048570955/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.310894536700672302243471156028" />
+														</text>
+
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+											</act>
+										</entryRelationship>
+										<!-- 2 -->
+										<entryRelationship typeCode="COMP" contextConductionInd="true">
+											<act classCode="ACT" moodCode="EVN">
+												<!-- DICOM Series Instance UID (0020,000E) root : Series Instance UID-->
+												<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.187580115709014280730997641712" />
+												<code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
+													<qualifier>
+														<name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series" />
+														<!-- DICOM Modality (0008,0060) -->
+														<value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+													</qualifier>
+												</code>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.331183406129824250741275752731" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.187580115709014280730997641712/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.331183406129824250741275752731" />
+														</text>
 														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
 															<qualifier>
 																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
@@ -159,9 +201,62 @@
 												</entryRelationship>
 												<entryRelationship typeCode="COMP" contextConductionInd="true">
 													<observation classCode="DGIMG" moodCode="EVN">
-														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184338.279957" />
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.171424488227777693822724251929" />
 														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-														<value code="9CC1F548A8B6C69C249E2E01CB0033EACD1C4D50" codeSystem="1.3.14.3.2.26" xsi:type="CD">
+														<!--WADO link -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.187580115709014280730997641712/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.171424488227777693822724251929" />
+														</text>
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.321414117818571426973222514043" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.187580115709014280730997641712/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.321414117818571426973222514043" />
+														</text>
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.217106578590152045405778705262" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.187580115709014280730997641712/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.217106578590152045405778705262" />
+														</text>
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.105951284037251026782883400081" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.187580115709014280730997641712/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.105951284037251026782883400081" />
+														</text>
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
 															<qualifier>
 																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
 															</qualifier>
@@ -170,31 +265,105 @@
 												</entryRelationship>
 											</act>
 										</entryRelationship>
+										<!-- 2 end -->
+										<!-- 3 -->
 										<entryRelationship typeCode="COMP" contextConductionInd="true">
 											<act classCode="ACT" moodCode="EVN">
-												<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.707821" />
+												<!-- DICOM Series Instance UID (0020,000E) root : 影像之 Series Instance UID-->
+												<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.328191285537072639441393834220" />
 												<code code="113015" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series">
+													<!-- DICOM Modality (0008,0060) -->
 													<qualifier>
-														<name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Series" />
+														<name code="121139" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" displayName="Modality" />
 														<value code="CT" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
 													</qualifier>
 												</code>
+												<!-- 第一張DICOM 影像索引 -->
 												<entryRelationship typeCode="COMP" contextConductionInd="true">
 													<observation classCode="DGIMG" moodCode="EVN">
-														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.715952" />
-														<code code="1.2.840.10008.5.1.4.1.1.7" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-														<value code="0C53ACAF23D40B7537BC831B6F044AA5F2D313F9" codeSystem="1.3.14.3.2.26" xsi:type="CD">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.207018747936703760303203690719" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link (選項) -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.328191285537072639441393834220/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.207018747936703760303203690719" />
+														</text>
+
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
 															<qualifier>
 																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
 															</qualifier>
 														</value>
 													</observation>
 												</entryRelationship>
+												<!-- 第二張DICOM 影像索引 -->
 												<entryRelationship typeCode="COMP" contextConductionInd="true">
 													<observation classCode="DGIMG" moodCode="EVN">
-														<id root="1.2.392.200036.9116.2.5.1.48.1221222295.1723184364.790716" />
-														<code code="1.2.840.10008.5.1.4.1.1.7" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
-														<value code="CDECF33EAF727337603EA42ADBFBAA5D7AB8FE5E" codeSystem="1.3.14.3.2.26" xsi:type="CD">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.274294485605735573847178163457" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link (選項) -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.328191285537072639441393834220/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.274294485605735573847178163457" />
+														</text>
+
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+
+												<!-- 第三張DICOM 影像索引 -->
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.213400907861340806678714794308" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link (選項) -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.328191285537072639441393834220/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.213400907861340806678714794308" />
+														</text>
+
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+												<!-- 第四張DICOM 影像索引 -->
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.311102259757356392427970063677" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link (選項) -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.328191285537072639441393834220/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.311102259757356392427970063677" />
+														</text>
+
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
+															<qualifier>
+																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
+															</qualifier>
+														</value>
+													</observation>
+												</entryRelationship>
+
+												<!-- 第五張DICOM 影像索引 -->
+												<entryRelationship typeCode="COMP" contextConductionInd="true">
+													<observation classCode="DGIMG" moodCode="EVN">
+														<!-- DICOM SOP Instance UID (0008,00018) -->
+														<id root="1.3.6.1.4.1.14519.5.2.1.7085.2626.917173693042362721495240037775" />
+														<code code="1.2.840.10008.5.1.4.1.1.2" codeSystem="1.2.840.10008.2.6.1" codeSystemName="DCMUID" />
+														<!--WADO link (選項) -->
+														<text xsi:type="ED" mediaType="application/dicom" >
+															<reference value="http://172.18.0.59:8080/dcm4chee-arc/aets/DCM4CHEE/rs/studies/1.3.6.1.4.1.14519.5.2.1.7085.2626.192997540292073877946622133586/series/1.3.6.1.4.1.14519.5.2.1.7085.2626.328191285537072639441393834220/instances/1.3.6.1.4.1.14519.5.2.1.7085.2626.917173693042362721495240037775" />
+														</text>
+
+														<value xsi:type="CD" code="A7B17EAFDB48AFA2A4A78FA576499314C3D1F723" codeSystem="1.3.14.3.2.26">
 															<qualifier>
 																<name code="121190" codeSystem="1.2.840.10008.2.16.4" codeSystemName="DCM" />
 															</qualifier>
