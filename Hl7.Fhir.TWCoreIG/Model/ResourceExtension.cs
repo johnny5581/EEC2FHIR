@@ -8,6 +8,7 @@ namespace Hl7.Fhir.Model
 {
     public static class ResourceExtension
     {
+        public static Uri BaseUri { get; set; }
         public static TResource ToInternalResource<TResource>(this TResource resource)
             where TResource : Resource
         {
@@ -23,7 +24,7 @@ namespace Hl7.Fhir.Model
         /// <summary>
         /// 取得reference
         /// </summary>        
-        public static ResourceReference GetReference(this Resource resource, ResourceReferenceType refType = ResourceReferenceType.Normal)
+        public static ResourceReference GetReference(this Resource resource, ResourceReferenceType refType = ResourceReferenceType.FullUri, Uri baseUrl = null)
         {
             var reference = new ResourceReference();
 
@@ -34,7 +35,7 @@ namespace Hl7.Fhir.Model
                     reference.Reference = $"{resource.TypeName}/{resource.Id}";
                     break;
                 case ResourceReferenceType.FullUri:
-                    reference.Reference = $"{resource.ResourceBase}{resource.TypeName}/{resource.Id}";
+                    reference.Reference = $"{resource.ResourceBase ?? baseUrl}{resource.TypeName}/{resource.Id}";
                     break;
                 case ResourceReferenceType.IdOnly:
                     reference.Reference = $"#{resource.Id}";
@@ -44,10 +45,10 @@ namespace Hl7.Fhir.Model
             return reference;
         }
 
-        public static Bundle AppendEntryResource(this Bundle bundle, Resource res)
+        public static Bundle AppendEntryResource(this Bundle bundle, Resource res, Uri baseUri = null)
         {
             var entry = new Bundle.EntryComponent();
-            entry.FullUrl = res.GetReference(ResourceReferenceType.FullUri).Reference;
+            entry.FullUrl = res.GetReference(ResourceReferenceType.FullUri, baseUri ?? BaseUri).Reference;
             entry.Resource = res;
             bundle.Entry.Add(entry);
             return bundle;

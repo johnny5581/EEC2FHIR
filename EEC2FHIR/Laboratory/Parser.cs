@@ -21,6 +21,7 @@ namespace EEC2FHIR.Laboratory
     {
         public Parser(FhirClient client) : base(client)
         {
+            ResourceExtension.BaseUri = client.Endpoint;
         }
 
 

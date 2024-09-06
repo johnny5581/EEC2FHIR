@@ -114,6 +114,7 @@ namespace EEC2FHIR.ImageReport
             var imagingStudy = new ImagingStudy();
             string pBodySite = "";
             string pReport = "";
+            var endpoints = new List<Endpoint>();
             foreach (var component in components)
             {
                 var pCode = component.XPathEvaluateString("ns:code/@code", nsMgr);
@@ -199,6 +200,7 @@ namespace EEC2FHIR.ImageReport
                             endpoint.PayloadType.Add(new CodeableConcept("", "", "DICOM"));
                             endpoint = CreateResource(endpoint);
                             imagingStudy.Endpoint.Add(endpoint.GetReference());
+                            endpoints.Add(endpoint);
                         }
                         imagingStudy.Series.Add(new ImagingStudy.SeriesComponent
                         {
@@ -269,6 +271,8 @@ namespace EEC2FHIR.ImageReport
             bundle.AppendEntryResource(diagnosticReport);
             bundle.AppendEntryResource(imagingStudy);
 
+            foreach (var endpoint in endpoints)
+                bundle.AppendEntryResource(endpoint);
             return bundle;
         }
 

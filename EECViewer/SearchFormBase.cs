@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,7 +27,14 @@ namespace EECViewer
             var tokenServer = ConfigurationManager.AppSettings["fhir.token.server"];
             var clientId = ConfigurationManager.AppSettings["fhir.token.client.id"];
             var clientSecret = ConfigurationManager.AppSettings["fhir.token.client.secret"];
-            client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, clientId, clientSecret));
+
+            var tokenType = ConfigurationManager.AppSettings["fhir.token.type"];
+            HttpMessageHandler msgHandler = null;
+            if (tokenType == "oauth")
+                msgHandler = new FhirConn.Utility.OAuth2BearerTokenHandler(this, tokenServer, clientId, clientSecret);
+            else
+                msgHandler = new FhirConn.Utility.HttpBearerTokenHandler(this, tokenServer, clientId, clientSecret);
+            client = new FhirClient(server, new FhirClientSettings { PreferredFormat = ResourceFormat.Json }, messageHandler: msgHandler);
 
 
             dgvData.AutoGenerateColumns = true;
