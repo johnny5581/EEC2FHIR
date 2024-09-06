@@ -24,7 +24,7 @@ namespace Hl7.Fhir.Model
         /// <summary>
         /// 取得reference
         /// </summary>        
-        public static ResourceReference GetReference(this Resource resource, ResourceReferenceType refType = ResourceReferenceType.FullUri, Uri baseUrl = null)
+        public static ResourceReference GetReference(this Resource resource, ResourceReferenceType refType = ResourceReferenceType.Normal, Uri baseUrl = null)
         {
             var reference = new ResourceReference();
 

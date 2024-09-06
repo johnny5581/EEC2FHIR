@@ -72,27 +72,27 @@ namespace EEC2FHIR.Laboratory
                 // 處理採檢資訊
                 var specimen = CreateSpecimenResource(organizer, "ns:specimen", nsMgr, composition);
 
-                // 獨立驗證Composition，使用internal resource將資源放到contained裡面                  
-                specimen.Id = Guid.NewGuid().ToString();
-                sectionComponent.Entry.Add(specimen.GetReference(ResourceReferenceType.IdOnly));
-                composition.Contained.Add(specimen);
+                //// 獨立驗證Composition，使用internal resource將資源放到contained裡面                  
+                //specimen.Id = Guid.NewGuid().ToString();
+                //sectionComponent.Entry.Add(specimen.GetReference(ResourceReferenceType.IdOnly));
+                //composition.Contained.Add(specimen);
 
                 // 統包bundle驗證
-                //specimen = CreateResource(specimen);
-                //sectionComponent.Entry.Add(specimen.GetReference());
+                specimen = CreateResource(specimen);
+                sectionComponent.Entry.Add(specimen.GetReference());
 
                 specimens.Add(specimen);
 
                 var observation = CreateObservationResource(organizer, "", nsMgr, composition, specimen);
 
-                // 獨立驗證Composition，使用internal resource將資源放到contained裡面 
-                observation.Id = Guid.NewGuid().ToString();
-                sectionComponent.Entry.Add(observation.GetReference(ResourceReferenceType.IdOnly));
-                composition.Contained.Add(observation);
+                //// 獨立驗證Composition，使用internal resource將資源放到contained裡面 
+                //observation.Id = Guid.NewGuid().ToString();
+                //sectionComponent.Entry.Add(observation.GetReference(ResourceReferenceType.IdOnly));
+                //composition.Contained.Add(observation);
 
                 // 統包bundle驗證
-                //observation = CreateResource(observation);
-                //sectionComponent.Entry.Add(observation.GetReference());
+                observation = CreateResource(observation);
+                sectionComponent.Entry.Add(observation.GetReference());
 
                 observations.Add(observation);
 
@@ -117,7 +117,7 @@ namespace EEC2FHIR.Laboratory
             composition.Type = new CodeableConcept(SystemCodeLoinc, "11503-0", "檢驗檢查");
 
             // 產生composition
-            composition = CreateResource(composition);
+            //composition = CreateResource(composition);
             composition.Id = Guid.NewGuid().ToString();
 
             // 組合bundle
